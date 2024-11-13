@@ -1,5 +1,7 @@
 package org.koreait.main.controllers;
 
+import lombok.RequiredArgsConstructor;
+import org.koreait.global.libs.Utils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,13 +11,15 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/")
+@RequiredArgsConstructor
 public class MainController {
+
+    private final Utils utils;
 
     @GetMapping
     public String index(Model model) {
-        model.addAttribute("addCss", List.of("member/test1.css","member/test2.css"));
-        model.addAttribute("addScript", new String[] {"member/test1.js", "member/test2.js"});
-        return "front/main/index";
+
+        return utils.tpl("main/index");
 
     }
 }
