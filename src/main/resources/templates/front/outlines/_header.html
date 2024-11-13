@@ -48,6 +48,28 @@
             </li>
         </ul>
     </div>
-    <div class="right">RIGHT</div>
+    <div class="right">
+        <ul>
+            <li>
+                <a href="#">
+                    <i class="icon catalog"></i>
+                    <th:block th:text="#{포켓몬_도감}"></th:block>
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/member/login}">
+                    <i class="icon login"></i>
+                    <th:block th:text="#{로그인}"></th:block>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="icon search"></i>
+                    <th:block th:text="#{통합검색}"></th:block>
+                </a>
+            </li>
+        </ul>
+        <a href="#" class="move-to-store"></a>
+    </div>
 </header>
 </html>
