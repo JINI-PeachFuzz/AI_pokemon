@@ -15,7 +15,7 @@ public class MainController {
     public String index(Model model) {
         model.addAttribute("addCss", List.of("member/test1.css","member/test2.css"));
         model.addAttribute("addScript", new String[] {"member/test1.js", "member/test2.js"});
-        return "front/main/index";;
+        return "front/main/index";
 
     }
 }
