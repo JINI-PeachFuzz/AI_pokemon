@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{front/layouts/main}">
+
+<main layout:fragment="content">
+    <img th:src="@{/front/images/logo.png}" th:alt="#{로고}">
+
+    <form name="frmLogin" class="login-box" method="POST" th:action="@{/member/login}" autocomplete="off" th:object="${requestLogin}">
+        <input th:if="*{redirectUrl != null }"
+               type="hidden" name="redirectUrl" th:value="*{redirectUrl}">
+        <div class="row">
+            <input type="text" name="email" th:field="*{email}" th:placeholder="#{이메일}">
+            <div class="error" th:each="err : ${#fields.errors('email')}" th:text="${err}"></div>
+        </div>
+        <div class="row">
+            <input type="password" name="password" th:field="*{password}" th:placeholder="#{비밀번호}">
+            <div class="error" th:each="err : ${#fields.errors('password')}" th:text="${err}"></div>
+        </div>
+        <button type="submit" th:text="#{로그인}"></button>
+
+        <div class="error global" th:each="err : ${#fields.globalErrors()}" th:text="${err}"></div>
+
+        <div class="links">
+            <a th:href="@{/member/find_email}" th:text="#{이메일_찾기}"></a>
+            <a th:href="@{/member/find_pass}" th:text="#{비밀번호_찾기}"></a>
+        </div>
+
+        <a th:href="@{/member/agree}" th:text="#{아직_회원이_아니신가요?}" class="join-link"></a>
+    </form>
+
+</main>
+
+</html>
