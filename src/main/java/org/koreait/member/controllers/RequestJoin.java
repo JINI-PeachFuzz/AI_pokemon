@@ -3,8 +3,10 @@ package org.koreait.member.controllers;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
 import lombok.Data;
 import org.koreait.member.constants.Gender;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -29,6 +31,7 @@ public class RequestJoin extends RequestAgree{
     private String nickName; // 닉네임
 
     @NotNull
+    @DateTimeFormat(pattern="yyyy-MM-dd")
     private LocalDate birthDt;  // 생년월일
 
     @NotNull
