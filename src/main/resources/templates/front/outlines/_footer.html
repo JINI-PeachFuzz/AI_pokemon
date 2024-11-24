@@ -1,6 +1,141 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
     <footer th:fragment="common">
-        <h1>사이트 하단 영역..</h1>
+        <div class="top">
+            <a th:href="@{/}" class="ft_logo">
+                <img th:src="@{/front/images/ft_logo.png}">
+            </a>
+            <ul class="footer-list">
+                <li>
+                    <a href="#">
+                        <div>
+                            <th:block th:text="#{회사소개}"></th:block>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <div>
+                            <th:block th:text="#{사업내용}"></th:block>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <div>
+                            <th:block th:text="#{제휴안내}"></th:block>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <div>
+                            <th:block th:text="#{이용약관}"></th:block>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <div>
+                            <th:block th:text="#{개인정보처리방침}"></th:block>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <div>
+                            <th:block th:text="#{이메일무단수집거부}"></th:block>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <div>
+                            <th:block th:text="#{고객센터}"></th:block>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="mid">
+            <pre>(주)포켓몬코리아   경기도 용인시 수지구 신수로 801, 4층</pre>
+            <pre>대표이사:임재범 개인정보관리책임자:임재범 사업자등록번호:113-86-07676</pre>
+            <li>
+                <a href="https://www.instagram.com/pokemon_korea_official/?igshid=OGQ5ZDc2ODk2ZA%3D%3D">
+                    <i class="icon insta"></i>
+                </a>
+            </li>
+            <li>
+                <a href="https://www.youtube.com/user/PokemonKoreaInc">
+                    <i class="icon youtube"></i>
+                </a>
+            </li>
+            <li>
+                <a href="https://x.com/PokemonKoreaInc">
+                    <i class="icon twitter"></i>
+                </a>
+            </li>
+            <li>
+                <a href="https://www.tiktok.com/@pokemon_kor">
+                    <i class="icon tiktok"></i>
+                </a>
+            </li>
+            <li>
+                <a href="https://www.pokemonstore.co.kr/">
+                    <i class="icon pokemon"></i>
+                </a>
+            </li>
+
+
+
+        </div>
+
+
+
+
+        <div class="bot">
+            <div class = "left">
+                <div class="l">
+                    <pre>고객센터</pre>
+                </div>
+
+                <div class="r">
+                    <ul>
+                        <pre>운영시간 : 평일 15시 ~ 18시</pre>
+                        <pre>031-272-0108</pre>
+                    </ul>
+                    <ul>
+                        <pre>카드 게임 및 카드 게임 이벤트 : 1588-4273</pre>
+                    </ul>
+                    <ul>
+                        <pre>webmaster@pokemonkorea.co.kr</pre>
+                    </ul>
+                </div>
+
+
+                <pre>※당사에서는 Pokémon GO 관련 문의는 대응하지 않습니다.</pre>
+            </div>
+
+
+
+
+            <div class = "right">
+                <ul>
+                    <pre>©2024 Pokémon. ©1995-2024 Nintendo/Creatures Inc./GAME FREAK inc.</pre>
+                    <pre>©Nintendo, Creatures, GAME FREAK, TV Tokyo, ShoPro, JR Kikaku. ©Pokémon. ©1998-2020 PIKACHU PROJECT.</pre>
+                    <pre>포켓몬스터, 포켓몬, Pokémon, 몬스터볼, Nintendo Switch, Nintendo 3DS, Nintendo DS는 Nintendo의 상표입니다.</pre>
+                </ul>
+                <ul>
+                    <pre>본 사이트의 콘텐츠에 대한 무단 복제 및 도용을 금하며 이를 어길 시 법적 조치를 받을 수 있습니다.</pre>
+                </ul>
+
+
+            </div>
+
+
+
+
+        </div>
     </footer>
 </html>
