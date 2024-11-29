@@ -107,7 +107,7 @@ public class MemberController {
         commonProcess("join", model); // 회원가입 공통 처리
 
         joinValidator.validate(agree, errors); // 약관 동의 여부 체크
-        joinValidator.validate(form, errors); // 회원 가입 양식 검증
+        joinValidator.validate(form, errors); // 회원 가입 양식 검증 / 중복여부
 
         if (errors.hasErrors()) {
             return utils.tpl("member/join");
