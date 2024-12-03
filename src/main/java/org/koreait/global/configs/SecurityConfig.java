@@ -2,6 +2,8 @@ package org.koreait.global.configs;
 
 import org.koreait.member.services.LoginFailureHandler;
 import org.koreait.member.services.LoginSuccessHandler;
+import org.koreait.member.services.MemberAccessDeniedHandler;
+import org.koreait.member.services.MemberAuthenticationExceptionHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -53,6 +55,13 @@ public class SecurityConfig {
                     .requestMatchers("/admin/**").hasAnyAuthority("MANAGER", "ADMIN") // 관리자 페이지는 MANAGER, ADMIN 권한
                     .anyRequest().permitAll(); // 나머지 페이지는 모두 접근 가능
         });
+
+        http.exceptionHandling(c -> {
+            c.authenticationEntryPoint(new MemberAuthenticationExceptionHandler())  // 미로그인시 인가 실패
+                    .accessDeniedHandler(new MemberAccessDeniedHandler()); // 로그인 이후 인가 실패
+
+        });
+
         /* 인가 설정 E */
 
         return http.build(); // 설정 무력화

@@ -10,7 +10,5 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import java.util.Optional;
 
 public interface AuthoritiesRepository extends JpaRepository<Authorities, AuthoritiesId>, QuerydslPredicateExecutor<Authorities> {
-    @EntityGraph(attributePaths = "authorities")
-    Optional<Member> findByEmail(String email);
 
 }

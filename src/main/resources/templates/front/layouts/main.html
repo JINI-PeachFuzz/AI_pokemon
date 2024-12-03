@@ -5,6 +5,10 @@
         <meta charset="UTF-8">
         <meta name="keywords" th:if="${keywords} != null" th:content="${keywords}">
         <meta name="description" th:if="${description != null}" th:content="${description}">
+        <meta name="_csrf" th:content="${_csrf.token}">
+        <meta name="_csrf_header" th:content="${_csrf.headerName}">
+        <!--   csrf가 토큰 검증 방식 관련 내용 / 기본 검증이라 다 들어감    -->
+
         <title th:if="${pageTitle != null}" th:text="${pageTitle}"></title>
 
         <link rel="stylesheet" type="text/css" th:href="@{/common/css/style.css}">
