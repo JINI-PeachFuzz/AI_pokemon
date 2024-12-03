@@ -12,6 +12,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,11 +20,12 @@ import java.util.stream.Collectors;
 @Lazy // 지연로딩 - 최초로 빈을 사용할때 생성
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class MemberUpdateService {
 
     private final MemberRepository memberRepository;
     private final AuthoritiesRepository authoritiesRepository;
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;
 
 
@@ -64,15 +66,19 @@ public class MemberUpdateService {
         memberRepository.saveAndFlush(member);
 
         // 회원 권한 업데이트 처리 S
+
         if (authorities != null) {
             /**
              * 기존 권한을 삭제하고 다시 등록
              */
+
             QAuthorities qAuthorities = QAuthorities.authorities;
             List<Authorities> items = (List<Authorities>) authoritiesRepository.findAll(qAuthorities.member.eq(member));
             if (items != null) {
                 authoritiesRepository.deleteAll(items);
+                authoritiesRepository.flush();
             }
+
 
             authoritiesRepository.saveAllAndFlush(authorities);
         }
