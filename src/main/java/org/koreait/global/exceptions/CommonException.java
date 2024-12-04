@@ -3,7 +3,9 @@ package org.koreait.global.exceptions;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.Errors;
 
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -14,9 +16,18 @@ import java.util.Objects;
 public class CommonException extends RuntimeException {
   private HttpStatus status;
   private boolean errorCode;
+  private Map<String, Object> errorMessages;
 
   public CommonException(String message, HttpStatus status) {
     super(message);
     this.status = Objects.requireNonNullElse(status, HttpStatus.INTERNAL_SERVER_ERROR);
+  }
+
+  /**
+   RestController에서 커맨드 객체 검증 실패시 가동한 에러 메세지 정보
+   */
+  public CommonException(Map<String,Object> errorMessages, HttpStatus status) {
+    this.errorMessages = errorMessages;
+    this.status = status;
   }
 }
