@@ -73,15 +73,16 @@ public class Utils {
      * @param errors
      * @return
      */
-    public Map<String, List<String>> getErrorMessages(Errors errors) {
+    public Map<String, List<String>> getErrorMessages(Errors errors) { // getErrorMessages 는 tpl이 아니기 때문에 JSON형태로 만들기위해
         ResourceBundleMessageSource ms = (ResourceBundleMessageSource) messageSource;
         ms.setUseCodeAsDefaultMessage(false);
         try {
-            // 필드별 에러코드 - getFieldErrors()
+            // 필드별 에러코드 - getFieldErrors() // 커맨드객체 에러
             // Collectors.toMap
             Map<String, List<String>> messages = errors.getFieldErrors()
                     .stream()
-                    .collect(Collectors.toMap(FieldError::getField, f -> getMessages(f.getCodes()), (v1, v2) -> v2));
+                    .collect(Collectors.toMap(FieldError::getField, f -> getMessages(f.getCodes()), (v1, v2) -> v2)); // 동일한 키값이 있으면 오류가 발생하므로 중복된게 있으면 v1은 기존, v2는 현재인데 현재껄로 바꿔줘라
+            // Codes 여러개가 될 수 있기 때문에 배열로
 
             // 글로벌 에러코드 - getGlobalErrors()
             List<String> gMessages = errors.getGlobalErrors()
