@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 @SpringBootTest
-@ActiveProfiles({"default", "test"})
+//@ActiveProfiles({"default", "test"})
 @AutoConfigureMockMvc
 public class ApiFileControllerTest {
 
@@ -47,7 +47,7 @@ public class ApiFileControllerTest {
     @Autowired
     private FileDeleteService deleteService;
 
-    @BeforeEach
+    //@BeforeEach
     void setup() {
         //mockMvc = MockMvcBuilders.standaloneSetup(ApiFileController.class).build();
         //이거는 단일 테스트 전부 불러와서 해야한다면 위에 Autowired를 사용해서 해야함
@@ -68,7 +68,7 @@ public class ApiFileControllerTest {
 
     @Test
     //@WithMockUser(username = "user01@test.org", authorities = "USER") // 가짜로 넣어논거 들어가는지 확인해볼려고
-    @WithUserDetails(value = "user01@test.org", userDetailsServiceBeanName = "memberInfoService", setupBefore = TestExecutionEvent.TEST_EXECUTION) // 실제 유저 데이터를 사용해서 해보고 싶을 떄 사용/ 단, 하나이상 회원가입을 한 후에 사용해야함
+    //@WithUserDetails(value = "user01@test.org", userDetailsServiceBeanName = "memberInfoService", setupBefore = TestExecutionEvent.TEST_EXECUTION) // 실제 유저 데이터를 사용해서 해보고 싶을 떄 사용/ 단, 하나이상 회원가입을 한 후에 사용해야함
     void test1() throws Exception {
         /**
          * MockMultipartFile
