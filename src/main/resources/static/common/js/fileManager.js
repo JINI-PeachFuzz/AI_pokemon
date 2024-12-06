@@ -6,13 +6,13 @@ commonLib.fileManager = {
     */
     upload(files, gid, location, single, imageOnly) {
         try {
-            if (!files || files.length === 0) {
+            if (!files || files.length === 0) { // 여기서 0은 갯수임 파일갯수 파일이 없을때를 얘기함
                 throw new Error("파일을 선택하세요.");
             }
 
             if (imageOnly) { // 이미지만 업로드 하는 경우
                 for (const file of files) {
-                    if (file.type.indexOf("image/") === -1) { // 이미지가 아닌 파일인 경우
+                    if (file.type.indexOf("image/") === -1) { // 이미지가 아닌 파일인 경우 // 인덱스가 0부터 시작인데 그것보다도 없는걸 할려면 -1 이어야함
                         throw new Error("이미지 형식이 아닙니다.");
                     }
                 }
