@@ -1,6 +1,8 @@
 package org.koreait.global.advices;
 
+import lombok.RequiredArgsConstructor;
 import org.koreait.global.exceptions.CommonException;
+import org.koreait.global.libs.Utils;
 import org.koreait.global.rests.JSONData;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +14,10 @@ import java.util.List;
 import java.util.Map;
 
 @RestControllerAdvice(annotations = RestController.class)
-public class CommonRestControllerAdvice {
+@RequiredArgsConstructor
+public class CommonRestControllerAdvice { // 공통적인 에러출력 / JSON쪽!
+
+    private final Utils utils;
 
     @ExceptionHandler(Exception.class) // CommonException에 에러메세지관련 내용 추가함
     public ResponseEntity<JSONData> errorHandler(Exception e) {
@@ -26,6 +31,8 @@ public class CommonRestControllerAdvice {
             Map<String, List<String>> errorMessages = commonException.getErrorMessages();
             if (errorMessages != null) {
                 message = errorMessages;
+            } else {
+                message = commonException.isErrorCode() ? utils.getMessage((String)message) : message;
             }
         }
 

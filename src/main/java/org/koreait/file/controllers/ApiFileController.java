@@ -9,7 +9,11 @@ import jakarta.validation.Valid;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.koreait.file.constants.FileStatus;
 import org.koreait.file.entities.FileInfo;
+import org.koreait.file.services.FileDeleteService;
+import org.koreait.file.services.FileDownloadService;
+import org.koreait.file.services.FileInfoService;
 import org.koreait.file.services.FileUploadService;
 import org.koreait.global.exceptions.BadRequestException;
 import org.koreait.global.libs.Utils;
@@ -25,13 +29,18 @@ import java.util.List;
 @Tag(name="파일 API", description = "파일 업로드, 조회, 다운로드, 삭제기능을 제공합니다.")
 @RestController
 @RequestMapping("/api/file")
-@NoArgsConstructor
+@RequiredArgsConstructor
 public class ApiFileController {
 
-    @Autowired
-    private Utils utils;
-    @Autowired
-    private FileUploadService uploadService;
+    private final Utils utils;
+
+    private final FileUploadService uploadService;
+
+    private final FileDownloadService downloadService;
+
+    private final FileInfoService infoService;
+
+    private final FileDeleteService deleteService;
 
 
     /**
@@ -63,14 +72,17 @@ public class ApiFileController {
     // 파일 다운로드
     @GetMapping("/download/{seq}")
     public void download(@PathVariable("seq") Long seq) {// 파일다운로드는 직접하는거기 때문에 void로 한거
-
+        downloadService.process(seq);
     }
 
     // 파일 단일 조회
     @GetMapping("/info/{seq}")
     public JSONData info(@PathVariable("seq") Long seq) {
 
-        return null; // 임시
+        FileInfo item = infoService.get(seq);
+
+
+        return new JSONData(item); // 200을 넣었고 JSON형태로 나올꺼
     }
 
     /**
@@ -79,21 +91,30 @@ public class ApiFileController {
      */
     @GetMapping(path = {"/list/{gid}", "/list/{gid}/{location}"})
     public JSONData list(@PathVariable("gid") String gid,
-                         @PathVariable(name = "location", required = false) String location) {
-        return null;
-    }
+                         @PathVariable(name = "location", required = false) String location,
+                         @RequestParam(name = "status", defaultValue = "DONE") FileStatus status) { // "DONE"으로 하면 완료된것만 보임
+
+        List<FileInfo> items = infoService.getList(gid, location, status);
+
+        return new JSONData(items);
+
+    } // 정보를 조회해야 삭제라던지 다운로드도 가능함
 
     // 파일 단일 삭제
     @DeleteMapping("/delete/{seq}")
     public JSONData delete(@PathVariable("seq") Long seq) {
 
-        return null;
+        FileInfo item = deleteService.delete(seq);
+
+        return new JSONData(item);
     }
 
     @DeleteMapping({"/deletes/{gid}","/deletes/{gid}/{location}"})
     public JSONData delete(@PathVariable("gid") String gid,
                            @PathVariable(name="location", required = false) String location) {
 
-        return null;
+        List<FileInfo> items = deleteService.deletes(gid, location);
+
+        return new JSONData(items);
     }
 }

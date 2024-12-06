@@ -25,6 +25,7 @@ public class FileUploadService {
 
     private final FileProperties properties;
     private final FileInfoRepository fileInfoRepository;
+    private final FileInfoService infoService;
 
     public List<FileInfo> upload(RequestUpload form){
         String gid = form.getGid();
@@ -68,6 +69,9 @@ public class FileUploadService {
             File _file = new File(dir, uploadFileName); // 서버쪽에 올라갈 파일명
             try {
                 file.transferTo(_file);
+
+                // 추가 정보 처리
+                infoService.addInfo(item);
 
                 uploadedItems.add(item);
 

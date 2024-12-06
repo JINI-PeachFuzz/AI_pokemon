@@ -36,4 +36,6 @@ public class FileInfo extends BaseMemberEntity {
     private String filePath; // 파일이 서버에 있는 경로
 
     private boolean done; // 파일과 연관된 작업이 완료되었는지 여부 체크
+    // 예를 들면 게시글 작성하다가 중간에 나가면 그건 이도저도 아닌거 그런것들은 모아서 한번에
+    // 삭제한다던지 해야하는데 그런거 관련
 }
