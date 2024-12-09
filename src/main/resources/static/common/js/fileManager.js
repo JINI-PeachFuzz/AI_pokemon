@@ -4,7 +4,7 @@ commonLib.fileManager = {
     * 파일 업로드 처리
     *
     */
-    upload(files, gid, location, single, imageOnly) {
+    upload(files, gid, location, single, imageOnly, done) {
         try {
             /* 유효성검사 S */
             if (!files || files.length === 0) { // 여기서 0은 갯수임 파일갯수 파일이 없을때를 얘기함
@@ -101,10 +101,10 @@ window.addEventListener("DOMContentLoaded", function() {
 
              function fileEventHandler(e) {
                 const files = e.currentTarget.files;
-                const {gid, location, single, imageOnly} = fileEl;
+                const {gid, location, single, imageOnly, done} = fileEl;
 
                 const { fileManager } = commonLib;
-                fileManager.upload(files, gid, location, single, imageOnly);
+                fileManager.upload(files, gid, location, single, imageOnly, done);
              }
         });
     }
@@ -128,13 +128,13 @@ window.addEventListener("DOMContentLoaded", function() {
             imageOnly = imageOnly === "true";
             done = done === "true";
 
-            if (single && file.length > 1) { // 단일 파일 업로드 이지만 여러개를 선택한 경우
+            if (single && files.length > 1) { // 단일 파일 업로드 이지만 여러개를 선택한 경우
                 alert("하나의 파일만 업로드 하세요.");
                 return;
             }
 
             const {fileManager} = commonLib;
-            fileManager.upload(file,gid,location,single,imageOnly,done);
+            fileManager.upload(files,gid,location,single,imageOnly,done);
         });
 
     }
