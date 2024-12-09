@@ -5,25 +5,26 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.koreait.file.constants.FileStatus;
 import org.koreait.file.entities.FileInfo;
-import org.koreait.file.services.FileDeleteService;
-import org.koreait.file.services.FileDownloadService;
-import org.koreait.file.services.FileInfoService;
-import org.koreait.file.services.FileUploadService;
+import org.koreait.file.services.*;
 import org.koreait.global.exceptions.BadRequestException;
 import org.koreait.global.libs.Utils;
 import org.koreait.global.rests.JSONData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.*;
+import java.nio.file.Files;
 import java.util.List;
 
 @Tag(name="파일 API", description = "파일 업로드, 조회, 다운로드, 삭제기능을 제공합니다.")
@@ -42,6 +43,9 @@ public class ApiFileController {
 
     private final FileDeleteService deleteService;
 
+    private final FileDoneService doneService;
+
+    private final ThumbnailService thumbnailService;
 
     /**
      * 파일 업로드
@@ -62,7 +66,18 @@ public class ApiFileController {
 
         form.setFiles(files);
 
+        /**
+         * 단일 파일 업로드
+         *      - 기 업로드된 파일을 삭제하고 새로 추가
+         */
+
         List<FileInfo> uploadedFiles = uploadService.upload(form);
+
+        // 업로드 완료 하자마자 완료 처리
+        if (form.isDone()) {
+            doneService.process(form.getGid(), form.getLocation());
+        }
+
         JSONData data = new JSONData(uploadedFiles);
         data.setStatus(HttpStatus.CREATED);
 
@@ -78,9 +93,7 @@ public class ApiFileController {
     // 파일 단일 조회
     @GetMapping("/info/{seq}")
     public JSONData info(@PathVariable("seq") Long seq) {
-
         FileInfo item = infoService.get(seq);
-
 
         return new JSONData(item); // 200을 넣었고 JSON형태로 나올꺼
     }
@@ -116,5 +129,25 @@ public class ApiFileController {
         List<FileInfo> items = deleteService.deletes(gid, location);
 
         return new JSONData(items);
+    }
+
+    @GetMapping("/thumb")
+    public void thumb(RequestThumb form, HttpServletResponse response) {
+        String path = thumbnailService.create(form);
+        if (!StringUtils.hasText(path)) {
+            return;
+        }
+
+        File file = new File(path);
+        try (FileInputStream fis = new FileInputStream(file);
+             BufferedInputStream bis = new BufferedInputStream(fis)) {
+
+            String contentType = Files.probeContentType(file.toPath());
+            response.setContentType(contentType);
+
+            OutputStream out = response.getOutputStream();
+            out.write(bis.readAllBytes());
+        } catch (IOException e) {}
+
     }
 }

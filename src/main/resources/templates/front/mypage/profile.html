@@ -3,15 +3,25 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{front/layouts/main}">
 <main layout:fragment="content">
-    <form name="frmProfile" method="POST" th:action="@{/mypage/profile}" th:object="${requestProfile}" autocomplete="off">
-        <input type="hidden" name="_method" value="PATCH">
+<form name="frmProfile" method="POST" th:action="@{/mypage/profile}" th:object="${requestProfile}" autocomplete="off">
+    <input type="hidden" name="_method" value="PATCH">
 
-        <button type="button" class='file-upload'
-                data-image-only="true"
-                data-single="true"
-                th:data-gid="${profile.email}"
-                data-location="profile"
-                th:text="#{이미지_업로드}"></button>
-    </form>
+    <div class="drag-upload profile-image"
+        data-image-only="true"
+        data-single="true"
+        th:data-gid="${profile.email}"
+        data-location="profile"
+        data-done="true"
+    >
+
+    </div>
+    <button type="button" class='file-upload'
+            data-image-only="true"
+            data-single="true"
+            th:data-gid="${profile.email}"
+            data-location="profile"
+            data-done="true"
+            th:text="#{이미지_업로드}"></button>
+</form>
 </main>
 </html>

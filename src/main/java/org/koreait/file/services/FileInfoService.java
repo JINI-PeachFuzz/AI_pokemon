@@ -79,7 +79,13 @@ public class FileInfoService {
         item.setFilePath(getFilePath(item));
         // fileUrl - 접근할 수 있는 주소(브라우저)
         item.setFileUrl(getFileUrl(item));
+
+        // thumbUrl - 이미지 형식인 경우
+        if (item.getContentType().contains("image/")) {
+            item.setThumbUrl(String.format("%s/api/file/thumb?seq=%d", request.getContextPath(), item.getSeq()));
+        }
     }
+
     // 개별로 사용하기도 해서(개별 조회) 아래에 따로 또 해준거
     public String getFilePath(FileInfo item) {
         Long seq = item.getSeq();
@@ -93,9 +99,9 @@ public class FileInfoService {
     }
 
     public String getFileUrl(FileInfo item) {
-            Long seq = item.getSeq();
-            String extension = Objects.requireNonNullElse(item.getExtension(), "");
-            return String.format("%S%s%s/%s", request.getContextPath(), properties.getUrl(), getFolder(seq), seq + extension);
+        Long seq = item.getSeq();
+        String extension = Objects.requireNonNullElse(item.getExtension(), "");
+        return String.format("%S%s%s/%s", request.getContextPath(), properties.getUrl(), getFolder(seq), seq + extension);
     }
 
     public String getFileUrl(Long seq) {
