@@ -1,6 +1,8 @@
 package org.koreait.member.services;
 
 import lombok.RequiredArgsConstructor;
+import org.koreait.file.entities.FileInfo;
+import org.koreait.file.services.FileInfoService;
 import org.koreait.member.MemberInfo;
 import org.koreait.member.constants.Authority;
 import org.koreait.member.entities.Authorities;
@@ -14,11 +16,14 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static ch.qos.logback.classic.util.StatusViaSLF4JLoggerFactory.addInfo;
+
 @Service
 @RequiredArgsConstructor
 public class MemberInfoService implements UserDetailsService {
 
     private final MemberRepository memberRepository;
+    private final FileInfoService fileInfoService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -36,6 +41,9 @@ public class MemberInfoService implements UserDetailsService {
 
         List<SimpleGrantedAuthority> authorities = items.stream().map(a -> new SimpleGrantedAuthority(a.getAuthority().name())).toList();
 
+        // 추가 정보 처리
+        addInfo(member);
+
         return MemberInfo.builder()
                 .email(member.getEmail())
                 .password(member.getPassword())
@@ -43,4 +51,19 @@ public class MemberInfoService implements UserDetailsService {
                 .authorities(authorities)
                 .build();
     }
+
+    /***
+     * 추가 정보 처리
+     * @param member
+     */
+    private void addInfo(Member member) {
+        List<FileInfo> files = fileInfoService.getList(member.getEmail(), "profile");
+        if (files != null && !files.isEmpty()) {
+            member.setProfileImage(files.get(0));
+        }
+
+    }
+
+
+
 }
