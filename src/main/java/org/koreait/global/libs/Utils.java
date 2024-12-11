@@ -32,7 +32,7 @@ public class Utils {
         String pattern = ".*(iPhone|iPod|iPad|BlackBerry|Android|Windows CE|LG|MOT|SAMSUNG|SonyEricsson).*";
 
 
-        return ua.matches(pattern);
+        return StringUtils.hasText(ua) && ua.matches(pattern); // DB조회시 NULL로 나와서 StringUtils.hasText(ua) 넣었음
     }
 
     /**

@@ -1,14 +1,16 @@
 package org.koreait.pokemon.controllers;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.koreait.global.annotations.ApplyErrorPage;
 import org.koreait.global.libs.Utils;
+import org.koreait.global.paging.ListData;
+import org.koreait.pokemon.entities.Pokemon;
+import org.koreait.pokemon.services.PokemonInfoService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -22,18 +24,26 @@ import java.util.List;
 public class PokemonController {
 
     private final Utils utils;
+    private final PokemonInfoService infoService;
+
 
     @GetMapping("/list")
-    public String list(Model model) {
+    public String list(@ModelAttribute PokemonSearch search, Model model) {
         commonProcess("list", model);
+
+        ListData<Pokemon> data = infoService.getList(search);
+        model.addAttribute("items", data.getItems());
+        model.addAttribute("pagination", data.getPagination());
 
         return utils.tpl("pokemon/list");
     }
 
     @GetMapping("/view/{seq}")
     public String view(@PathVariable("seq") Long seq, Model model) {
-        commonProcess("view", model);
+        Pokemon item = infoService.get(seq);
+        model.addAttribute("item",item);
 
+        commonProcess("view", model);
         return utils.tpl("pokemon/view");
     }
 
@@ -49,6 +59,12 @@ public class PokemonController {
             addCss.add("pokemon/list"); // 목록쪽에만 적용되는 스타일
         } else if (mode.equals("view")) {
             addCss.add("pokemon/view"); // 상세쪽에만 적용되는 스타일
+
+            // 상세 보기에서는 포켓몬 이름으로 제목을 완성
+            Pokemon item = (Pokemon) model.getAttribute("item");
+            if (item != null) {
+                pageTitle = String.format("%s - %s", item.getName(), pageTitle);
+            } // 상단에 마이페이지라던지 나오는걸 포켓몬이름 - 포켓몬 도감으로 나오게!
 
         }
 
