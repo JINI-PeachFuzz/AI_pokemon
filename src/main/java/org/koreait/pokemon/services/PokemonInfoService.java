@@ -17,6 +17,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.List;
+
 import static org.springframework.data.domain.Sort.Order.desc;
 
 @Lazy
@@ -55,6 +57,10 @@ public class PokemonInfoService {
         Pageable pageable = PageRequest.of(page - 1, limit, Sort.by(desc("seq"))); // 페이지는 0번 부터임
 
         Page<Pokemon> data = pokemonRepository.findAll(andBuilder, pageable);
+        List<Pokemon> items = data.getContent(); // 조회된 목록
+        // 추가 정보 처리
+        items.forEach(this::addInfo); // 메서드 참조
+
 
         return null;
     }
