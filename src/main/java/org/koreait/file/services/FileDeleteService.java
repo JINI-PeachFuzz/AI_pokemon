@@ -41,7 +41,7 @@ public class FileDeleteService {
         File file = new File(filePath);
         if (file.exists() && file.isFile()) {
             file.delete();
-        }
+        } // 예를 들면 폴더안에 파일을 삭제해서 빈폴더 만드는 것
 
         // 3. 삭제된 파일 정보를 반환
         return item;

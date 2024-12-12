@@ -11,7 +11,7 @@ import java.io.Serializable;
 @IdClass(AuthoritiesId.class) // 복합키 사용
 public class Authorities implements Serializable {
     @Id
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY) // 전체적으로 지연로딩을 하고 필요할때 즉시로딩
     private Member member;
 
     @Id

@@ -16,9 +16,9 @@ public abstract class BaseMemberEntity extends BaseEntity {
 
     @CreatedBy
     @Column(length = 65, updatable = false)
-    private String createdBy;
+    private String createdBy; // 파일을 처음 생성했을 떄 ID 저장되는 거
 
     @LastModifiedBy
     @Column(length = 65, insertable = false) // 수정할때만 들어가야해서
-    private String modifiedBy;
+    private String modifiedBy; // 파일을 수정 했을 때 ID 저장되는 거
 }

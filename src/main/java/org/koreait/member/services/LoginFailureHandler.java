@@ -34,7 +34,7 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
         String redirectUrl = request.getContextPath() + "/member/login";
 
         // 아이디 또는 비밀번호를 입력하지 않은 경우, 아이디로 조회 X, 비번이 일치하지 않는 경우
-        if (exception instanceof BadCredentialsException) {
+        if (exception instanceof BadCredentialsException) { // BadCredentialsException 시큐리티제공 예외처리/사용자인증으로 발생하는 예외
             List<String> errorCodes = Objects.requireNonNullElse(form.getErrorCodes(), new ArrayList<>());
 
             if (!StringUtils.hasText(email)) {
@@ -51,16 +51,16 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
             }
 
             form.setErrorCodes(errorCodes);
-        } else if (exception instanceof CredentialsExpiredException) { //  비밀번호가 만료된 경우
+        } else if (exception instanceof CredentialsExpiredException) { //  비밀번호가 만료된 경우 / 시큐리티 제공, 사용자의 자격 증명(비밀번호 등)이 만료된 경우 발생하는 예외
             redirectUrl = request.getContextPath() + "/member/password/change";
-        } else if (exception instanceof DisabledException) { // 탈퇴한 회원
+        } else if (exception instanceof DisabledException) { // 탈퇴한 회원 / 사용자의 계정이 비활성화(Disabled) 상태인 경우
             form.setErrorCodes(List.of("Failure.disabled.login"));
 
         }
 
         System.out.println(exception);
 
-        session.setAttribute("requestLogin", form);
+        session.setAttribute("requestLogin", form); // 틀리다고 해서 다시 안쳐도 되게 해주는거 / 남아있는거
 
         // 로그인 실패시에는 로그인 페이지로 이동
         response.sendRedirect(redirectUrl);

@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Getter @Setter
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class) // 사용할때마다 설정하게 새로고침느낌으로 MvcConfig에 추가함
-public abstract class BaseEntity {
+public abstract class BaseEntity { // 이거는 다 필요한거
 
     @CreatedDate
     @Column(updatable = false)

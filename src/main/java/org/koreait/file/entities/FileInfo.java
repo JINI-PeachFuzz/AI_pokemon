@@ -32,7 +32,7 @@ public class FileInfo extends BaseMemberEntity implements Serializable {
     @Column(length = 65)
     private String contentType; // 파일 형식 image/png  application/..
 
-    @Transient
+    @Transient // DB에 안넣음
     private String fileUrl; // URL로 파일 접근할 수 있는 주소 - 2차 가공
 
     @Transient

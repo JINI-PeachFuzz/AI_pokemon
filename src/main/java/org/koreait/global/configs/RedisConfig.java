@@ -37,3 +37,6 @@ public class RedisConfig {
         return redisTemplate;
     }
 }
+
+// 레디스는 세션값을 바꿔주는 거 / 관계 직렬화를 해줘야함
+// implements Serializable / 키와 밸류로 문자열로 직렬화를 해줘야함

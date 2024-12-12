@@ -73,4 +73,5 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+    // 시큐리티제공, 비밀번호를 안전하게 암호화(해싱)하고 이후 사용자가 입력한 비밀번호와 암호화된 비밀번호를 비교할 수 있는 기능을 제공함
 }

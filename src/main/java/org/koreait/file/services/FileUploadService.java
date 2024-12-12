@@ -37,12 +37,10 @@ public class FileUploadService {
         String rootPath = properties.getPath(); // 주경로 / 환경변수로 설정한 곳
 
 
-
-
         // 파일 업로드 성공 파일 정보
         List<FileInfo> uploadedItems = new ArrayList<>();
 
-        for (MultipartFile file : files){
+        for (MultipartFile file : files){ // **향상된 for문(enhanced for-loop)**을 사용하여 files라는 컬렉션(Collection) 안의 모든 요소를 순회하는 코드입니다. 이 문장은 파일 업로드 처리에서 흔히 사용되며, 사용자가 여러 개의 파일을 업로드할 때 그 파일들을 하나씩 처리하는 로직
             String contentType = file.getContentType();
             // 이미지 형식의 파일만 허용하는 경우 - 이미지가 아닌 파일은 건너띄기
             if (form.isImageOnly() && contentType.indexOf("image/") == -1) {
@@ -52,7 +50,7 @@ public class FileUploadService {
             // 1. 파일 업로드 정보 - DB에 기록 S
             // 파일명.확장자 // model.weights.h5
             String fileName = file.getOriginalFilename();
-            String extension = fileName.substring(fileName.lastIndexOf("."));
+            String extension = fileName.substring(fileName.lastIndexOf(".")); // substring은 자르겠다
 
             FileInfo item = new FileInfo();
             item.setGid(gid);
@@ -68,19 +66,20 @@ public class FileUploadService {
             // 2. 파일 업로드 처리 S
             long seq = item.getSeq();
             String uploadFileName = seq + extension;
-            long folder = seq % 10L; // 0 ~ 9
+            long folder = seq % 10L; // 0 ~ 9 // 균등배분
             File dir = new File(rootPath + folder);
             // 디렉토리가 존재 하지 않거나 파일로만 있는 경우 생성
             if (!dir.exists() || !dir.isDirectory()) {
-                dir.mkdirs();
+                dir.mkdirs(); // 하나의 디렉토리만 생성 / make directory
             }
 
             File _file = new File(dir, uploadFileName); // 서버쪽에 올라갈 파일명
             try {
-                file.transferTo(_file);
+                file.transferTo(_file); // 지정경로에다가 파일을 저장하겠다는 뜻
+                // 여기서는 무조건 try / catch를 사용해야함 안쓰면 인텔리제이에서 오류발생함 너 써라 하는 느낌
 
                 // 추가 정보 처리
-                infoService.addInfo(item);
+                infoService.addInfo(item); // addInfo 는 추가로 가공할게 있을 때 사용함
 
                 uploadedItems.add(item);
 

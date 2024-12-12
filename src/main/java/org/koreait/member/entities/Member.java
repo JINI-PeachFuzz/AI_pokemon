@@ -56,7 +56,7 @@ public class Member extends BaseEntity implements Serializable {
     @Column(length = 50)
     private String optionalTerms; // 선택 약관
 
-    @ToString.Exclude
+    @ToString.Exclude // 투스트링에서 배제하는거 // 순환참조가 나오는데 롬복때문에 // N+1문제
     @OneToMany(mappedBy = "member")
     private List<Authorities> authorities;
 

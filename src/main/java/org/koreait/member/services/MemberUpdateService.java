@@ -40,6 +40,8 @@ public class MemberUpdateService {
      */
     public void process(RequestJoin form) {
         // 커맨드 객체 -> 엔티티 객체 데이터 옮기기
+        // modelMapper 를 사용하면서 셋셋셋하는거 그걸 안써도 되게 해줌 근데 조건이 자료형이랑 그런것들이 일치해야함
+
         Member member = modelMapper.map(form, Member.class);
 
         // 선택 약관 -> 약관 항목1||약관 항목2||...
@@ -68,6 +70,7 @@ public class MemberUpdateService {
     public void process(RequestProfile form) {
         process(form, null);
     }
+    // 메서드 오버로드 사용함 / 열린구조
 
     public void process(RequestProfile form, List<Authority> authorities) { // 관리자일때만 추가할 거
         Member member = memberUtil.getMember(); // 로그인한 사용자의 정보

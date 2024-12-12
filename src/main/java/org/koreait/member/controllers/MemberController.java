@@ -58,7 +58,7 @@ public class MemberController {
     public String login(@ModelAttribute RequestLogin form, Errors errors, Model model) {
         commonProcess("login", model); // 로그인 페이지 공통 처리
 
-        if (form.getErrorCodes() != null) { // 검증 실패
+        if (form.getErrorCodes() != null) { // 검증 실패 // 쪼개논거
             form.getErrorCodes().stream().map(s -> s.split("_"))
                     .forEach(s -> {
                         if (s.length > 1) {
@@ -167,9 +167,9 @@ public class MemberController {
     /**
      * 공통 처리 부분
      *
-     * @param mode
+     * @param mode // 모드는 로그인, 조인, 어그리를 얘기하는 거임
      * @param model
-     */
+     */                        // agree      // agree에서 주는 Model
     private void commonProcess(String mode, Model model) {
         mode = StringUtils.hasText(mode) ? mode : "login";
 
@@ -188,7 +188,7 @@ public class MemberController {
         } else if (mode.equals("agree")) {
             pageTitle = utils.getMessage("약관동의");
             // 약관 동의 페이지에 최초 접근시 약관 선택을 초기화
-            model.addAttribute("requestAgree", requestAgree());
+            model.addAttribute("requestAgree", requestAgree()); // "requestAgree" 키값, requestAgree() 밸류
 
         }
 
