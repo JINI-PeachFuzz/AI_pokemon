@@ -1,6 +1,7 @@
 package org.koreait.pokemon.services;
 
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.constraints.Max;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +22,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import static org.springframework.data.domain.Sort.Order.asc;
 import static org.springframework.data.domain.Sort.Order.desc;
 
 @Lazy
@@ -33,6 +37,7 @@ public class PokemonInfoService {
     private final PokemonRepository pokemonRepository;
     private final HttpServletRequest request;
     private final Utils utils;
+    private final JPAQueryFactory queryFactory;
 
     /***
      * 포켓몬 목록 조회
@@ -43,7 +48,7 @@ public class PokemonInfoService {
     public ListData<Pokemon> getList(PokemonSearch search) {
         int page = Math.max(search.getPage(), 1); // 페이지 번호 // 둘중에 큰수를 반환하므로 -1,0 이면 1이 나옴
         int limit = search.getLimit(); // 한페이지 당 레코드 갯수
-        limit = limit < 1 ? 20 : limit;
+        limit = limit < 1 ? 18 : limit;
 
 
         QPokemon pokemon = QPokemon.pokemon;
@@ -60,7 +65,7 @@ public class PokemonInfoService {
         /* 검색 처리 E */
 
         // pageable 도메인껄로 사용해야함
-        Pageable pageable = PageRequest.of(page - 1, limit, Sort.by(desc("seq"))); // 페이지는 0번 부터임
+        Pageable pageable = PageRequest.of(page - 1, limit, Sort.by(asc("seq"))); // 페이지는 0번 부터임
 
         Page<Pokemon> data = pokemonRepository.findAll(andBuilder, pageable);
         List<Pokemon> items = data.getContent(); // 조회된 목록
@@ -86,7 +91,7 @@ public class PokemonInfoService {
         Pokemon item = pokemonRepository.findById(seq).orElseThrow(PokemonNotFoundException::new);
 
         // 추가 정보 처리
-        addInfo(item);
+        addInfo(item, true); // 상세보기는 true가 들어감
 
         return item;
 
@@ -107,7 +112,52 @@ public class PokemonInfoService {
         String types = item.getTypes();
         if (StringUtils.hasText(types)) {
             item.set_types(Arrays.stream(types.split("\\|\\|")).toList());
-
         }
+
+
     }
+    // 페이지 넘기는 거 관련
+    private void addInfo(Pokemon item, boolean isView) { // boolean isView 은 확인밖에..
+        addInfo(item);
+        if (!isView) return;
+
+        long seq = item.getSeq();
+        long lastSeq = getLastSeq();
+
+        // 이전 포켓몬 정보 - prevItem
+        long prevSeq = seq - 1L; // 음수이면 마지막껄로 가는걸로 해줘야함
+        prevSeq = prevSeq < 1L ? lastSeq : prevSeq; // 이전번호
+
+        // 다음 포켓몬 정보 - prevItem
+        long nextSeq = seq + 1L;
+        nextSeq = nextSeq > lastSeq ? 1L : nextSeq;
+
+        QPokemon pokemon = QPokemon.pokemon;
+        List<Pokemon> items = (List<Pokemon>) pokemonRepository.findAll(pokemon.seq.in(prevSeq, nextSeq)); // 순서대로 가져와서 넣음
+
+        Map<String, Object> prevItem = new HashMap<>();
+        Map<String, Object> nextItem = new HashMap<>();
+        for (int i = 0; i < items.size(); i++) {
+            Pokemon _item = items.get(i);
+
+            Map<String, Object> data = _item.getSeq().longValue() == prevSeq ? prevItem : nextItem;
+            data.put("seq", _item.getSeq());
+            data.put("name", _item.getName());
+            data.put("nameEn", _item.getNameEn());
+        }
+
+        item.setPrevItem(prevItem);
+        item.setNextItem(nextItem);
+
+    }
+
+    private Long getLastSeq() { // 여기에 마지막꺼 가져오는거 넣을 꺼임
+        QPokemon pokemon = QPokemon.pokemon;
+
+        return queryFactory.select(pokemon.seq.max()) // select를 넣게 되면 튜플형도 있는데 이거는 영속성에 포함안되고 확인? 만 됨.
+                .from(pokemon)
+                .fetchFirst();
+    }
+
+
 }

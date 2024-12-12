@@ -10,7 +10,7 @@ public class MessageSourceConfig {
     @Bean
     public MessageSource messageSource() {
         ResourceBundleMessageSource ms = new ResourceBundleMessageSource();
-        ms.addBasenames("messages.commons", "messages.errors", "messages.validations");
+        ms.addBasenames("messages.commons", "messages.errors", "messages.validations", "messages.pokemon");
         ms.setDefaultEncoding("UTF-8");
         ms.setUseCodeAsDefaultMessage(true);
 

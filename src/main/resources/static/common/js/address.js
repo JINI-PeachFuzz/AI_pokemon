@@ -11,7 +11,7 @@ commonLib.address = {
 
         const script = document.createElement("script");
         script.id = "address-api";
-        script.src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js";
+        script.src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"; // 동적로딩
         document.head.prepend(script);
     },
 
@@ -26,7 +26,7 @@ commonLib.address = {
                */
                if (typeof callbackAddressSearch === 'function') {
                 const {zonecode, roadAddress} = data;
-                callbackAddressSearch({zipCode: zonecode, address: roadAddress});
+                callbackAddressSearch({zipCode: zonecode, address: roadAddress}); // 후속처리는 여기다가
                }
             }
         }).open();

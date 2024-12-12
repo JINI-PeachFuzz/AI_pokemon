@@ -8,6 +8,7 @@ import org.koreait.member.constants.Authority;
 import org.koreait.member.entities.Authorities;
 import org.koreait.member.entities.Member;
 import org.koreait.member.repositories.MemberRepository;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -18,6 +19,7 @@ import java.util.List;
 
 import static ch.qos.logback.classic.util.StatusViaSLF4JLoggerFactory.addInfo;
 
+@Lazy
 @Service
 @RequiredArgsConstructor
 public class MemberInfoService implements UserDetailsService {
@@ -56,7 +58,7 @@ public class MemberInfoService implements UserDetailsService {
      * 추가 정보 처리
      * @param member
      */
-    private void addInfo(Member member) {
+    public void addInfo(Member member) {
         List<FileInfo> files = fileInfoService.getList(member.getEmail(), "profile");
         if (files != null && !files.isEmpty()) {
             member.setProfileImage(files.get(0));

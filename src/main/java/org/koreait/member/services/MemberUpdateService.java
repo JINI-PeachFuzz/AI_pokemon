@@ -11,7 +11,6 @@ import org.koreait.member.repositories.AuthoritiesRepository;
 import org.koreait.member.repositories.MemberRepository;
 import org.koreait.mypage.controllers.RequestProfile;
 import org.modelmapper.ModelMapper;
-import org.springframework.cglib.core.Local;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,7 +19,6 @@ import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Lazy // 지연로딩 - 최초로 빈을 사용할때 생성
 @Service
@@ -33,6 +31,7 @@ public class MemberUpdateService {
     private final PasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;
     private final MemberUtil memberUtil;
+    private final MemberInfoService infoService;
 
     /**
      * 커맨드 객체의 타입에 따라서 RequestJoin이면 회원 가입 처리
@@ -135,6 +134,12 @@ public class MemberUpdateService {
         }
 
         // 회원 권한 업데이트 처리 E
+
+        // 로그인 회원 정보 업데이터
+        infoService.addInfo(member); // 싱글톤 패턴이라 이것만 넣어도 됨
+        memberUtil.setMember(member); // 2차 가공해야함
+
+
     }
 
 }
