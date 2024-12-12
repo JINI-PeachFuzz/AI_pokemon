@@ -11,7 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-@Lazy // 순환참조발생도 방지하는거 같기도 함 / 멤버인포서비스에도 넣어줬음
+//@Lazy 멤버인포서비스에도 넣어줬음 / 근데 이거 넣으니까 오류발생했음 그래서 지웠음
 @Setter
 @Component
 public class MemberUtil {
@@ -26,14 +26,10 @@ public class MemberUtil {
     * 관리자 여부
     * 권한 - MANAGER, ADMIN
     * */
-    public boolean isAdmin(){
-        /*
+    public boolean isAdmin() {
         return isLogin() &&
                 getMember().getAuthorities().stream()
                         .anyMatch(a -> a.getAuthority() == Authority.ADMIN || a.getAuthority() == Authority.MANAGER);
-
-         */
-        return false;
     }
 
 
