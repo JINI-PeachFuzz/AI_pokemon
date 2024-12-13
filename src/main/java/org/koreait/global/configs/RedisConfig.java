@@ -14,7 +14,7 @@ public class RedisConfig {
 
     @Value("${spring.data.redis.host}")
     private String host;
-
+// yml에 설정한걸 가져와서 사용
     @Value("${spring.data.redis.port}")
     private int port;
 

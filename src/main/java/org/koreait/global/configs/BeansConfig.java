@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.web.client.RestTemplate;
 
-
+// 수동등록 빈설정
 @Configuration
 public class BeansConfig {
 
@@ -22,7 +22,7 @@ public class BeansConfig {
 
     @Lazy
     @Bean
-    public ModelMapper modelMapper() {
+    public ModelMapper modelMapper() { // Mapper 범용기능기
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 
@@ -30,6 +30,7 @@ public class BeansConfig {
     }
 
     // 자바객체를 JSON으로 서로 바꿔주는 기능!
+    // ObjectMapper
     @Lazy
     @Bean
     public ObjectMapper objectMapper() {

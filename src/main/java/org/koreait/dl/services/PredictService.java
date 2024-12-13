@@ -25,7 +25,7 @@ public class PredictService {
     private String dataUrl;
 
     @Autowired
-    private ObjectMapper om;
+    private ObjectMapper om; // 빈설정하단 참고
 
     public int[] predict(List<int[]> items) {
         try {
@@ -42,7 +42,7 @@ public class PredictService {
             //int exitCode = process.waitFor();
             //System.out.println("exitCode:" + exitCode);
             InputStream in = process.getInputStream();
-            return om.readValue(in.readAllBytes(), int[].class);
+            return om.readValue(in.readAllBytes(), int[].class); //int[].class 는 뭐가 들어올지 몰라서
 
         } catch (Exception e) {
             e.printStackTrace();

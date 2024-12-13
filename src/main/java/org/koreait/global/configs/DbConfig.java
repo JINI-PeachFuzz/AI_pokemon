@@ -15,7 +15,7 @@ public class DbConfig {
 
     @Lazy
     @Bean
-    public JPAQueryFactory queryFactory() {
+    public JPAQueryFactory jpaQueryFactory() {
         return new JPAQueryFactory(em);
     }
 }

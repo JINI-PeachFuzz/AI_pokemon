@@ -21,8 +21,9 @@ public class MvcConfig implements WebMvcConfigurer {
      */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/**")
+        registry.addResourceHandler("/**") // **는 앤트패턴
                 .addResourceLocations("classpath:/static/");
+        // classpath는 클래스파일을 인식할 수 있는 경로 / 정적경로 / css나 js파일이 있는 곳
     }
 
     /**
@@ -38,5 +39,8 @@ public class MvcConfig implements WebMvcConfigurer {
     @Bean
     public HiddenHttpMethodFilter hiddenHttpMethodFilter(){
         return new HiddenHttpMethodFilter();
+        // get이나 post방식으로 사용하는데 delete나 path, put등을 사용할려고 할때
+        // 히든을 사용하면 교체해서 사용할 수 있게 해줌
+        // 프로필html 에서 보면 타입을 히든으로 해서 넣어줬었음
     }
 }
