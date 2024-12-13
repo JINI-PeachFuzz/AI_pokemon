@@ -22,14 +22,16 @@ public class FileDeleteService {
     private final MemberUtil memberUtil;
 
     // 삭제한다음에 그 데이터를 반환값으로 넣을 꺼
+    // 파일삭제할때 데이터를 확인해야하는 경우도 있으니 seq가 들어간거
     public FileInfo delete(Long seq) {
         FileInfo item = infoService.get(seq);
         String filePath = item.getFilePath();
         // 0. 파일 소유자만 삭제 가능하게 통제 - 다만 관리자는 가능
+        // 관리자는 만능! 다 가능함!
         String createdBy = item.getCreatedBy();
         if (!memberUtil.isAdmin() && StringUtils.hasText(createdBy)
                 && (!memberUtil.isLogin() || !memberUtil.getMember().getEmail().equals(createdBy))) {
-            throw new UnAuthorizedException();
+            throw new UnAuthorizedException(); // 파일소유자가 맞는지 확인 아니면 401응답코드 나오게.
         }
 
         // 삭제할려면

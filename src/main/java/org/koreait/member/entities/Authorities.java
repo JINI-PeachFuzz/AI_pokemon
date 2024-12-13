@@ -20,5 +20,5 @@ public class Authorities implements Serializable {
     private Authority authority;
 
 
-
+// id, id 두개인건 한명에게 여러권한을 줄 수있지만 중복된 권한은 안 주게 복합키로 정의했음, 다른사람은 동일 권한을 가질 수 는 있게해줌
 }

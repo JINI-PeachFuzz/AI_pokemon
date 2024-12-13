@@ -77,14 +77,14 @@ public class ApiFileController {
             deleteService.deletes(form.getGid(), form.getLocation());
         }
 
-        List<FileInfo> uploadedFiles = uploadService.upload(form);
+        List<FileInfo> uploadedFiles = uploadService.upload(form); // 업로드 처리!
 
         // 업로드 완료 하자마자 완료 처리
         if (form.isDone()) {
             doneService.process(form.getGid(), form.getLocation());
         }
 
-        JSONData data = new JSONData(uploadedFiles);
+        JSONData data = new JSONData(uploadedFiles); // 제이슨형태로 출력하기 위해 넣어줬음
         data.setStatus(HttpStatus.CREATED);
 
         return data;
@@ -94,7 +94,8 @@ public class ApiFileController {
     @GetMapping("/download/{seq}")
     public void download(@PathVariable("seq") Long seq) {// 파일다운로드는 직접하는거기 때문에 void로 한거
         downloadService.process(seq);
-    }
+    } // 다운할때는 응답헤더가 중요함
+    // 파일이름으로 출력되는걸 바꿔버리는데... seq만 가지고도 다운이 가능하게 만든거
 
     // 파일 단일 조회
     @GetMapping("/info/{seq}")
@@ -110,9 +111,10 @@ public class ApiFileController {
      */
     @GetMapping(path = {"/list/{gid}", "/list/{gid}/{location}"})
     public JSONData list(@PathVariable("gid") String gid,
-                         @PathVariable(name = "location", required = false) String location, // required=false 필수아니면 false
+                         @PathVariable(name = "location", required = false) String location, // required=false 필수아니면 false / gid는 필순데 이거는 필수아님!
                          @RequestParam(name = "status", defaultValue = "DONE") FileStatus status) { // "DONE"으로 하면 완료된것만 보임
-// @RequestParam**은 Spring MVC에서 사용되는 어노테이션으로, HTTP 요청의 파라미터를 컨트롤러 메서드의 매개변수로 전달하는 데 사용됩니다. 주로 GET 요청의 쿼리 파라미터나 POST 요청의 폼 데이터를 처리할 때 사용됩니다.
+// @RequestParam**은 Spring MVC에서 사용되는 어노테이션으로, HTTP 요청의 파라미터를 컨트롤러 메서드의 매개변수로 전달하는 데 사용됩니다. 주로 GET 요청의 쿼리 파라미터나 POST 요청의 폼 데이터를 처리할 때 사용됩니다. // FileStatus을 파일 완료와 미완에대해서 정의해놨음
+
         List<FileInfo> items = infoService.getList(gid, location, status);
 
         return new JSONData(items);
@@ -153,6 +155,7 @@ public class ApiFileController {
 
             OutputStream out = response.getOutputStream();
             out.write(bis.readAllBytes());
+            // 바디쪽에 출력해서 이미지가 바로 보이게 만듦
         } catch (IOException e) {}
 
     }

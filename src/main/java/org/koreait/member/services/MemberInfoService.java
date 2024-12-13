@@ -23,12 +23,13 @@ import static ch.qos.logback.classic.util.StatusViaSLF4JLoggerFactory.addInfo;
 @Service
 @RequiredArgsConstructor
 public class MemberInfoService implements UserDetailsService {
+    // 스프링 시큐리티임!
 
     private final MemberRepository memberRepository;
     private final FileInfoService fileInfoService;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException { // loadUserByUsername 회원조회관련
         Member member = memberRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException(username));
 
 
@@ -44,7 +45,7 @@ public class MemberInfoService implements UserDetailsService {
         List<SimpleGrantedAuthority> authorities = items.stream().map(a -> new SimpleGrantedAuthority(a.getAuthority().name())).toList();
 
         // 추가 정보 처리
-        addInfo(member);
+        addInfo(member); // 조회방식은 추가 처리를 add 이런식으로 해줌
 
         return MemberInfo.builder()
                 .email(member.getEmail())
@@ -53,6 +54,8 @@ public class MemberInfoService implements UserDetailsService {
                 .authorities(authorities)
                 .build();
     }
+    // MemberInfo (유저디테일)구현체임 // 인증하는데 사용됨.
+
 
     /***
      * 추가 정보 처리

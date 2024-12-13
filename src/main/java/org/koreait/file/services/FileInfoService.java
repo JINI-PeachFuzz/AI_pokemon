@@ -39,7 +39,7 @@ public class FileInfoService {
         return item;
     }
 
-    public List<FileInfo> getList(String gid, String location, FileStatus status) {
+    public List<FileInfo> getList(String gid, String location, FileStatus status) { // 조회하는게 많아서 BooleanBuilder로 만듦
         status = Objects.requireNonNullElse(status, FileStatus.ALL);
         // ALL 일때는 조건추가X
         QFileInfo fileInfo = QFileInfo.fileInfo; // 검색
@@ -51,23 +51,25 @@ public class FileInfoService {
         }
 
         // 파일 작업 완료 상태
-        if (status != FileStatus.ALL) {
+        if (status != FileStatus.ALL) { //ALL 일때는 전체다 보이는거니까 처리할 게 없음 / ALL이 아닐때 처리하는걸 정의해야함
             andBuilder.and(fileInfo.done.eq(status == FileStatus.DONE));
         }
 
         List<FileInfo> items = (List<FileInfo>) infoRepository.findAll(andBuilder, Sort.by(asc("createdAt"))); // Builder는 하나일때
+        // 오름차순으로 정리하게 추가했음
+
 
         // 추가 정보 처리
-        items.forEach(this::addInfo);
+        items.forEach(this::addInfo); // 스타일~
 
         return items;
     }
 
     public List<FileInfo> getList(String gid, String location) {
         return getList(gid, location, FileStatus.DONE);
-    }
+    }// 상세페이지, 게시글 보기 등 다 완료된 페이지를 더 많이 보게됨. / 그래서 기본값을 넣은거
 
-    public List<FileInfo> getList(String gid) { // 파일 그룹작업 완료된 파일
+    public List<FileInfo> getList(String gid) { // 파일 그룹작업 완료된 파일 // gid 파일만 확인이 가능하게 오버로드를 이용해서 처리했음
         return getList(gid, null);
     }
 

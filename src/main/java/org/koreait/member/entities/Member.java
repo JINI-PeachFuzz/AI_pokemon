@@ -58,7 +58,7 @@ public class Member extends BaseEntity implements Serializable {
 
     @ToString.Exclude // 투스트링에서 배제하는거 // 순환참조가 나오는데 롬복때문에 // N+1문제
     @OneToMany(mappedBy = "member")
-    private List<Authorities> authorities;
+    private List<Authorities> authorities; // 역할을 중복으로 할 수 있게 복수로 구현했음
 
     // 비밀번호 변경 일시
     private LocalDateTime credentialChangedAt;
