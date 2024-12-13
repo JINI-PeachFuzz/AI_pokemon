@@ -12,7 +12,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 @EnableJpaAuditing
 @EnableScheduling // 쌓아놓고 이괄적으로 한번에 학습을 시킴
-@EnableRedisHttpSession
+@EnableRedisHttpSession // 레디스에 대한 기본설정들이 여기 들어가 있다고 생각하면 될듯
 public class MvcConfig implements WebMvcConfigurer {
     /**
      * 정적 경로 설정, CSS, JS, 이미지

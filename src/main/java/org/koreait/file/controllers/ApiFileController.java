@@ -58,12 +58,13 @@ public class ApiFileController {
             @Parameter(name="gid", description = "파일 그룹 ID", required = true), // 빨간색별표가 붙음 / 필수라고
             @Parameter(name = "location", description = "파일 그룹 내에서 위치 코드"),
             @Parameter(name = "file", description = "업로드 파일, 복수개 전송 가능", required = true)
-    })
+    }) // 설명단거 / 다른사람들이 보기때문에 설명을 잘 달아줘야함 / 로컬호스트3000/apidocs/html 에 있음
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/upload")
     public JSONData upload(@RequestPart("file") MultipartFile[] files, @Valid RequestUpload form, Errors errors) {
+        // MultipartFile[] files은 이미 정해진 인터페이스임! / 파일이름, 콘텐트타입, 용량등 그런거
         if (errors.hasErrors()) {
-            throw new BadRequestException(utils.getErrorMessages(errors));
+            throw new BadRequestException(utils.getErrorMessages(errors)); // 2차가공 / getErrorMessages(errors)는 errors를 일괄적으로 가공하기 위해서 만든거 / map형태로 들어감
         }
 
         form.setFiles(files); // 이미지를 눌렀을 때 여기로 들어가는 거
@@ -135,7 +136,7 @@ public class ApiFileController {
 
         return new JSONData(items);
     }
-
+ // 썸네일! RequestThumb 을 들어가면 크기라던지 그런거 정의해놨음
     @GetMapping("/thumb")
     public void thumb(RequestThumb form, HttpServletResponse response) {
         String path = thumbnailService.create(form);

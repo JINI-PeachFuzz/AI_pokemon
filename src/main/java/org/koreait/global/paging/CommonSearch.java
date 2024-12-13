@@ -14,3 +14,4 @@ public class CommonSearch {
     private String sopt; // 검색 옵션
     private String skey; // 검색 키워드
 }
+// 예시로 포켓몬 컨트롤 쪽에 서치 참고 / 거기서도 상속받아서 추가해서 사용했음

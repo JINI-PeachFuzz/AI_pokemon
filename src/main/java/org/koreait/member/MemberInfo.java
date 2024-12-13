@@ -46,10 +46,10 @@ public class MemberInfo implements UserDetails {
         return true;
     }
 
-    @Override
+    @Override // 비번만료관련
     public boolean isCredentialsNonExpired() {
         LocalDateTime credentialChangedAt = member.getCredentialChangedAt();
-        return credentialChangedAt != null &&
+        return credentialChangedAt != null && // 지난 변경시점에서 값이 널이 아니고 30일이 안됐을경우 기본페이지로 넘어가게
                 credentialChangedAt.isAfter(LocalDateTime.now().minusMonths(1L)); // 한달기준으로 인증
     }
 
@@ -59,3 +59,6 @@ public class MemberInfo implements UserDetails {
 
     }
 }
+// 위에 isAccountNonExpired, isAccountNonLocked 등 안에 내용없는것들도
+// 시큐리티에서 참이냐 거짓이냐에 따라서 이미 판별하는데
+// 값이 false이면 로그인이 안되는거임

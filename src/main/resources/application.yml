@@ -38,7 +38,7 @@ spring:
     multipart:
       maxFileSize: 20MB
       maxRequestSize: 60MB
-      fileSizeThreshold: 30MB
+      fileSizeThreshold: 30MB #30메가까지는 임시로 넣고 넘으면 다른곳에 저장하는거
 
 # 로거 설정
 logging:

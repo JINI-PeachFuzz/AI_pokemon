@@ -16,12 +16,13 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.HashMap;
 import java.util.Map;
-
+// 자바형태로서 보여지는 쪽이고 아래 Rest는 제이슨형태로 데이터가 보여지는거
 @ControllerAdvice(annotations = ApplyErrorPage.class)
 @RequiredArgsConstructor
 public class CommonControllerAdvice {
     private final Utils utils;
 
+    // 아래에 에러페이지에 대한 공통처리를 넣었음
     @ExceptionHandler(Exception.class)
     public ModelAndView errorHandler(Exception e, HttpServletRequest request) {
         Map<String, Object> data = new HashMap<>();
@@ -36,7 +37,7 @@ public class CommonControllerAdvice {
         data.put("exception", e);
 
         if (e instanceof CommonException commonException) {
-            status = commonException.getStatus();
+            status = commonException.getStatus(); // 응답코드에 관련된부분(정확하게 나타내기 위해서) / 예외체계를 만들었는데 상속받은 객체면 그걸 사용함
             message = commonException.isErrorCode() ? utils.getMessage(message) : message;
 
             StringBuffer sb = new StringBuffer(2048);
@@ -55,7 +56,7 @@ public class CommonControllerAdvice {
                 String url = redirectException.getUrl();
                 sb.append(String.format("%s.location.replace('%s');", target, url));
             }
-
+// 위 3개 예외처리는
             if (!sb.isEmpty()) {
                 data.put("script", sb.toString());
             }
@@ -65,7 +66,7 @@ public class CommonControllerAdvice {
         data.put("_status", status);
         data.put("message", message);
         ModelAndView mv = new ModelAndView();
-        mv.setStatus(status);
+        mv.setStatus(status); // 응답코드
         mv.addAllObjects(data);
         mv.setViewName(tpl);
         return mv;

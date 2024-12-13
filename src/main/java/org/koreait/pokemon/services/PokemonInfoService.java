@@ -45,7 +45,7 @@ public class PokemonInfoService {
      * @param search
      * @return
      */
-    public ListData<Pokemon> getList(PokemonSearch search) {
+    public ListData<Pokemon> getList(PokemonSearch search) { // PokemonSearch 커몬서치를 통해서 받게된거 // 글로벌 페이지 리스트데이터 참고
         int page = Math.max(search.getPage(), 1); // 페이지 번호 // 둘중에 큰수를 반환하므로 -1,0 이면 1이 나옴
         int limit = search.getLimit(); // 한페이지 당 레코드 갯수
         limit = limit < 1 ? 18 : limit;
@@ -55,7 +55,7 @@ public class PokemonInfoService {
 
 
         /* 검색 처리 S */
-        BooleanBuilder andBuilder = new BooleanBuilder();
+        BooleanBuilder andBuilder = new BooleanBuilder(); // 검색처리가 1개일때는 q클래스로 넣으면 되는데 여러개일 때 (predicate를 통해) 검색조건 정한거
         String skey = search.getSkey();
         if (StringUtils.hasText(skey)) { // 키워드 검색
             andBuilder.and(pokemon.name
@@ -78,7 +78,7 @@ public class PokemonInfoService {
         int ranges = utils.isMobile() ? 5: 10;
         Pagination pagination = new Pagination(page, (int)data.getTotalElements(),ranges, limit, request);
 
-        return new ListData<>(items, pagination);
+        return new ListData<>(items, pagination); // 목록과 페이지에 있는걸 같이 보이게 하기 위해서!
     }
 
     /***

@@ -41,7 +41,9 @@ public class Pagination {
      * @param total : 총 Page(레코드) 개수
      * @param ranges : 페이지 구간 갯수
      * @param limit : 한 페이지당 출력될 레코드 갯수
-     * @param request : 검색 결과 Page 일 경우 queryString 가져오기 위함
+     *
+     * @param request : 검색 결과 Page 일 경우 queryString 가져오기 위함 // 이건 지웠음 그냥 참고 // 주소에 보면 ? 뒤에 검색데이터가 있는데 그건 페이지를 이동해도 남아있어야
+     * 검색이 유지되는걸 구현 할 때 사용
      * 앞에 page, total은 필수임
      */
 
@@ -77,7 +79,7 @@ public class Pagination {
 
         // 구간 번호 - 0, 1, 2
         // int 형태로 연산하기때문에 소수점 자동 버림처리
-        int rangeCnt = (page -1) / ranges;
+        int rangeCnt = (page -1) / ranges; // 어떤 구간인지를 알 수 있음 / 패턴구했던거 생각!
         int firstRangePage = rangeCnt * ranges +1;// 현재 구간의 시작 페이지 번호
         int lastRangePage = firstRangePage + ranges -1; // 현재 구간의 마지막 페이지 번호
         // lastRangePage = lastRangePage > totalPages ? totalPages : lastRangePage;
@@ -146,7 +148,7 @@ public class Pagination {
         List<String[]> pages = new ArrayList<>();
         for (int i = firstRangePage; i <= lastRangePage; i++) {
             String url =  baseUrl + i;
-            pages.add(new String[] {"" + i, url});
+            pages.add(new String[] {"" + i, url}); // url : 쿼리스트링이 포함된 url임
         }
 
         return pages;

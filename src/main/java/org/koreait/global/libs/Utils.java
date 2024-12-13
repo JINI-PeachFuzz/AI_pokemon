@@ -29,7 +29,7 @@ public class Utils {
 
         // 요청 헤더 - User-Agent / 브라우저 정보
         String ua = request.getHeader("User-Agent");
-        String pattern = ".*(iPhone|iPod|iPad|BlackBerry|Android|Windows CE|LG|MOT|SAMSUNG|SonyEricsson).*";
+        String pattern = ".*(iPhone|iPod|iPad|BlackBerry|Android|Windows CE|LG|MOT|SAMSUNG|SonyEricsson).*"; // 모바일 구현 / 요청헤드쪽에 있는 걸로 모바일인지 아닌지 확인 / 정규 표현식!
 
 
         return StringUtils.hasText(ua) && ua.matches(pattern); // DB조회시 NULL로 나와서 StringUtils.hasText(ua) 넣었음
@@ -41,8 +41,8 @@ public class Utils {
      * @param path
      * @return
      */
-    public String tpl(String path) {
-        String prefix = isMobile() ? "mobile" : "front";
+    public String tpl(String path) { // 템플릿 / 모바일과 pc를 구분하기 위해만든거서
+        String prefix = isMobile() ? "mobile" : "front"; // 모바일인지 프론트인지 구분할 수 있게 해줌
 
         return String.format("%s/%s", prefix, path);
     }
@@ -55,17 +55,18 @@ public class Utils {
      */
     public String getMessage(String code) {
         Locale lo = request.getLocale(); // 사용자 요청 헤더(Accept-Language)
+        // 브라우저에 있는 언어설정 / 이걸가지고 만든게 lacale 정보임!// 톰캣서버가 결정하고 정해줌
 
-        return messageSource.getMessage(code, null, lo); // 싱글톤이라서 메세지소스는 하나임
+        return messageSource.getMessage(code, null, lo); // 싱글톤이라서 메세지소스는 하나임 / lo : locale정보!
     }
 
     public List<String> getMessages(String[] codes) {
 
         return Arrays.stream(codes).map(c -> {
-            try {
+            try { // 있는것만 나오게 하기위해 트라이 캐치를 사용함
                 return getMessage(c);
             } catch (Exception e) {
-                return "";
+                return ""; // 예외처리났을때 멈추는 것보단 비어있는 걸로 나오는게 좋으니 "" 로 처리한거 / 예외처리 코드다발안보이고 정해진걸로 보이게 하기 위해서!
             }
         }).filter(s -> !s.isBlank()).toList();
 
@@ -79,7 +80,7 @@ public class Utils {
      */
     public Map<String, List<String>> getErrorMessages(Errors errors) { // getErrorMessages 는 tpl이 아니기 때문에 JSON형태로 만들기위해
         ResourceBundleMessageSource ms = (ResourceBundleMessageSource) messageSource;
-        ms.setUseCodeAsDefaultMessage(false);
+        ms.setUseCodeAsDefaultMessage(false); // false로 변경한 이유 : 프로퍼티쪽에 메세지가 없으면 에러코드가 나오는데 의도하지않은 코드가 나올 수 있어서 감추기 위해 등록하지 않은 메시지일경우 예외발생함
         try {
             // 필드별 에러코드 - getFieldErrors() // 커맨드객체 에러
             // Collectors.toMap
@@ -101,6 +102,7 @@ public class Utils {
             return messages;
         } finally {
             ms.setUseCodeAsDefaultMessage(true); // 싱글톤이기 때문에 다시 원래형으로 돌린거
+            // 다썼으면 원래형태로 돌린거 싱글톤이라서 다른 곳에서도 false일테니까
         }
     }
 
@@ -137,21 +139,21 @@ public class Utils {
     }
 
     public String showImage(Long seq, String url, int width, int height, String mode, String className) {
-
+// seq : 파일등록번호 , url은 원격번호 주소 / 너비, 높이, / 모드:이미지태그, 백그라운드(이미지) // 어느 이미지로 할지 구분 // 썸네일관련 // 크기 맞추는거 api쪽에 sum이라는게 있는게 거기에 들어가서 맞춰지는 거
 
         try {
             String imageurl = null;
             if (seq != null && seq > 0L) {
-                FileInfo item = fileInfoService.get(seq);
+                FileInfo item = fileInfoService.get(seq); // 화면에 꽉채울때등등
                 if (!item.isImage()) {
                     return ""; // null 보단 비어있는 문자열이 오류방지위해서는 좋음
                 }
 
-                imageurl = String.format("%s&width=%d&height=%d", item.getThumbUrl(), width, height);
+                imageurl = String.format("%s&width=%d&height=%d", item.getThumbUrl(), width, height); // getThumbUrl 2차가공!
 
             } else if (StringUtils.hasText(url)) {
                 imageurl = String.format("%s/api/file/thumb?url=%s&width=%d&height=%d", request.getContextPath(), url, width, height);
-            }
+            } // url을 가지고 썸네일을 만듦
 
             if(!StringUtils.hasText(imageurl)) return "";
 

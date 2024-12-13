@@ -8,13 +8,13 @@ import org.springframework.util.StringUtils;
 import java.io.Serializable;
 
 @Data
-@Entity
+@Entity // 파일이 올라오면 거기에 대한 정보들을 기록해야함 / 엔티티를 정의했음
 @Table(indexes = {
         @Index(name="idx_gid", columnList = "gid, createdAt"),
         @Index(name="idx_gid_location", columnList = "gid, location, createdAt")
 })
 public class FileInfo extends BaseMemberEntity implements Serializable {
-    @Id @GeneratedValue
+    @Id @GeneratedValue // @GeneratedValue 로그인한 회원과 정보가 일치한지 확인
     private Long seq; // 파일 등록 번호
 
     @Column(length = 45, nullable = false)
@@ -31,6 +31,7 @@ public class FileInfo extends BaseMemberEntity implements Serializable {
 
     @Column(length = 65)
     private String contentType; // 파일 형식 image/png  application/..
+    // DB에서 이미지라고 있는것만 검색하고 싶을 때 라던지 나누면 나중에 찾기 편하니까!
 
     @Transient // DB에 안넣음
     private String fileUrl; // URL로 파일 접근할 수 있는 주소 - 2차 가공
@@ -41,7 +42,7 @@ public class FileInfo extends BaseMemberEntity implements Serializable {
     @Transient
     private String thumbUrl; // 썸네일 기본 URL
 
-    private boolean done; // 파일과 연관된 작업이 완료되었는지 여부 체크
+    private boolean done; // 파일과 연관된 작업이 완료되었는지 여부 체크 // 확정 같은 거!
     // 예를 들면 게시글 작성하다가 중간에 나가면 그건 이도저도 아닌거 그런것들은 모아서 한번에
     // 삭제한다던지 해야하는데 그런거 관련
 
@@ -50,5 +51,8 @@ public class FileInfo extends BaseMemberEntity implements Serializable {
     public boolean isImage() {
 
         return StringUtils.hasText(contentType) && contentType.contains("image/");
-    }
+    } // 썸네일관련하여 추가한 거 / 콘텐트타입이 있으면 그안에 이미지가 있는지 없는지 판단하는거
 }
+
+
+// 엔티티만들고 나면 컨트롤로~

@@ -26,7 +26,7 @@ import java.util.List;
 
 @Slf4j
 @Controller
-@ApplyErrorPage
+@ApplyErrorPage // 예외발생시 던져주는 거
 @RequestMapping("/member")
 @RequiredArgsConstructor
 @SessionAttributes({"requestAgree", "requestLogin"})
@@ -69,7 +69,8 @@ public class MemberController {
                     });
         }
 
-        return utils.tpl("member/login");
+        return utils.tpl("member/login"); // tpl은 모바일과 pc를 구분하기 위해서
+        // 유틸쪽에 만들어져있음
     }
 
     @ResponseBody

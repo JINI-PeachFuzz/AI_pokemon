@@ -21,7 +21,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableMethodSecurity // 특정 메서드만 통제할때도 사용가능
 public class SecurityConfig {
 
-    @Bean
+    @Bean // 이 빈이 중요함 / 로그인설정에 대한 설정들
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         /* 인증 설정 S - 로그인, 로그아웃 */
@@ -31,7 +31,7 @@ public class SecurityConfig {
                     .passwordParameter("password")
                     .failureHandler(new LoginFailureHandler())
                     .successHandler(new LoginSuccessHandler());
-        });
+        }); // 상세하게 하기 위해서 핸들러를 나눔 / 멤버-서비스
 
         http.logout(c -> {
             c.logoutRequestMatcher(new AntPathRequestMatcher("/member/logout"))
@@ -51,7 +51,7 @@ public class SecurityConfig {
          * hasRole("명칭")
          * hasAnyRole(...)
          */
-        http.authorizeHttpRequests(c -> {
+        http.authorizeHttpRequests(c -> { // 람다형태로 한건 영역별로 설정할 수 있게 하기 위해서임
             c.requestMatchers("/mypage/**").authenticated() // 인증한 회원
                     .requestMatchers("/member/login", "/member/join", "/member/agree").anonymous() // 미인증 회원
                     .requestMatchers("/admin/**").hasAnyAuthority("MANAGER", "ADMIN") // 관리자 페이지는 MANAGER, ADMIN 권한

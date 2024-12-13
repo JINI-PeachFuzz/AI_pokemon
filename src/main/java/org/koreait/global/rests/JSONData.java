@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 @Data
 @NoArgsConstructor
 public class JSONData {
+    // 성공이든 실패이든 동일한 틀로 나옴
     private HttpStatus status = HttpStatus.OK; // 응답도 200이 많음 OK는 200을 의미함
     private boolean success = true; // 성공이 많으니 기본적으로 넘어가게 설정한거 기본은 false임!
     private Object message; // 실패시 에러 메세지 / 중첩된 필드와 자료형으로 나올수 있으니 옵젝으로 만든거
