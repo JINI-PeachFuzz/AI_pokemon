@@ -41,8 +41,13 @@ public class MemberUtil {
     public Member getMember() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null && auth.isAuthenticated() && auth.getPrincipal() instanceof MemberInfo memberInfo) {
-            return member== null ? memberInfo.getMember() : member;
-        } // null일땐 새로
+            if (member == null) { // null일땐 새로 // 멤버가 아닌경우도 있으니 그 내용을 추가함
+                setMember(memberInfo.getMember());
+                return member;
+            } else {
+                return member;
+            }
+        }
 
         return null;
     }

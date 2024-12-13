@@ -38,11 +38,11 @@ public class MypageController {
 
     @ModelAttribute("profile")
     public Member getMember(){
-        return memberUtil.getMember();
+        return memberUtil.getMember(); // 로그인은 회원정보에서 조회하는 거임
     }
 
     @ModelAttribute("addCss")
-    public List<String> addCss() {
+    public List<String> addCss() { // 이거는 addCss 그냥 여기에 다 넣은거임 공통과 따로 분리안한거
         return List.of("mypage/style");
     }
 
@@ -94,7 +94,7 @@ public class MypageController {
         MemberInfo memberInfo = (MemberInfo) infoService.loadUserByUsername(principal.getName());
         memberUtil.setMember(memberInfo.getMember());
 
-        model.addAttribute("profile", memberInfo.getMember());
+        model.addAttribute("profile", memberInfo.getMember()); // 새로 정보를 업뎃함
     }
 
 
@@ -113,7 +113,7 @@ public class MypageController {
         if (mode.equals("profile")) { // 회원정보 수정
             addCommonScript.add("fileManager");
             addCommonScript.add("address");
-            addScript.add("mypage/profile");
+            addScript.add("mypage/profile"); // 분리해서 추가한거
             pageTitle = utils.getMessage("회원정보_수정");
 
         }
@@ -121,5 +121,6 @@ public class MypageController {
         model.addAttribute("addCommonScript", addCommonScript);
         model.addAttribute("addScript", addScript);
         model.addAttribute("pageTitle", pageTitle);
+        // 최종적으로 모델에 넣어줌
     }
 }

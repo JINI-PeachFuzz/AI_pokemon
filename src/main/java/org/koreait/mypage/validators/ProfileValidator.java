@@ -15,7 +15,7 @@ public class ProfileValidator implements Validator, PasswordValidator {
     public boolean supports(Class<?> clazz) {
         return clazz.isAssignableFrom(RequestProfile.class);
     }
-
+// 값이 있을 때만!
     @Override
     public void validate(Object target, Errors errors) {
         RequestProfile form = (RequestProfile)target;

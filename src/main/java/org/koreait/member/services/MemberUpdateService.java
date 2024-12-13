@@ -89,7 +89,7 @@ public class MemberUpdateService {
 
         // 회원정보 수정일때는 비밀번호가 입력 된 경우만 저장
         String password = form.getPassword();
-        if (StringUtils.hasText(password)) {
+        if (StringUtils.hasText(password)) { // 비번은 변경하지 않음
             String hash = passwordEncoder.encode(password);
             member.setPassword(hash);
             member.setCredentialChangedAt(LocalDateTime.now()); // 30일후 비번변경 디데이 다시 시작하게 할려고
@@ -97,7 +97,7 @@ public class MemberUpdateService {
 
         // 회원 권한은 관리자만 수정 가능!
         List<Authorities> _authorities = null;
-        if (authorities != null && memberUtil.isAdmin()) {
+        if (authorities != null && memberUtil.isAdmin()) { // 관리자일때만 권한을 변경할 수있게 검증하는 곳
             _authorities = authorities.stream().map(a -> {
                 Authorities auth = new Authorities();
                 auth.setAuthority(a);
@@ -127,7 +127,7 @@ public class MemberUpdateService {
 
             QAuthorities qAuthorities = QAuthorities.authorities;
             List<Authorities> items = (List<Authorities>) authoritiesRepository.findAll(qAuthorities.member.eq(member));
-            if (items != null) {
+            if (items != null) { // 권한은 기존껄 삭제하고 추가하는게 더 편함
                 authoritiesRepository.deleteAll(items);
                 authoritiesRepository.flush();
             }

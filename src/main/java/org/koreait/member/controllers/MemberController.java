@@ -95,6 +95,9 @@ public class MemberController {
         System.out.println(email);
     } */
 
+
+    // 세션에 데이터를 넣어서 확장가능하게 해준거 // 페이지를 각각 나눠놨음
+    // "member/agree" -> RequestAgree agree -> @SessionAttribute("requestAgree") 방식으로
     /**
      * 회원가입 약관 동의
      *
@@ -140,7 +143,9 @@ public class MemberController {
         joinValidator.validate(form, errors); // 회원 가입 양식 검증
 
         if (errors.hasErrors()) {
-            return utils.tpl("member/join");
+            return utils.tpl("member/join"); // 검증안됐으면 다시 회원가입쪽으로 가서 양식을 보여준다던지 해야함 // join.html 10J 참고!
+            // 글로벌 에러는 62J 참고
+
         }
 
         // 회원 가입 처리
@@ -150,6 +155,8 @@ public class MemberController {
         form.setOptionalTerms(agree.getOptionalTerms());
 
         updateService.process(form);
+        // 회원가입도 가입이지만 수정도 가능하게 하기 위해서 만듦
+        // 서비스 - 멤버업뎃서비스 / 2가지 가능하게 만듦
 
         status.setComplete();
 
@@ -176,7 +183,7 @@ public class MemberController {
 
         String pageTitle = null; // 페이지 제목
         List<String> addCommonScript = new ArrayList<>(); // 공통 자바스크립트
-        List<String> addScript = new ArrayList<>(); // front쪽에 추가하는 자바스크립트
+        List<String> addScript = new ArrayList<>(); // front쪽에 추가하는 자바스크립트 // 공통으로 처리할 것들도 있지만 여기서만 처리할 것도 있는데 그런거 프론트쪽에만 추가할려고 만든 스크립트 // 위치가 다름
 
         if (mode.equals("login")) {  // 로그인 공통 처리
             pageTitle = utils.getMessage("로그인");
@@ -203,6 +210,5 @@ public class MemberController {
         // front 스크립트
         model.addAttribute("addScript", addScript);
     }
-
 
 }
