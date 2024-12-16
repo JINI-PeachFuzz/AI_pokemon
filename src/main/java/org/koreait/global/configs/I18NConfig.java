@@ -25,7 +25,7 @@ public class I18NConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public CookieLocaleResolver localeResolver() {
+    public CookieLocaleResolver localeResolver() { // Resolver : Controller로 들어온 파라미터를 가공하거나 수정 기능을 제공하는 객체
         CookieLocaleResolver resolver = new CookieLocaleResolver();
         resolver.setCookieMaxAge(60*60); // 한시간만 유지
         resolver.setCookieName("language"); // 한시간뒤엔 설정에 있는 언어순위대로 나올꺼임
