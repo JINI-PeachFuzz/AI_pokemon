@@ -42,20 +42,34 @@ commonLib.ajaxLoad = function(url, callback, method = 'GET', data, headers) {
         options.body = data instanceof FormData ? data : JSON.stringify(data);
     }
 
-    fetch(url, options)
-            .then(res => res.json())
+// resolve는 성공시, reject는 실패시!
+    return new Promise((resolve, reject) => {
+        fetch(url, options)
+            .then(res => {
+                if (res.status !== 204)
+                    return res.json();
+                else {
+                    resolve();
+                }
+            }) // 바디데이터 없을 경우를 대비해서 코드 추가함 204가 아닐 경우 JSON파일로 받겠다!
             .then(json => {
-                if (json.success) { // 응답 성공(처리 성공)
+                if (json?.success) { // 응답 성공(처리 성공) // ?. 은 옵셔널체이닝
                    if (typeof callback === 'function') { // 콜백 함수가 정의된 경우
                         callback(json.data);
                    }
+                   resolve(json);
+
                    return;
                 }
 
-                alert(json.message); // 실패시에는 alert 메세지를 출력
+                reject(json); // 처리 실패
             })
-            .catch(err => console.error(err))
+            .catch(err => {
+                console.error(err);
 
+                reject(err); // 응답 실패
+            });
+    }); // Promise
 };
 
 
