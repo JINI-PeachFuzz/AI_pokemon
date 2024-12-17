@@ -1,54 +1,165 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
 * { font-family: "Noto Sans KR", sans-serif; box-sizing: border-box; outline: none; color: #000; }
 
-/* 기본 스타일 초기화 S */
-html { font-size: 13px; } /* 1rem - 13px */
-body { margin: 120px 0 0; }
-a { text-decoration: none; }
-ul, ol { list-style: none; }
-ul, ol, dl, dt, dd { margin: 0; padding: 0; }
-img { border: 0; }
-/* 기본 스타일 초기화 E */
-
-/* 공통 스타일 S */
-.layout-width { max-width: 1250px; min-width: 1100px; }
-main {
-    min-height: 500px;
-}
-/* 공통 스타일 E */
-
-
-.icon.img {
-    width: 40px;
-    height: 40px;
-    border-radius: 9999px;
-    background: url("../images/icon_insta.png") no-repeat center center;
+/* 전체 스타일 초기화 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.icon.img {
-    width: 40px;
-    height: 40px;
-    border-radius: 9999px;
-    background: url("../images/icon_youtube.png") no-repeat center center;
+body {
+  font-family: "Noto Sans KR", sans-serif;
+  line-height: 1.6;
+  color: #fff;
+  background-color: #000;
 }
 
-.icon.img {
-    width: 40px;
-    height: 40px;
-    border-radius: 9999px;
-    background: url("../images/icon_twitter.png") no-repeat center center;
+/* 전체 스타일 */
+footer {
+  background-color: #000;
+  color: #fff;
+  font-size: 0.9rem;
 }
 
-.icon.img {
-    width: 40px;
-    height: 40px;
-    border-radius: 9999px;
-    background: url("../images/icon_tiktok.png") no-repeat center center;
+footer .top,
+footer .mid,
+footer .bot {
+  padding: 20px 0;
+  text-align: center;
 }
 
-.icon.img {
-    width: 40px;
-    height: 40px;
-    border-radius: 9999px;
-    background: url("../images/icon_pokemon.png") no-repeat center center;
+footer a {
+  text-decoration: none;
+  color: #fff;
+  transition: color 0.3s;
+}
+
+footer a:hover {
+  color: #f0c040;
+}
+
+/* 상단 영역 */
+footer .top {
+  border-bottom: 1px solid #333;
+}
+
+footer .ft_logo img {
+  display: block;
+  margin: 0 auto 15px;
+  max-width: 200px;
+}
+
+footer .footer-list {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 15px;
+  list-style: none;
+}
+
+footer .footer-list li a {
+  font-size: 0.9rem;
+}
+
+/* 중간 영역  */
+footer .mid {
+  border-bottom: 1px solid #333;
+}
+
+footer .mid pre {
+  margin: 10px 0;
+  font-size: 0.85rem;
+  white-space: pre-wrap;
+  line-height: 1.5;
+}
+
+footer .mid li {
+  display: inline-block;
+  margin: 10px;
+}
+
+footer .mid .icon {
+  width: 30px;
+  height: 30px;
+  display: inline-block;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/* 아이콘 이미지 추가 */
+footer .mid .icon.insta {
+  background-image: url("images/icon-instagram.png");
+}
+footer .mid .icon.youtube {
+  background-image: url("images/icon-youtube.png");
+}
+footer .mid .icon.twitter {
+  background-image: url("images/icon-twitter.png");
+}
+footer .mid .icon.tiktok {
+  background-image: url("images/icon-tiktok.png");
+}
+footer .mid .icon.pokemon {
+  background-image: url("images/icon-pikachu.png");
+}
+
+/*  하단 영역  */
+footer .bot {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  padding: 20px 10px;
+}
+
+footer .bot .left {
+  flex: 1;
+  padding: 10px;
+  text-align: left;
+  border-right: 1px solid #444;
+}
+
+footer .bot .right {
+  flex: 1;
+  padding: 10px;
+  text-align: left;
+}
+
+footer .bot .left pre,
+footer .bot .right pre {
+  margin: 5px 0;
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+footer .bot .left strong {
+  display: block;
+  font-size: 1rem;
+  margin-bottom: 10px;
+}
+
+footer .bot ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  footer .bot {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  footer .bot .left,
+  footer .bot .right {
+    border-right: none;
+    border-bottom: 1px solid #444;
+    padding: 10px 0;
+  }
+
+  footer .footer-list {
+    flex-direction: column;
+  }
 }
