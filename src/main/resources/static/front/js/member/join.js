@@ -14,7 +14,7 @@ window.addEventListener("DOMContentLoaded", function() {
         }
     });
 
-    // 인증코드 전송 버튼 처리
+    // 인증코드 전송 처리 S
     sendButton.addEventListener("click", function() {
         const email = frmJoin.email.value.trim();
         if (!email) {
@@ -47,12 +47,13 @@ window.addEventListener("DOMContentLoaded", function() {
     */
 
     function updateTimer(seconds) {
-        let timerStr = "00:00";
+        let timerStr = "";
         if (seconds > 0) {
             const min = Math.floor(seconds / 60); // 분에 대한 것
             const sec = seconds - min * 60; // 남아있는 초
             timeStr = `${('' + min).padStart(2, '0')}:${('' + sec).padStart(2, '0')}`; // 0 채워넣기
         } else { // 타이머가 0이 되면 다시 이메일 변경 가능하게 처리, 인증 코드 입력 불가 처리, 인증하기 버튼 감추기
+            timerStr = "00:00"; // 1초에서 멈추는 현상으로 인해 위에는 빈문자열을 넣고 여기에 00:00 을 추가해줬음
             frmJoin.email.removeAttribute("readonly");
             // 인증코드 입력하고 나면 다시 입력하지 못하게 막아야함
             authCodeEl.value = ""; // 막기전에 비워준거
@@ -66,6 +67,35 @@ window.addEventListener("DOMContentLoaded", function() {
             timerEl.innerHTML = timeStr;
         }
     }
+    // 인증코드 전송 처리 S
+
+    // 인증 코드 확인 처리 S
+    verifyButton.addEventListener("click", function() {
+        const authCode = authCodeEl.value;
+        if (!authCode || ('' + authCode).length < 5) { // authCode를 문자열로 할려고 결합했음
+            alert("인증코드를 입력하세요.");
+            authCodeEl.focus();
+            return;
+        }
+        const el = document.querySelector(".auth-box .message");
+        el.classList.remove("dn");
+
+        emailAuth.verify(authCode, () => {
+            // 인증 성공시
+            // 1. "인증되었습니다." 메세지를 출력
+            // 2. authCodeEl, verifyButton, sendButton, timer 제거
+            el.innerText = "인증되었습니다.";
+            const authBoxEl = document.querySelector(".auth-box").children[0];
+            authBoxEl.parentElement.removeChild(authBoxEl); // 하나하나씩 제거하는 것보다 div통으로 제거하는게 좋을 거 같음
+
+        }, (err) => {
+            // 인증 실패시
+            el.innerText = err.message;
+        });
+
+
+    });
+    // 인증 코드 확인 처리 E
 });
 
 // 주소 검색 후 후속 처리 (회원 가입 양식)

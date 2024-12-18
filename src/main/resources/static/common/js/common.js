@@ -11,6 +11,13 @@ commonLib.getMeta = function(mode){
 
     return el?.content; // el값이 없으면 undifined가 나옴 / ?. : 옵셔널 체이닝문법
 };
+
+// 자바스크립트에서 만든 주소에 컨택스트 경로 추가
+commonLib.url = function(url) {
+    return `${commonLib.getMeta('rootUrl').replace("/", "")}${url}`;
+
+};
+
 /*
 Ajax 요청 처리
 

@@ -48,6 +48,11 @@ public class MemberController {
         return new RequestLogin();
     }
 
+    @ModelAttribute("authCodeVerified")
+    public boolean authCodeVerified() {
+        return false;
+    }
+
     /* 회원 페이지 CSS */
     @ModelAttribute("addCss")
     public List<String> addCss() {
@@ -119,6 +124,9 @@ public class MemberController {
     @PostMapping("/join")
     public String join(RequestAgree agree, Errors errors, @ModelAttribute RequestJoin form, Model model) {
         commonProcess("join", model); // 회원 가입 공통 처리
+
+        // 회원가입 양식 첫 유입에서는 이메일인증 상태를 false
+        model.addAttribute("authCodeVerified", false);
 
         joinValidator.validate(agree, errors);
 
