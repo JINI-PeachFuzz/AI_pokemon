@@ -4,12 +4,19 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.koreait.global.annotations.ApplyErrorPage;
 import org.koreait.global.libs.Utils;
+import org.koreait.global.paging.CommonSearch;
+import org.koreait.global.paging.ListData;
+import org.koreait.global.paging.Pagination;
 import org.koreait.member.MemberInfo;
 import org.koreait.member.entities.Member;
 import org.koreait.member.libs.MemberUtil;
 import org.koreait.member.services.MemberInfoService;
 import org.koreait.member.services.MemberUpdateService;
 import org.koreait.mypage.validators.ProfileValidator;
+import org.koreait.pokemon.controllers.PokemonSearch;
+import org.koreait.pokemon.entities.Pokemon;
+import org.koreait.pokemon.services.PokemonInfoService;
+import org.koreait.wishlist.constants.WishType;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +28,7 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 @Controller
 @ApplyErrorPage // 이걸 추가해야 원하는 에러페이지가 나옴
@@ -34,7 +42,7 @@ public class MypageController {
     private final MemberUpdateService updateService;
     private final ProfileValidator profileValidator;
     private final MemberInfoService infoService;
-
+    private final PokemonInfoService pokemonInfoService;
 
     @ModelAttribute("profile")
     public Member getMember(){
@@ -97,6 +105,28 @@ public class MypageController {
         model.addAttribute("profile", memberInfo.getMember()); // 새로 정보를 업뎃함
     }
 
+    /***
+     * 찜하기 목록
+     * @param mode : POKEMON : 포켓몬 찜하기 목록, BOARD : 게시글 찜하기 목록
+     * @return
+     */
+    @GetMapping({"/wishlist", "/wishlist/{mode}"})
+    public String wishlist(@PathVariable(name = "mode", required = false) WishType mode, CommonSearch search, Model model) { // WishType에 상수로 만들어놓은게 있으니까!
+        commonProcess("wishlist", model); // 여기에 자스나 CSS를 넣어주면 좋을듯
+
+        mode = Objects.requireNonNullElse(mode,WishType.POKEMON); // 위시타입을 안해도 포켓몬이 기본값!
+
+        if (mode == WishType.BOARD) { // 게시글 찜하기 목록
+
+        } else { // 포켓몬 찜하기 목록
+            PokemonSearch pSearch = modelMapper.map(search, PokemonSearch.class);
+            ListData<Pokemon> data = pokemonInfoService.getMyPokemons(pSearch);
+            model.addAttribute("items", data.getItems());
+            model.addAttribute("pagination", data.getPagination());
+        }
+
+        return utils.tpl("mypage/wishlist");
+    }
 
     /**
      * 컨트롤러 공통 처리 영역
@@ -115,8 +145,11 @@ public class MypageController {
             addCommonScript.add("address");
             addScript.add("mypage/profile"); // 분리해서 추가한거
             pageTitle = utils.getMessage("회원정보_수정");
-
+        } else if (mode.equals("wishlist")) { // 찜하기 목록
+            addCommonScript.add("wish"); // 찜해제하는거 공통부분 추가한거
+            pageTitle = utils.getMessage("My_WishList");
         }
+
 
         model.addAttribute("addCommonScript", addCommonScript);
         model.addAttribute("addScript", addScript);
