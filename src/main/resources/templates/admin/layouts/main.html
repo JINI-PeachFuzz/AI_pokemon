@@ -6,7 +6,7 @@
         <meta name="keywords" th:if="${keywords} != null" th:content="${keywords}">
         <meta name="description" th:if="${description != null}" th:content="${description}">
         <meta name="_csrf" th:content="${_csrf.token}">
-        <meta name="_csrf_header" th:content="${_csfr.headerName}">
+        <meta name="_csrf_header" th:content="${_csrf.headerName}">
         <meta name="rootUrl" th:content="@{/}">
 
         <title th:if="${pageTitle != null}" th:text="${pageTitle}"></title>
@@ -48,7 +48,7 @@
             <aside th:replace="~{admin/outlines/_menu::main}"></aside>
             <section>
                 <nav th:replace="~{admin/outlines/_submenu::sub}"></nav>
-                <div layout:fragment="content" class="mail-content"></div>
+                <div layout:fragment="content" class="main-content"></div>
             </section>
         </main>
 
