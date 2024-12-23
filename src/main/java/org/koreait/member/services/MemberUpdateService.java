@@ -107,7 +107,15 @@ public class MemberUpdateService {
         }
 
         save(member, _authorities);
+
+        // 로그인 회원 정보 업데이트
+        Member _member = memberRepository.findByEmail(member.getEmail()).orElse(null);
+        if (_member != null) {
+            infoService.addInfo(_member); // 싱글톤 패턴이라 이것만 넣어도 됨
+            memberUtil.setMember(_member); // 2차 가공해야함
+        }
     }
+
 
     /**
      *
@@ -137,10 +145,6 @@ public class MemberUpdateService {
         }
 
         // 회원 권한 업데이트 처리 E
-
-        // 로그인 회원 정보 업데이터
-        infoService.addInfo(member); // 싱글톤 패턴이라 이것만 넣어도 됨
-        memberUtil.setMember(member); // 2차 가공해야함
 
 
     }

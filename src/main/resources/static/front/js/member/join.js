@@ -3,12 +3,13 @@ window.addEventListener("DOMContentLoaded", function() {
     const sendButton = document.getElementById("send-auth-code");
     const authCodeEl = document.getElementById("auth-code");
     const verifyButton = document.getElementById("verify-auth-code");
+    const timerEl = document.querySelector(".auth-box .timer");
 
     const { emailAuth } = commonLib;
 
     frmJoin.email.addEventListener("change", function() {
         if (this.value.trim()) {
-            sendButton.disabled = false;
+            sendButton.disabled = false; // join 인증코드전송
         } else { // 입력을 했을 때만 버튼 활성화
             sendButton.disabled = true;
         }
@@ -62,7 +63,6 @@ window.addEventListener("DOMContentLoaded", function() {
             verifyButton.classList.add("dn");
         }
 
-        const timerEl = document.querySelector(".auth-box .timer");
         if (timerEl) {
             timerEl.innerHTML = timeStr;
         }
