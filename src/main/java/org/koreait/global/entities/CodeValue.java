@@ -19,5 +19,5 @@ public class CodeValue {
 
     @Lob
     @Column(name="_VALUE")
-    private String value;
+    private String value; // JSON형태로 바꿔줄꺼
 }

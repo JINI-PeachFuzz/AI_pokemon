@@ -1,5 +1,6 @@
 package org.koreait.member.services;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.koreait.member.constants.Authority;
 import org.koreait.member.controllers.RequestJoin;
@@ -32,6 +33,7 @@ public class MemberUpdateService {
     private final ModelMapper modelMapper;
     private final MemberUtil memberUtil;
     private final MemberInfoService infoService;
+    private final HttpSession session;
 
     /**
      * 커맨드 객체의 타입에 따라서 RequestJoin이면 회원 가입 처리
@@ -101,7 +103,7 @@ public class MemberUpdateService {
             _authorities = authorities.stream().map(a -> {
                 Authorities auth = new Authorities();
                 auth.setAuthority(a);
-                auth.setMember(member);
+                auth.setMember(member); // 인터페이스 - 상수화가 됨 그래서 아래 멤버는 수정했음
                 return auth;
             }).toList();
         }
@@ -109,10 +111,11 @@ public class MemberUpdateService {
         save(member, _authorities);
 
         // 로그인 회원 정보 업데이트
-        Member _member = memberRepository.findByEmail(member.getEmail()).orElse(null);
+        // RequestProfile form이 회원정보 수정이라 젤 밑에서 이쪽으로 변경함
+        Member _member = memberRepository.findByEmail(member.getEmail()).orElse(null); // 상수화가 되서 Member _member로 변경함
         if (_member != null) {
             infoService.addInfo(_member); // 싱글톤 패턴이라 이것만 넣어도 됨
-            memberUtil.setMember(_member); // 2차 가공해야함
+            session.setAttribute("member", _member); // 2차 가공해야함
         }
     }
 
