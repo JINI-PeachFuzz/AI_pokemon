@@ -1,5 +1,6 @@
 package org.koreait.member.controllers;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +30,7 @@ import java.util.List;
 @ApplyErrorPage // 예외발생시 던져주는 거
 @RequestMapping("/member")
 @RequiredArgsConstructor
-@SessionAttributes({"requestAgree", "requestLogin"})
+@SessionAttributes({"requestAgree", "requestLogin", "authCodeVerified"})
 public class MemberController {
 
     private final Utils utils;
@@ -175,9 +176,9 @@ public class MemberController {
     @ResponseBody
     @GetMapping("/refresh")
     @PreAuthorize("isAuthenticated()") // 회원만 접근가능함
-    public void refresh(Principal principal){
+    public void refresh(Principal principal, HttpSession session){
         MemberInfo memberInfo = (MemberInfo) infoService.loadUserByUsername(principal.getName());
-        memberUtil.setMember(memberInfo.getMember());
+        session.setAttribute("member", memberInfo.getMember());
     }
 
     /**

@@ -43,7 +43,7 @@ public class EmailAuthService {
          * 만료시간을 3분으로 기록
          * 사용자의 입력을 검증하기 위해서 세션에 인증 코드와 만료시간을 기록 // 개인서비스데이터!
          */
-        Integer authCode = random.nextInt(99999); // 총 5자리내에서 코드가 발급됨. // int -> Integer로 바꿨음 / 오토박싱이 발생하면서 null오류가 발생하지 않을까 싶어서
+        Integer authCode = random.nextInt(10000, 99999); // 총 5자리내에서 코드가 발급됨. // int -> Integer로 바꿨음 / 오토박싱이 발생하면서 null오류가 발생하지 않을까 싶어서
 
         LocalDateTime expired = LocalDateTime.now().plusMinutes(3L);
         //3분정도 유효시간 설정
