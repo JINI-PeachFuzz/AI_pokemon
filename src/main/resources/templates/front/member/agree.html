@@ -15,6 +15,7 @@
                 <label for="requiredTerms0" th:text="#{이용약관에_동의합니다.}"></label> <!--라벨은 연결할려고 사용-->
                 <!--id와 for는 동일해야함-->
                 <div class="error" th:each="err : ${#fields.errors('requiredTerms1')}" th:text="${err}"></div>
+                <div th:object="${@termsInfoService.get('useGuide')}" th:utext="*{content}"></div>
             </li>
             <li>
                 <input type="checkbox" name="requiredTerms2" value="true" th:field="*{requiredTerms2}" id="requiredTerms1" class="terms">
