@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layouts/main}">
+<div layout:fragment="content">
+    <h1>회원검색</h1>
+    <form name="frmSearch" method="GET" th:action="@{/admin/member/list}" th:object="${memberSearch}" autocomplete="off">
+        <table class="table-cols">
+            <tr>
+                <th width="180">날짜검색</th>
+                <td class="flex ac">
+                    <select name="dateType" th:field="*{dateType}" class="w180 mr5">
+                        <option value="createdAt">가입일</option>
+                        <option value="credentialChangedAt">비밀번호 변경일</option>
+                        <option value="deletedAt">탈퇴일</option>
+                    </select>
+                    <input type="date" name="sDate" th:field="*{sDate}" class="w220">
+                    <span class="error" th:each="err : ${#fields.errors('sDate')}" th:text="${err}"></span>
+                    ~
+                    <input type="date" name="eDate" th:field="*{eDate}" class="w220">
+                    <span class="error" th:each="err : ${#fields.errors('eDate')}" th:text="${err}"></span>
+                </td>
+            </tr>
+            <tr>
+                <th>회원권한</th>
+                <td>
+                    <span class="checkbox" th:each="authority, status : ${authorities}">
+                        <input type="checkbox" name="authority" th:value="${authority.name}" th:id="${'authority-' + status.index}" th:field="*{authority}">
+                        <label th:for="${'authority-' + status.index}" th:text="${#messages.msg(authority.name)}"></label>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <th>키워드 검색</th>
+                <td class="flex">
+                    <select name="sopt" th:field="*{sopt}" class="w180 mr5">
+                        <option value="ALL">통합검색</option>
+                        <option value="EMAIL">이메일</option>
+                        <option value="NAME">이름</option>
+                    </select>
+                    <input type="text" name="skey" th:field="*{skey}" placeholder="검색할 키워드를 입력하세요.">
+                </td>
+            </tr>
+        </table>
+        <button type="submit" class="submit-btn">검색하기</button>
+    </form>
+
+    <h2>회원목록</h2>
+    <form name="frmList" method="POST" th:action="@{/admin/member/list}" target="ifrmProcess">
+        <input type="hidden" name="_method" value="PATCH">
+
+        <table class="table-rows">
+            <thead>
+            <tr>
+                <th width="40">
+                    <input type="checkbox" class="check-all" data-target-class="chk" id="check-all">
+                    <label for="check-all" class="standalone"></label>
+                </th>
+                <th width="180">이메일</th>
+                <th width="180">회원권한</th>
+                <th width="180">회원명/닉네임</th>
+                <th width="180">가입일시</th>
+                <th width="180">비밀번호 변경일시</th>
+                <th width="180">탈퇴일시</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:if="${items == null || items.isEmpty()}">
+                <td colspan="8" class="no-data">조회된 회원이 없습니다.</td>
+            </tr>
+            <tr th:unless="${items == null || items.isEmpty()}" th:each="item, status : ${items}" th:object="${item}">
+                <input type="hidden" th:name="${'seq_' + status.index}" th:value="*{seq}">
+                <td align="center">
+                    <input type="checkbox" name="chk" class="chk" th:value="${status.index}" th:id="${'chk-' + status.index}">
+                    <label th:for="${'chk-' + status.index}" class="standalone"></label>
+                </td>
+                <td th:text="*{email}" align="center"></td>
+                <td align="center">
+                    <span th:each="authority : *{authorities}" th:text="${#messages.msg(authority.authority.name)}" class="mr10"></span>
+                </td>
+                <td th:text="*{#strings.concat(name, '/', nickName)}" align="center"></td>
+                <td align="center" th:text="*{#temporals.format(createdAt, 'yyyy.MM.dd HH:mm:ss')}"></td>
+                <td align="center">
+                    <div th:if="*{credentialChangedAt != null}"
+                         th:text="*{#temporals.format(credentialChangedAt, 'yyyy.MM.dd HH:mm:ss')}"></div>
+                    <input type="checkbox" th:name="${'updateCredentialChangedAt_' + status.index}" value="true" th:id="${'updateCredentialChangedAt_' + status.index}">
+                    <label th:for="${'updateCredentialChangedAt_' + status.index}">갱신하기</label>
+                </td>
+                <td align="center">
+                    <th:block th:if="*{deletedAt != null}">
+                        <div th:text="*{#temporals.format(deletedAt, 'yyyy.MM.dd HH:mm:ss')}"></div>
+                        <input type="checkbox" th:name="${'deletedAt_' + status.index}" value="CANCEL" th:id="${'deletedAt_' + status.index}">
+                        <label th:for="${'deletedAt_' + status.index}">탈퇴취소</label>
+                    </th:block>
+                    <th:block th:if="*{deletedAt == null}">
+                        <input type="checkbox" th:name="${'deletedAt_' + status.index}" value="RESIGN" th:id="${'deletedAt_' + status.index}">
+                        <label th:for="${'deletedAt_' + status.index}">탈퇴하기</label>
+                    </th:block>
+                </td>
+                <td>
+                    <button type="button" class="sbtn">정보수정</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+
+        <div class="table-action" data-form-name="frmList">
+            선택 회원을 <button type="button" class="sbtn modify">수정하기</button>
+        </div>
+    </form>
+
+    <th:block th:replace="~{common/_pagination::pagination}"></th:block>
+</div>
+</html>

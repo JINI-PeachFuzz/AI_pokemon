@@ -89,6 +89,12 @@ textarea {
     border-bottom: 1px solid #212121;
     font-size: 1.15rem;
 }
+
+.table-rows .no-date {
+    padding: 150px 0;
+    text-align: center;
+    font-size: 1.15rem;
+}
 /* 테이블 공통 E */
 
 /* 여백 공통 S */
@@ -103,7 +109,26 @@ textarea {
 .mb30 {
     margin-bottom: 30px !important;
 }
+
+.mr5 {
+    margin-right: 5px !important;
+}
+
+.mr10 {
+    margin-right: 10px !important;
+}
 /* 여백 공통 E */
+
+/* 너비 공통 S */
+.w180 {
+    width: 180px !important;
+}
+
+.w220 {
+    width: 220px !important;
+}
+
+/* 너비 공통 S */
 
 /* 버튼 공통 S */
 .btn {
@@ -196,7 +221,8 @@ input[type='checkbox'] {
     display: none;
 }
 
-input[type='checkbox'] + label {
+input[type='checkbox'] + label,
+.checkbox input[type='checkbox'] ~ label {
     background:url("../images/check.png") no-repeat left center;
     padding: 0 20px 0 33px;
     height: 40px;
@@ -205,7 +231,8 @@ input[type='checkbox'] + label {
     cursor: pointer;
 }
 
-input[type='checkbox']:checked + label {
+input[type='checkbox']:checked + label,
+.checkbox input[type='checkbox']:checked ~ label {
     background:url("../images/check_on.png") no-repeat left center;
 }
 
@@ -318,3 +345,35 @@ h2 {
     opacity: 0;
 }
 /* 세션 메세지 E */
+
+/* 페이징 공통 S */
+.pagination {
+    margin: 20px 0;
+    text-align: center;
+
+}
+
+.pagination > a {
+    display: inline-block;
+    height: 30px;
+    min-width: 30px;
+    padding: 0 5px;
+    text-align: center;
+    line-height: 28px;
+    border: 1px solid  #000;
+    border-radius: 3px;
+
+}
+
+.pagination > a + a {
+    margin-left: 2px;
+
+}
+
+.pagination > a.on {
+    background: #000;
+    color: #fff;
+
+}
+
+/* 페이징 공통 E */

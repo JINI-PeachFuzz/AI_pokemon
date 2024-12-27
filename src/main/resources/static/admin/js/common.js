@@ -6,7 +6,9 @@ window.addEventListener("DOMContentLoaded", function() {
         const frm = document[formName];
         if (!frm) continue; // 선택이 안되는 경우에 건너띄기
 
-        const buttons = frm.querySelectorAll("button");
+        const buttons = tableActions.querySelectorAll("button");
+        // 관리자페이지에서 정보수정눌렀을 때 정말 수정하겠습니까란 팝업창이 떠서 하위인
+        // tableActions로 변경해줬음
 
         for (const button of buttons) {
             button.addEventListener("click", function(){

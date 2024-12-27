@@ -79,6 +79,10 @@ commonLib.ajaxLoad = function(url, callback, method = 'GET', data, headers) {
     }); // Promise
 };
 
+commonLib.popup = function(url, width = 350, height = 350, isAjax = false) {
+
+}
+
 
 window.addEventListener("DOMContentLoaded", function() {
     // 체크박스 전체 토글 기능 S
