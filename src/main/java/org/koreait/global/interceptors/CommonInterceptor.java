@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.List;
 import java.util.Objects;
 
 @Component
@@ -31,7 +30,6 @@ public class CommonInterceptor implements HandlerInterceptor {
         }
 //        System.out.println("uri :" + uri);
         SiteConfig config = Objects.requireNonNullElseGet(codeValueService.get("siteConfig", SiteConfig.class), SiteConfig::new);
-
         mv.addObject("siteConfig", config);
     }
 }

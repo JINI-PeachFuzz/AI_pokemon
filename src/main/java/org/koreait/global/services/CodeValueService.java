@@ -38,7 +38,7 @@ public class CodeValueService {
     public <R> R get(String code, Class<R> cls) {
         CodeValue item = repository.findById(code).orElse(null);
 
-        if (item == null) {
+        if (item != null) {
             String json = item.getValue();
             try {
                 return om.readValue(json, cls);

@@ -36,7 +36,7 @@
 
     <th:block layout:fragment="addCss"></th:block>
 
-    <script th:src="@{/common/js/common.js}"></script>
+    <script th:src="@{/common/js/common.js?v={v}(v=*{jsVersion})}"></script>
 
     <th:block th:if="${addCommonScript != null}">
         <script th:each="jsPath : ${addCommonScript}"

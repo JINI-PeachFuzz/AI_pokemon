@@ -62,7 +62,7 @@ public class WishService {
     }
 
     public List<Long> getMyWish(WishType type) {
-        if (memberUtil.isLogin()) {
+        if (!memberUtil.isLogin()) {
             return List.of(); // null대신에 List넣어줬음/오류없이 사용하기 위해서
         }
 

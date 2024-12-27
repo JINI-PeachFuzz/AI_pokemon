@@ -7,7 +7,7 @@ import java.util.List;
 public interface SubMenus {
     String menuCode();
 
-    @ModelAttribute("submenu")
+    @ModelAttribute("submenus")
     default List<MenuDetail> submenus() {
         return Menus.getMenus(menuCode());
 

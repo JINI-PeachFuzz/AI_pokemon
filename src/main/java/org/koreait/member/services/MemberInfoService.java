@@ -30,8 +30,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
-import static ch.qos.logback.classic.util.StatusViaSLF4JLoggerFactory.addInfo;
-
 @Lazy
 @Service
 @RequiredArgsConstructor
@@ -120,7 +118,7 @@ public class MemberInfoService implements UserDetailsService {
 
         // 권한 검색 S
         List<Authority> authorities = search.getAuthority();
-        if (authorities != null & !authorities.isEmpty()) {
+        if (authorities != null && !authorities.isEmpty()) {
 
             //List<Authorities> _authorities = authorities.stream()
             //                .map(a -> )

@@ -7,7 +7,6 @@ import org.koreait.global.annotations.ApplyErrorPage;
 import org.koreait.global.libs.Utils;
 import org.koreait.global.paging.CommonSearch;
 import org.koreait.global.paging.ListData;
-import org.koreait.global.paging.Pagination;
 import org.koreait.member.MemberInfo;
 import org.koreait.member.entities.Member;
 import org.koreait.member.libs.MemberUtil;
@@ -32,10 +31,10 @@ import java.util.List;
 import java.util.Objects;
 
 @Controller
-@ApplyErrorPage // 이걸 추가해야 원하는 에러페이지가 나옴
+@ApplyErrorPage
 @RequestMapping("/mypage")
 @RequiredArgsConstructor
-@SessionAttributes("profile") // 직렬화 되어있음
+@SessionAttributes("profile")  // 직렬화 되어있음
 public class MypageController {
     private final Utils utils;
     private final MemberUtil memberUtil;
@@ -46,7 +45,7 @@ public class MypageController {
     private final PokemonInfoService pokemonInfoService;
 
     @ModelAttribute("profile")
-    public Member getMember(){
+    public Member getMember() {
         return memberUtil.getMember(); // 로그인은 회원정보에서 조회하는 거임
     }
 
@@ -56,7 +55,7 @@ public class MypageController {
     }
 
     @GetMapping // "/mypage" 와 동일함
-    public String index(Model model){
+    public String index(Model model) {
         commonProcess("main", model);
 
         return utils.tpl("mypage/index");
@@ -72,6 +71,7 @@ public class MypageController {
         if (StringUtils.hasText(optionalTerms)) {
             form.setOptionalTerms(Arrays.stream(optionalTerms.split("\\|\\|")).toList());
         }
+
         model.addAttribute("requestProfile", form);
 
         return utils.tpl("mypage/profile");
@@ -84,7 +84,7 @@ public class MypageController {
 
         profileValidator.validate(form, errors);
 
-        if(errors.hasErrors()) {
+        if (errors.hasErrors()) {
             return utils.tpl("mypage/profile");
         }
 
@@ -106,17 +106,17 @@ public class MypageController {
         model.addAttribute("profile", memberInfo.getMember()); // 새로 정보를 업뎃함
     }
 
-    /***
+    /**
      * 찜하기 목록
+     *
      * @param mode : POKEMON : 포켓몬 찜하기 목록, BOARD : 게시글 찜하기 목록
      * @return
      */
     @GetMapping({"/wishlist", "/wishlist/{mode}"})
-    public String wishlist(@PathVariable(name = "mode", required = false) WishType mode, CommonSearch search, Model model) { // WishType에 상수로 만들어놓은게 있으니까!
+    public String wishlist(@PathVariable(name="mode", required = false) WishType mode, CommonSearch search, Model model) { // WishType에 상수로 만들어놓은게 있으니까!
         commonProcess("wishlist", model); // 여기에 자스나 CSS를 넣어주면 좋을듯
 
-        mode = Objects.requireNonNullElse(mode,WishType.POKEMON); // 위시타입을 안해도 포켓몬이 기본값!
-
+        mode = Objects.requireNonNullElse(mode, WishType.POKEMON); // 위시타입을 안해도 포켓몬이 기본값!
         if (mode == WishType.BOARD) { // 게시글 찜하기 목록
 
         } else { // 포켓몬 찜하기 목록
@@ -131,6 +131,7 @@ public class MypageController {
 
     /**
      * 컨트롤러 공통 처리 영역
+     *
      * @param mode
      * @param model
      */
@@ -148,9 +149,8 @@ public class MypageController {
             pageTitle = utils.getMessage("회원정보_수정");
         } else if (mode.equals("wishlist")) { // 찜하기 목록
             addCommonScript.add("wish"); // 찜해제하는거 공통부분 추가한거
-            pageTitle = utils.getMessage("My_WishList");
+            pageTitle = utils.getMessage("나의_WISH");
         }
-
 
         model.addAttribute("addCommonScript", addCommonScript);
         model.addAttribute("addScript", addScript);

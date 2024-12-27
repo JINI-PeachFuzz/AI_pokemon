@@ -5,7 +5,7 @@
 <main layout:fragment="content">
     <h1 th:text="#{My_WishList}"></h1>
     <nav>
-        <a th:href="@{/mypage/wishlist/POKEMON}" class="tab" th:classappend="${mode = null || mode.name == 'POKEMON' } ? 'on'" th:text="#{포켓몬}"></a>
+        <a th:href="@{/mypage/wishlist/POKEMON}" class="tab"  th:text="#{포켓몬}"></a>
         <a th:href="@{/mypage/wishlist/BOARD}" class="tab" th:classappend="${mode != null && mode.name == 'BOARD' } ? 'on'" th:text="#{게시글}"></a>
     </nav>
 

@@ -1,12 +1,12 @@
 window.addEventListener("DOMContentLoaded", function() {
     // 공통 양식 버튼 처리 S
     const tableActions = document.getElementsByClassName("table-action");
-    for (const tableActions of tableActions) {
-        const { formName } = tableActions.dataset;
+    for (const tableAction of tableActions) {
+        const { formName } = tableAction.dataset;
         const frm = document[formName];
         if (!frm) continue; // 선택이 안되는 경우에 건너띄기
 
-        const buttons = tableActions.querySelectorAll("button");
+        const buttons = tableAction.querySelectorAll("button");
         // 관리자페이지에서 정보수정눌렀을 때 정말 수정하겠습니까란 팝업창이 떠서 하위인
         // tableActions로 변경해줬음
 
