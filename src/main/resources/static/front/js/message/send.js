@@ -1,7 +1,7 @@
 window.addEventListener("DOMContentLoaded", function() {
     const { loadEditor } = commonLib;
 
-    loadEditor("content", 450)
+    loadEditor("content", 350)
         .then((editor) => {
             window.editor = editor; // 전역 변수로 등록, then 구간 외부에서도 접근 가능하게 처리
         });
@@ -34,11 +34,10 @@ function callbackFileUpload(files) { // 콜백함수를 통해 열린기능으�
         const fileItem = dom.querySelector(".file-item");
 
 
-
         if (location === 'editor') { // 에디터에 추가될 이미지
             imageUrls.push(fileUrl); // push 로 필요한걸 하나씩 추가하는 형태
 
-            targetEditor.append(fileItem)
+            targetEditor.append(fileItem);
 
         } else { // 다운로드를 위한 첨부 파일
             const el = fileItem.querySelector(".insert-editor");
@@ -49,7 +48,7 @@ function callbackFileUpload(files) { // 콜백함수를 통해 열린기능으�
     }
 
 
-    if (imageUrls.length > 0) insertImage(imageUrls); // insertImage를 이용해서 추가한다고 보면됨.
+    if (imageUrls.length > 0) insertImage(imageUrls);// insertImage를 이용해서 추가한다고 보면됨.
 
 }
 

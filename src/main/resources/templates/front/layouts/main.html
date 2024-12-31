@@ -7,13 +7,13 @@
     <meta name="description" th:if="*{description != null}" th:content="*{description}">
     <meta name="_csrf" th:content="${_csrf.token}">
     <meta name="_csrf_header" th:content="${_csrf.headerName}">
-    <!--   csrf가 토큰 검증 방식 관련 내용 / 기본 검증이라 다 들어감    -->
+    <!--csrf가 토큰 검증 방식 관련 내용 / 기본 검증이라 다 들어감-->
     <meta name="rootUrl" th:content="@{/}">
 
-<!--    <title th:if="${pageTitle != null}" th:text="${pageTitle}">-->
+    <!--<title th:if="${pageTitle != null}" th:text="${pageTitle}">-->
     <title>
         <th:block th:if="${pageTitle != null}"
-            th:text="${#strings.concat(pageTitle, ' - ')}"></th:block>
+        th:text="${#strings.concat(pageTitle, ' - ')}"></th:block>
         <th:block th:text="*{siteTitle}"></th:block>
     </title>
 
@@ -44,7 +44,6 @@
     </th:block>
 
     <th:block layout:fragment="addCommonScript"></th:block>
-
 
     <script th:src="@{/front/js/common.js?v={v}(v=*{jsVersion})}"></script>
 

@@ -15,7 +15,6 @@ commonLib.getMeta = function(mode){
 // 자바스크립트에서 만든 주소에 컨택스트 경로 추가
 commonLib.url = function(url) {
     return `${commonLib.getMeta('rootUrl').replace("/", "")}${url}`;
-
 };
 
 /*
@@ -28,13 +27,13 @@ Ajax 요청 처리
 @params headers : 추가 요청 헤더
 */
 
-commonLib.ajaxLoad = function(url, callback, method = 'GET', data, headers) {
-    if(!url) return; // url없으면 처리안할꺼임
+commonLib.ajaxLoad = function(url, callback, method = 'GET', data, headers, isText = false) {
+    if (!url) return; // url없으면 처리안할꺼임
 
-    const {getMeta} = commonLib;
+    const { getMeta } = commonLib;
     const csrfHeader = getMeta("_csrf_header");
     const csrfToken = getMeta("_csrf");
-    url = /^http[s]?:/.test(url) ? url : getMeta("rootUrl") + url.replace("/","");
+    url = /^http[s]?:/.test(url) ? url : commonLib.url(url);
 
     headers = headers ?? {};
     headers[csrfHeader] = csrfToken;
@@ -54,12 +53,18 @@ commonLib.ajaxLoad = function(url, callback, method = 'GET', data, headers) {
         fetch(url, options)
             .then(res => {
                 if (res.status !== 204)
-                    return res.json();
+                    return isText ? res.text() : res.json();
                 else {
                     resolve();
                 }
             }) // 바디데이터 없을 경우를 대비해서 코드 추가함 204가 아닐 경우 JSON파일로 받겠다!
             .then(json => {
+                if (isText) {
+                    resolve(json);
+                    return;
+                }
+
+
                 if (json?.success) { // 응답 성공(처리 성공) // ?. 은 옵셔널체이닝
                    if (typeof callback === 'function') { // 콜백 함수가 정의된 경우
                         callback(json.data);
@@ -167,7 +172,7 @@ commonLib.loadEditor = function(id, height = 350) {
     return new Promise((resolve, reject) => {
         (async() => {
             try {
-                const editor = await ClassicEditor.create(document.getElementById(id));
+                const editor = await ClassicEditor.create(document.getElementById(id)); // ClassicEditor는 상단툴바
                 resolve(editor);
                 editor.editing.view.change((writer) => {
                     writer.setStyle(
