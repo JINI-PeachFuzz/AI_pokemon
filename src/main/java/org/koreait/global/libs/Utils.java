@@ -3,10 +3,8 @@ package org.koreait.global.libs;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.koreait.file.controllers.RequestThumb;
 import org.koreait.file.entities.FileInfo;
 import org.koreait.file.services.FileInfoService;
-import org.koreait.file.services.ThumbnailService;
 import org.springframework.context.MessageSource;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.stereotype.Component;
@@ -14,7 +12,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 
-import java.io.File;
 import java.util.*;
 import java.util.stream.Collectors;
 

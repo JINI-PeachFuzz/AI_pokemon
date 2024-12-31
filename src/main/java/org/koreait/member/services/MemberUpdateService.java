@@ -1,7 +1,6 @@
 package org.koreait.member.services;
 
 import jakarta.servlet.http.HttpSession;
-import jdk.jshell.execution.Util;
 import lombok.RequiredArgsConstructor;
 import org.koreait.global.exceptions.scripts.AlertException;
 import org.koreait.global.libs.Utils;
@@ -16,6 +15,7 @@ import org.koreait.member.repositories.MemberRepository;
 import org.koreait.mypage.controllers.RequestProfile;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +24,7 @@ import org.springframework.util.StringUtils;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
 
 @Lazy // 지연로딩 - 최초로 빈을 사용할때 생성
 @Service
@@ -80,7 +81,9 @@ public class MemberUpdateService {
     // 메서드 오버로드 사용함 / 열린구조
 
     public void process(RequestProfile form, List<Authority> authorities) { // 관리자일때만 추가할 거
-        Member member = memberUtil.getMember(); // 로그인한 사용자의 정보
+        String email = form.getEmail();
+        Member member = memberUtil.isAdmin() && StringUtils.hasText(email) ? memberRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(email)) : memberUtil.getMember(); // 로그인한 사용자의 정보
+
         member.setName(form.getName());
         member.setNickName(form.getNickName());
         member.setBirthDt(form.getBirthDt());
@@ -117,10 +120,13 @@ public class MemberUpdateService {
 
         // 로그인 회원 정보 업데이트
         // RequestProfile form이 회원정보 수정이라 젤 밑에서 이쪽으로 변경함
-        Member _member = memberRepository.findByEmail(member.getEmail()).orElse(null); // 상수화가 되서 Member _member로 변경함
-        if (_member != null) {
-            infoService.addInfo(_member); // 싱글톤 패턴이라 이것만 넣어도 됨
-            session.setAttribute("member", _member); // 2차 가공해야함
+        if (!StringUtils.hasText(email)) {
+            Member _member = memberRepository.findByEmail(member.getEmail()).orElse(null); // 상수화가 되서 Member _member로 변경함
+
+            if (_member != null) {
+                infoService.addInfo(_member); // 싱글톤 패턴이라 이것만 넣어도 됨
+                session.setAttribute("member", _member); // 2차 가공해야함
+            }
         }
     }
 
