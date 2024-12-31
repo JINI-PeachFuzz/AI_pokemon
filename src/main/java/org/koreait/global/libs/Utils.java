@@ -203,6 +203,10 @@ public class Utils {
         return text.replaceAll("\\r", "")
                 .replaceAll("\\n", "<br>");
     }
+
+    public String popup(String url, int width, int height) {
+        return String.format("commonLib.popup('%s', %d, %d);", url, width, height);
+    }
 }
 
 
