@@ -45,6 +45,7 @@
 
     <th:block layout:fragment="addCommonScript"></th:block>
 
+
     <script th:src="@{/front/js/common.js?v={v}(v=*{jsVersion})}"></script>
 
     <th:block th:if="${addScript != null}">
