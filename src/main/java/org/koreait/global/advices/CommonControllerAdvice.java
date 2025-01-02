@@ -56,7 +56,7 @@ public class CommonControllerAdvice {
                 String url = redirectException.getUrl();
                 sb.append(String.format("%s.location.replace('%s');", target, url));
             }
-// 위 3개 예외처리는
+// 위 3개 예외처리는 자주 사용하는 것들이라 공통으로 사용하기 위해 만듦
             if (!sb.isEmpty()) {
                 data.put("script", sb.toString());
             }

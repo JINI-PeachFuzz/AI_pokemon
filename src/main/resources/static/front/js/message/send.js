@@ -65,7 +65,7 @@ function callbackFileUpload(files) { // 콜백함수를 통해 열린기능으�
 
             targetEditor.append(fileItem);
             el.addEventListener("click", function() {
-                const { url } = this.dataset;
+                const { url } = this.dataset; // 얘는 하나만 들어오는거
                 insertImage(url); // 이미지 첨부기능
             });
 
@@ -95,7 +95,7 @@ function callbackFileUpload(files) { // 콜백함수를 통해 열린기능으�
 
 function insertImage(imageUrls) {
     // 얘가 배열이아닌 문자열로 들어왔을 경우
-    imageUrls = typeof imageUrls === 'string' ? [imageUrls] : imageUrls;
+    imageUrls = typeof imageUrls === 'string' ? [imageUrls] : imageUrls; // 예를들어 이미지를 하나만 추가했다가 또 2~3개 더 추가할 수 도 있는거고.. 그럴경우를 대비해서 배열로 만들어주는거라 보면됨.
     // 통일성있게 담아줌
 
     editor.execute('insertImage', { source: imageUrls }); // insertImage 이미 정해져있는 명령어! / location 값이랑 fileName, seq, file URL 이 필요함
