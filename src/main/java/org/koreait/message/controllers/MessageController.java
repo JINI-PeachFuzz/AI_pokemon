@@ -2,9 +2,12 @@ package org.koreait.message.controllers;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.koreait.file.constants.FileStatus;
+import org.koreait.file.services.FileInfoService;
 import org.koreait.global.annotations.ApplyErrorPage;
 import org.koreait.global.libs.Utils;
-import org.koreait.message.controllers.validators.MessageValidator;
+import org.koreait.message.services.MessageSendService;
+import org.koreait.message.validators.MessageValidator;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -23,6 +26,8 @@ public class MessageController {
 
     private final Utils utils;
     private final MessageValidator messageValidator;
+    private final FileInfoService fileInfoService;
+    private final MessageSendService sendService; // 전송서비스
 
     @ModelAttribute("addCss")
     public List<String> addCss() {
@@ -57,8 +62,16 @@ public class MessageController {
         messageValidator.validate(form, errors);
 
         if (errors.hasErrors()) {
+            // 업로드한 파일 목록 form에 추가 / gid 와 location 정보를 가지고
+            String gid = form.getGid();
+            form.setEditorImages(fileInfoService.getList(gid,"editor", FileStatus.ALL));
+            form.setAttachFiles(fileInfoService.getList(gid,"attach", FileStatus.ALL));
+
+
             return utils.tpl("message/form"); // 검증실패시에는 넘어가는게 아니라 양식을 보여주는 걸로~
         }
+
+        sendService.process(form); // 전송이 되었는지 확인하고 조회쪽으로 넘어가게 됨 // 서비스 연동
 
         return "redirect:/message/list";
     }

@@ -1,5 +1,6 @@
 server:
   port: 3000
+#  host: 172.31.39.23
   servlet:
     session:
       cookie.name: bfb4c74f0

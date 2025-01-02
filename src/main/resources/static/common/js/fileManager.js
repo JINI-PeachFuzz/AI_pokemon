@@ -83,6 +83,8 @@ window.addEventListener("DOMContentLoaded", function() {
            if (!fileEl) {
                fileEl = document.createElement("input");
                fileEl.type = 'file';
+           } else {
+                fileEl.value = ''; // 초기화 // 없을땐 괜찮은데 있을 땐 초기화!
            }
 
             fileEl.gid = gid;
@@ -99,15 +101,21 @@ window.addEventListener("DOMContentLoaded", function() {
              fileEl.removeEventListener("change", fileEventHandler);
              fileEl.addEventListener("change", fileEventHandler);
 
-             function fileEventHandler(e) {
-                const files = e.currentTarget.files;
-                const {gid, location, single, imageOnly, done} = fileEl;
 
-                const { fileManager } = commonLib;
-                fileManager.upload(files, gid, location, single, imageOnly, done);
-             }
-        });
+       });
+
     }
+
+    // 이미지를 추가로 넣을 때마다 새로 또 추가가 되는현상이 위 코드 안에있어서 그런게 아닐까 싶어서 밖으로 뺐음 // 이벤트핸들러가 새로 정의되기때문에 중복으로 나오는 문제 해결됨
+    // for문안에 있으니까 이미지 첨부할때 파일이 2개씩 추가되는 현상있어서 포문밖으로 뺐음
+    function fileEventHandler(e) {
+        const files = e.currentTarget.files;
+        const {gid, location, single, imageOnly, done} = fileEl;
+
+        const { fileManager } = commonLib;
+        fileManager.upload(files, gid, location, single, imageOnly, done);
+    }
+
     // 드래그 앤 드롭 파일 업로드 처리
     const dragUploads = document.getElementsByClassName("drag-upload");
     for (const el of dragUploads) {

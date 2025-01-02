@@ -5,6 +5,27 @@ window.addEventListener("DOMContentLoaded", function() {
         .then((editor) => {
             window.editor = editor; // 전역 변수로 등록, then 구간 외부에서도 접근 가능하게 처리
         });
+
+    // 이미지 본문 추가 이벤트 처리
+    const insertEditors = document.querySelectorAll(".insert-editor")
+    insertEditors.forEach(el => {
+        el.addEventListener("click", e => insertImage(e.currentTarget.dataset.url));
+    });
+
+    // 파일 삭제 버튼 이벤트 처리
+    const removeEls = document.querySelectorAll(".file-item .remove");
+    const { fileManager } = commonLib;
+    removeEls.forEach(el => {
+        el.addEventListener("click", e => {
+            if (confirm('정말 삭제하겠습니까?')) {
+                const seq = e.currentTarget.dataset.seq;
+                fileManager.delete(seq, () => {
+                    const el = document.getElementById(`file-${seq}`);
+                    el.parentElement.removeChild(el);
+                });
+            }
+        });
+    });
 });
 
 /**
@@ -16,6 +37,8 @@ function callbackFileUpload(files) { // 콜백함수를 통해 열린기능으�
         return;
     }
 
+//    console.log(files); // 첨부파일관련하여 문제확인하기 위해 확인작업으로 적었던거
+
     const imageUrls = [];
 
     const targetEditor = document.getElementById("editor-files");
@@ -23,6 +46,8 @@ function callbackFileUpload(files) { // 콜백함수를 통해 열린기능으�
     const tpl = document.getElementById("tpl-file-item").innerHTML;
 
     const domParser = new DOMParser();
+
+    const { fileManager } = commonLib; // 이미지 삭제하기 위해서 추가한거
 
     for (const {seq, fileUrl, fileName, location} of files) {
         let html = tpl;
@@ -32,19 +57,35 @@ function callbackFileUpload(files) { // 콜백함수를 통해 열린기능으�
 
         const dom = domParser.parseFromString(html, "text/html");
         const fileItem = dom.querySelector(".file-item");
-
+        const el = fileItem.querySelector(".insert-editor"); // else안에 있던걸 여기로 옮겼음
+        const removeEl = fileItem.querySelector(".remove"); // 파일삭제시
 
         if (location === 'editor') { // 에디터에 추가될 이미지
             imageUrls.push(fileUrl); // push 로 필요한걸 하나씩 추가하는 형태
 
             targetEditor.append(fileItem);
+            el.addEventListener("click", function() {
+                const { url } = this.dataset;
+                insertImage(url); // 이미지 첨부기능
+            });
 
         } else { // 다운로드를 위한 첨부 파일
-            const el = fileItem.querySelector(".insert-editor");
+
             el.parentElement.removeChild(el);
 
             targetAttach.append(fileItem);
         }
+
+        removeEl.addEventListener("click", function() {
+            if (!confirm('정말 삭제하시겠습니까?')) {
+                return;
+            }
+
+            fileManager.delete(seq, f => {
+                const el = document.getElementById(`file-${f.seq}`);
+                if (el) el.parentElement.removeChild(el); // 부모쪽에서 바로 삭제하는 거기때문에 parentEl로...
+            });
+        });
     }
 
 
@@ -53,5 +94,9 @@ function callbackFileUpload(files) { // 콜백함수를 통해 열린기능으�
 }
 
 function insertImage(imageUrls) {
+    // 얘가 배열이아닌 문자열로 들어왔을 경우
+    imageUrls = typeof imageUrls === 'string' ? [imageUrls] : imageUrls;
+    // 통일성있게 담아줌
+
     editor.execute('insertImage', { source: imageUrls }); // insertImage 이미 정해져있는 명령어! / location 값이랑 fileName, seq, file URL 이 필요함
 }
