@@ -18,6 +18,7 @@ import java.util.List;
 
 import static org.springframework.data.domain.Sort.Order.asc;
 
+
 @Lazy
 @Service
 @Profile("dl") // dl이라는게 있으면 선별적으로 빈을 만들어서 하겠다.
@@ -42,7 +43,8 @@ public class TrainService {
             Process process = builder.start();
             int exitCode = process.waitFor();
             System.out.println(exitCode);
-        } catch (Exception e) {e.printStackTrace();}
+
+        } catch (Exception e) {}
     }
     // 훈련기록 기억
     public void log(TrainItem item) {
@@ -52,13 +54,12 @@ public class TrainService {
     public List<TrainItem> getList(boolean isAll) {
 
 
-        if(isAll) {
+        if (isAll) {
             return repository.findAll(Sort.by(asc("createdAt")));
         } else {
             QTrainItem trainItem = QTrainItem.trainItem;
-            return (List<TrainItem>) repository.findAll(trainItem.createdAt.after(LocalDateTime.of(LocalDate.now().minusDays(1L), LocalTime.of(0,0,0))), Sort.by(asc("createdAt"))); // 0시0분0초 부터 / 하루치 데이터 지금날짜의 전날새벽 1시부터 돌린다고 해서 minusDays(1L)을 해야1시부터가 적용됨
-
+            return (List<TrainItem>)repository.findAll(trainItem.createdAt.after(LocalDateTime.of(LocalDate.now().minusDays(1L), LocalTime.of(0, 0, 0))), Sort.by(asc("createdAt")));
+            // 0시0분0초 부터 / 하루치 데이터 지금날짜의 전날새벽 1시부터 돌린다고 해서 minusDays(1L)을 해야1시부터가 적용됨
         }
-
     }
 }
