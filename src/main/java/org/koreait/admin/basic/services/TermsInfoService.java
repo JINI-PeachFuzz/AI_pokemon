@@ -12,6 +12,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 import static org.springframework.data.domain.Sort.Order.asc;
 
@@ -23,8 +24,8 @@ public class TermsInfoService {
     private final ObjectMapper om;
 
     public Terms get(String code) {
-        return service.get(String.format("term_$s", code), Terms.class);
-    }
+        return Objects.requireNonNullElseGet(service.get(String.format("term_$s", code), Terms.class), Terms::new);
+    } // Objects.requireNonNullElseGet(service.get 코드 추가 / 약관쪽 내용 널일때 추가했음
 
     public List<Terms> getList() {
         QCodeValue codeValue = QCodeValue.codeValue;

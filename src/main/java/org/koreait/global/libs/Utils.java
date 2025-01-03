@@ -197,8 +197,8 @@ public class Utils {
      * @return
      */
     public String nl2br(String text) {
-        return text.replaceAll("\\r", "")
-                .replaceAll("\\n", "<br>");
+        return text == null ? "" : text.replaceAll("\\r", "")
+                .replaceAll("\\n", "<br>"); // br을 줄개행으로 변환 / 약관조회 오류로 인해 널조건을 좀더 추가했음
     }
 
     public String popup(String url, int width, int height) {

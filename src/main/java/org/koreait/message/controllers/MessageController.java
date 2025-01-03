@@ -6,7 +6,11 @@ import org.koreait.file.constants.FileStatus;
 import org.koreait.file.services.FileInfoService;
 import org.koreait.global.annotations.ApplyErrorPage;
 import org.koreait.global.libs.Utils;
+import org.koreait.global.paging.ListData;
+import org.koreait.message.entities.Message;
+import org.koreait.message.services.MessageInfoService;
 import org.koreait.message.services.MessageSendService;
+import org.koreait.message.services.MessageStatusService;
 import org.koreait.message.validators.MessageValidator;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,6 +32,8 @@ public class MessageController {
     private final MessageValidator messageValidator;
     private final FileInfoService fileInfoService;
     private final MessageSendService sendService; // 전송서비스
+    private final MessageInfoService infoService;
+    private final MessageStatusService statusService;
 
     @ModelAttribute("addCss")
     public List<String> addCss() {
@@ -64,8 +70,8 @@ public class MessageController {
         if (errors.hasErrors()) {
             // 업로드한 파일 목록 form에 추가 / gid 와 location 정보를 가지고
             String gid = form.getGid();
-            form.setEditorImages(fileInfoService.getList(gid,"editor", FileStatus.ALL));
-            form.setAttachFiles(fileInfoService.getList(gid,"attach", FileStatus.ALL));
+            form.setEditorImages(fileInfoService.getList(gid, "editor", FileStatus.ALL));
+            form.setAttachFiles(fileInfoService.getList(gid, "attach", FileStatus.ALL));
 
 
             return utils.tpl("message/form"); // 검증실패시에는 넘어가는게 아니라 양식을 보여주는 걸로~
@@ -81,22 +87,36 @@ public class MessageController {
      *
      * @return
      */
+    // 리스트 목록에 대한 거
     @GetMapping("/list")
-    public String list(Model model) {
+    public String list(@ModelAttribute MessageSearch search, Model model) {
         commonProcess("list", model);
+        // MessageSearch search의 서치에서 모드값이 없을 경우를 대비해 기본값을 추가해줌
+        String mode = search.getMode();
+        search.setMode(StringUtils.hasText(mode) ? mode : "receive"); // 내가 받은거 먼저 나올거임 / 기본값은 받은 쪽지!
+
+        ListData<Message> data = infoService.getList(search);
+        model.addAttribute("items", data.getItems());
+        model.addAttribute("pagination", data.getPagination());
 
         return utils.tpl("message/list");
     }
 
+    // 리스트 개별 조회
     @GetMapping("/view/{seq}")
     public String view(@PathVariable("seq") Long seq, Model model) {
         commonProcess("view", model);
+
+        Message item = infoService.get(seq);
+        model.addAttribute("item", item);
+
+        statusService.change(seq); // 열람 상태로 변경
 
         return utils.tpl("message/view");
     }
 
     @DeleteMapping
-    public String delete(@RequestParam(name="seq", required = false) List<String> seq) { // 쪽지 삭제기능
+    public String delete(@RequestParam(name = "seq", required = false) List<String> seq) { // 쪽지 삭제기능
         return "redirect:/message/list";
 
     }
