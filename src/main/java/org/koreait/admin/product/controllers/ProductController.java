@@ -44,7 +44,7 @@ public class ProductController implements SubMenus {
      */
     @GetMapping("/add")
     public String add(Model model) {
-        commonProcess("product_save", model); // save를 해서 상품등록 수정을 같이
+        commonProcess("add", model); // save를 해서 상품등록 수정을 같이
 
         return "admin/product/add";
     }
@@ -58,7 +58,7 @@ public class ProductController implements SubMenus {
      */
     @GetMapping("/edit/{seq}")
     public String edit(@PathVariable("seq") Long seq, Model model) {
-        commonProcess("product_save", model);
+        commonProcess("edit", model);
 
         return "admin/product/edit";
 
@@ -71,7 +71,7 @@ public class ProductController implements SubMenus {
      */
     @PostMapping("/save")
     public String save(Model model) {
-        commonProcess("product_save", model);
+        commonProcess("", model);
 
         return "redirect:/admin/product/list"; // 상품목록 수정이 다되면 목록으로 돌아가게
     }
@@ -83,7 +83,7 @@ public class ProductController implements SubMenus {
      */
     @GetMapping("/category")
     public String categoryList(Model model) {
-        commonProcess("category_list", model);
+        commonProcess("category", model);
 
         return "admin/product/category/list";
     }
