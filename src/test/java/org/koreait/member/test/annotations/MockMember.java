@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-@WithSecurityContext(factory = MockSecurityContextFactory.class)
+@WithSecurityContext(factory = MockSecurityContextFactory.class) // 사용자를 만들어주는 애노테이션
 public @interface MockMember {
     long seq() default 1L;
     String email() default "user01@test.org";

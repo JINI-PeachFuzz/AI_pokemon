@@ -47,9 +47,9 @@ public class Message extends BaseEntity {
     private String content; // 쪽지 내용
 
     @Transient
-    private List<FileInfo> editorImages; // 2차가공을 통해서 content로 넣어줄거임
+    private List<FileInfo> editorImages; // 2차가공을 통해서 content로 넣어줄거임 / MessageInfoService
 
     @Transient
-    private List<FileInfo> attachFiles; // 2차가공을 통해서 넣어줄거임
+    private List<FileInfo> attachFiles; // 2차가공을 통해서 넣어줄거임 / MessageInfoService
 
 }
