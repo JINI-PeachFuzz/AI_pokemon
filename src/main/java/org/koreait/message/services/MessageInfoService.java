@@ -87,7 +87,7 @@ public class MessageInfoService {
 
         // send - 보낸 쪽지 목록, receive - 받은 쪽지 목록
         andBuilder.and(mode.equals("send") ? message.sender.eq(member) : message.receiver.eq(member));
-        andBuilder.and(mode.equals("send") ? message.deletedBySender.eq(false) : message.deletedByReceiver.eq(false));
+        andBuilder.and(mode.equals("send") ? message.deletedBySender.eq(false) : message.deletedByReceiver.eq(false)); // 쪽지 삭제를 할때 양쪽에서 지워지면 안되기 때문에 따로따로 삭제하는걸 넣었음
 
         // 보낸사람 조건 검색
         List<String> sender = search.getSender();
@@ -106,15 +106,14 @@ public class MessageInfoService {
         }
 
 
-
         // 검색 조건 처리 E
-
+        // queryFactory 은 sql문을 쓰기위해서 사용하는 거고 조회하기 위한거
         List<Message> items = queryFactory.selectFrom(message)
-                .leftJoin(message.receiver)
-                .fetchJoin() // 처음부터 조회하고 바로 가져오겠다는 뜻
-                .where(andBuilder)
-                .limit(limit)
-                .offset(offset)
+                .leftJoin(message.receiver) // 수신인 조회
+                .fetchJoin() // 처음부터 조회하고 바로 가져오겠다는 뜻 // 처음부터 조인한 상태로 조회하겠다.
+                .where(andBuilder) // where은 spl 조건문 // andBuilder는 모두가 참이어야함
+                .limit(limit) // 한페이지에 몇개보여줄지
+                .offset(offset) // 시작페이지 1번,11번 시작하는 번호
                 .orderBy(message.createdAt.desc()) // 최신 순서대로 나올수있게
                 .fetch();
 
