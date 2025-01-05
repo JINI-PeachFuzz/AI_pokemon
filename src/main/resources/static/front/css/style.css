@@ -240,21 +240,23 @@ footer .top_flex {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  gap: 150px;
+  gap: 100px;
+  padding: 30px 0px 30px 40px; /* top 전체적인 위치 간격 */
 }
 
 footer .top_right {
   display: flex;
   flex-direction: row;
-  padding: 0;
-  gap: 10px;
+  padding: 0px 0px 0px 200px;
+  gap: 20px;
   list-style: none;
   align-items: center;
+
 }
 
 footer .top_right li {
   position: relative;
-  padding: 0px 18px 0px 28px; /* 텍스트와 바 간격 */
+  padding: 0px 0px 0px 18px; /* 텍스트와 바 간격 */
   align-items: center;
 }
 
@@ -264,7 +266,7 @@ footer .top_right li::before {
   left: 0; /* 수직선 위치 */
   top: 0;
   bottom: 0;
-  width: 0.5px; /* 수직선 두께 */
+  width: 0.3px; /* 수직선 두께 */
   background-color: white; /* 수직선 색상 */
 }
 
@@ -273,7 +275,7 @@ footer .top_right li:first-child::before {
 }
 
 footer .address {
-  padding-left: 15px;
+  padding-left: 17px;
   padding-top: 7px;
 }
 
@@ -328,15 +330,15 @@ footer .box {
 }
 
 footer a {
-  font-size: 13px;
+  font-size: 15px;
 }
-footer h3 {
+footer pre {
   font-size: 13px;
-  margin: 0;
+  margin: 5px;
 }
 
 footer h2 {
-  font-size: 13px;
+  font-size: 14px;
   margin: 0;
 }
 
