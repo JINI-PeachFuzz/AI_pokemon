@@ -61,7 +61,7 @@ public class MessageInfoService {
 
         addInfo(item); // 추가 정보 처리 / editorImages, attachFiles
 
-        return null;
+        return item;
     }
 
     /***

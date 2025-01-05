@@ -216,3 +216,140 @@ header .move-to-store::after {
     color: #fff;
 }
 /* 페이지네이션 E */
+
+/* 푸터 S */
+footer {
+  background-color: #000;
+  display: flex;
+  flex-direction: column;
+  color: white;
+}
+
+footer * {
+    color: white;
+}
+
+footer .top {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+footer .top_flex {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 150px;
+}
+
+footer .top_right {
+  display: flex;
+  flex-direction: row;
+  padding: 0;
+  gap: 10px;
+  list-style: none;
+  align-items: center;
+}
+
+footer .top_right li {
+  position: relative;
+  padding: 0px 18px 0px 28px; /* 텍스트와 바 간격 */
+  align-items: center;
+}
+
+footer .top_right li::before {
+  content: ""; /* 커스텀 요소 삽입 */
+  position: absolute;
+  left: 0; /* 수직선 위치 */
+  top: 0;
+  bottom: 0;
+  width: 0.5px; /* 수직선 두께 */
+  background-color: white; /* 수직선 색상 */
+}
+
+footer .top_right li:first-child::before {
+  content: none; /* 첫 번째 항목의 수직선만 제거 */
+}
+
+footer .address {
+  padding-left: 15px;
+  padding-top: 7px;
+}
+
+footer .icons {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  align-items: center;
+  padding-right: 15px;
+  padding-top: 5px;
+}
+
+footer .icons img {
+  width: 43px;
+  height: 43px;
+  align-items: center;
+}
+
+footer .mid {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  background-color: #1a1a1a;
+  padding: 20px 20px;
+}
+
+footer .bot {
+  display: flex;
+  flex-direction: column;
+  padding-top: 15px;
+  padding: 0px 27px;
+}
+
+footer .info_top {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+
+footer .layout {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 30px 0px;
+  align-items: center;
+}
+
+footer .box {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+footer a {
+  font-size: 13px;
+}
+footer h3 {
+  font-size: 13px;
+  margin: 0;
+}
+
+footer h2 {
+  font-size: 13px;
+  margin: 0;
+}
+
+footer .bright_top {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+footer .subinfo {
+  display: flex;
+  flex-direction: column;
+  gap: 23px;
+}
+
+/* 푸터 E */

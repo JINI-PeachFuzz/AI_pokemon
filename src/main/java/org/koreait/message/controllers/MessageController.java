@@ -108,6 +108,7 @@ public class MessageController {
         commonProcess("view", model);
 
         Message item = infoService.get(seq);
+
         model.addAttribute("item", item);
 
         statusService.change(seq); // 열람 상태로 변경

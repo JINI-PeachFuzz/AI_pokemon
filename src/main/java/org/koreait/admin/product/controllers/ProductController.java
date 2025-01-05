@@ -41,6 +41,8 @@ public class ProductController implements SubMenus {
      *
      * @param model
      * @return
+     *
+     * // Menus의 상품관리에 맞게 commonProcess("요기위치", model);를 변경해줌
      */
     @GetMapping("/add")
     public String add(Model model) {
@@ -95,7 +97,7 @@ public class ProductController implements SubMenus {
      */
     @GetMapping({"/category/add", "/category/edit/{cate}"})
     public String categoryUpdate(@PathVariable(name="cate", required = false) String cate, Model model) {
-        commonProcess("category_save", model);
+        commonProcess("category", model);
 
         return "admin/product/category/add";
     }
@@ -108,7 +110,7 @@ public class ProductController implements SubMenus {
      */
     @PostMapping("/category/save")
     public String categorySave(Model model) {
-        commonProcess("category_save", model);
+        commonProcess("category", model);
 
         return "redirect:/admin/product/category";
     }
