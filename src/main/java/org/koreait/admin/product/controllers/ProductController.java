@@ -1,12 +1,19 @@
 package org.koreait.admin.product.controllers;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.koreait.admin.global.menu.SubMenus;
+import org.koreait.file.constants.FileStatus;
+import org.koreait.file.services.FileInfoService;
 import org.koreait.global.annotations.ApplyErrorPage;
 import org.koreait.global.libs.Utils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @ApplyErrorPage
 @RequiredArgsConstructor
@@ -15,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 public class ProductController implements SubMenus {
 
     private final Utils utils; // 템플릿이 필요할 수도 있으니 남겨둠 / 관리자라서 필요는 없음
+    private final FileInfoService fileInfoService; // 이걸가지고 바로 조회할꺼 / gid뿐만아니라 location도 같이 조회할 예정
 
     @Override
     @ModelAttribute("menuCode")
@@ -45,8 +53,10 @@ public class ProductController implements SubMenus {
      * // Menus의 상품관리에 맞게 commonProcess("요기위치", model);를 변경해줌
      */
     @GetMapping("/add")
-    public String add(Model model) {
+    public String add(@ModelAttribute RequestProduct form, Model model) {
         commonProcess("add", model); // save를 해서 상품등록 수정을 같이
+
+        form.setGid(UUID.randomUUID().toString()); // 중복되지않는 ID생성
 
         return "admin/product/add";
     }
@@ -72,8 +82,22 @@ public class ProductController implements SubMenus {
      * @return
      */
     @PostMapping("/save")
-    public String save(Model model) {
-        commonProcess("", model);
+    public String save(@Valid RequestProduct form, Errors errors, Model model) {
+        String mode = form.getMode();
+        mode = StringUtils.hasText(mode) ? mode : "add";
+
+        commonProcess(mode, model); // 모드가 어떤건지에 따라 달라져야하니까
+
+        if (errors.hasErrors()) { // 에러발생해도 form에 있는 데이터는 메시지와 동일하게 유지되어야함
+            String gid = form.getGid();
+            form.setMainImages(fileInfoService.getList(gid, "main", FileStatus.ALL));
+            form.setListImages(fileInfoService.getList(gid, "list", FileStatus.ALL));
+            form.setEditorImages(fileInfoService.getList(gid, "editor", FileStatus.ALL));
+
+            return "admin/product/" + mode;
+        }
+
+        // 여기에는 상품 등록, 수정 처리 서비스를 넣으면 됨.
 
         return "redirect:/admin/product/list"; // 상품목록 수정이 다되면 목록으로 돌아가게
     }
