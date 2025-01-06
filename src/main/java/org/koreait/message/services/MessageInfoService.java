@@ -50,9 +50,14 @@ public class MessageInfoService {
 
         if (!memberUtil.isAdmin()) {
             Member member = memberUtil.getMember();
+            BooleanBuilder orBuilder2 = new BooleanBuilder();
+            BooleanBuilder andBuilder = new BooleanBuilder();
+            orBuilder2.or(andBuilder.and(message.notice.eq(true)).and(message.receiver.isNull()))
+            // 공지사항이지만 리시버가 널인때는 보여져야함
+                    .or(message.receiver.eq(member));
 
             orBuilder.or(message.sender.eq(member))
-                    .or(message.receiver.eq(member)); // 이건 관리자일때만 추가
+                            .or(orBuilder2);
 
             builder.and(orBuilder);
         }
@@ -126,7 +131,8 @@ public class MessageInfoService {
                 .where(andBuilder) // where은 spl 조건문 // andBuilder는 모두가 참이어야함
                 .limit(limit) // 한페이지에 몇개보여줄지
                 .offset(offset) // 시작페이지 1번,11번 시작하는 번호
-                .orderBy(message.createdAt.desc()) // 최신 순서대로 나올수있게
+                .orderBy(message.notice.desc(), message.createdAt.desc()) // 최신 순서대로 나올수있게
+                // 앞은 1차정렬, 뒤는 2차정렬 -> 공지사항이 항상 상단에 보여질 수 있게 한거
                 .fetch();
 
         items.forEach(this::addInfo); // 추가 정보 처리
@@ -149,6 +155,8 @@ public class MessageInfoService {
         item.setEditorImages(fileInfoService.getList(gid, "editor"));
         item.setAttachFiles(fileInfoService.getList(gid, "attach"));
 
-        item.setReceived(item.getReceiver().getSeq().equals(memberUtil.getMember().getSeq())); // 수신한 쪽지인지 구분
+        item.setReceived(
+                (item.isNotice() && item.getReceiver() == null) || // 공지글을 받았는지 아닌지 체크
+                item.getReceiver().getSeq().equals(memberUtil.getMember().getSeq())); // 수신한 쪽지인지 구분
     }
 }

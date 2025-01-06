@@ -16,6 +16,7 @@ import java.util.List;
 @Entity
 @Builder
 @NoArgsConstructor @AllArgsConstructor // 편법으로 기본생성자가 프라이빗으로 생성되기 때문에 추가한거
+@Table(indexes = @Index(name="idx_notice_created_at", columnList = "notice DESC, createdAt DESC")) // 공지사항을 인덱스번호로 좀 더 빨리 조회할 수 있게 하기 위해 추가한거
 public class Message extends BaseEntity {
     @Id @GeneratedValue
     private Long seq;
