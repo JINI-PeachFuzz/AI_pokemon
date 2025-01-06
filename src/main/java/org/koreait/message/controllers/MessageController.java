@@ -1,5 +1,6 @@
 package org.koreait.message.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.koreait.file.constants.FileStatus;
@@ -8,6 +9,7 @@ import org.koreait.global.annotations.ApplyErrorPage;
 import org.koreait.global.libs.Utils;
 import org.koreait.global.paging.ListData;
 import org.koreait.message.entities.Message;
+import org.koreait.message.services.MessageDeleteService;
 import org.koreait.message.services.MessageInfoService;
 import org.koreait.message.services.MessageSendService;
 import org.koreait.message.services.MessageStatusService;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Controller
@@ -34,6 +37,7 @@ public class MessageController {
     private final MessageSendService sendService; // 전송서비스
     private final MessageInfoService infoService;
     private final MessageStatusService statusService;
+    private final MessageDeleteService deleteService;
 
     @ModelAttribute("addCss")
     public List<String> addCss() {
@@ -104,21 +108,25 @@ public class MessageController {
 
     // 리스트 개별 조회
     @GetMapping("/view/{seq}")
-    public String view(@PathVariable("seq") Long seq, Model model) {
-        commonProcess("view", model);
+    public String view(@PathVariable("seq") Long seq, Model model, HttpServletRequest request) {
+        commonProcess("view", model); // HttpServletRequest request를 가지고 referer을 확인할 수 있게
 
         Message item = infoService.get(seq);
-
         model.addAttribute("item", item);
 
         statusService.change(seq); // 열람 상태로 변경
+
+        String referer = Objects.requireNonNullElse(request.getHeader("referer"),"");
+        // referer정보가 없어도 빈문자열로 나올 수 있게
+        model.addAttribute("mode", referer.contains("mode=send") ? "send":"receive");
 
         return utils.tpl("message/view");
     }
 
     @GetMapping("/delete/{seq}")
-    public String delete(@PathVariable("seq") Long seq) { // 쪽지 삭제기능
+    public String delete(@PathVariable("seq") Long seq, @RequestParam(name = "mode", defaultValue = "receive") String mode) { // 쪽지 삭제기능 / 모드값을 추가했고 없을 땐 기본값이 receive임
 
+        deleteService.process(seq, mode);
 
         return "redirect:/message/list";
     }

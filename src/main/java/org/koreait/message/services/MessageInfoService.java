@@ -53,11 +53,11 @@ public class MessageInfoService {
             BooleanBuilder orBuilder2 = new BooleanBuilder();
             BooleanBuilder andBuilder = new BooleanBuilder();
             orBuilder2.or(andBuilder.and(message.notice.eq(true)).and(message.receiver.isNull()))
-            // 공지사항이지만 리시버가 널인때는 보여져야함
+                    // 공지사항이지만 리시버가 널인때는 보여져야함
                     .or(message.receiver.eq(member));
 
             orBuilder.or(message.sender.eq(member))
-                            .or(orBuilder2);
+                    .or(orBuilder2);
 
             builder.and(orBuilder);
         }
@@ -75,11 +75,11 @@ public class MessageInfoService {
      * @return
      */
     public ListData<Message> getList(MessageSearch search) {
-    // 본인이 보내고 받은것만 볼 수 있게 한정해줘야함
-        int page = Math.max(search.getPage(),1); // 1페이지 이상나올거
+        // 본인이 보내고 받은것만 볼 수 있게 한정해줘야함
+        int page = Math.max(search.getPage(), 1); // 1페이지 이상나올거
         int limit = search.getLimit();
         limit = limit < 1 ? 20 : limit;
-        int offset = (page -1) * limit; // 쿼리dsl을 사용할 거라서 넣어준거
+        int offset = (page - 1) * limit; // 쿼리dsl을 사용할 거라서 넣어준거
 
 
         // 검색 조건 처리 S
@@ -139,7 +139,7 @@ public class MessageInfoService {
 
         long total = messageRepository.count(andBuilder);
 
-        Pagination pagination = new Pagination(page, (int)total, utils.isMobile() ? 5:10, limit, request); // 페이지네이션 기초 페이지생성
+        Pagination pagination = new Pagination(page, (int) total, utils.isMobile() ? 5 : 10, limit, request); // 페이지네이션 기초 페이지생성
 
         // (int page, int total, int ranges, int limit, HttpServletRequest request)
 
@@ -155,8 +155,16 @@ public class MessageInfoService {
         item.setEditorImages(fileInfoService.getList(gid, "editor"));
         item.setAttachFiles(fileInfoService.getList(gid, "attach"));
 
+        Member member = memberUtil.getMember();
         item.setReceived(
                 (item.isNotice() && item.getReceiver() == null) || // 공지글을 받았는지 아닌지 체크
-                item.getReceiver().getSeq().equals(memberUtil.getMember().getSeq())); // 수신한 쪽지인지 구분
+                        item.getReceiver().getSeq().equals(member.getSeq())
+        ); // 수신한 쪽지인지 구분
+
+        // 삭제 가능 여부
+        boolean deletable = (item.isNotice() && memberUtil.isAdmin())
+                || (!item.isNotice() && (item.getSender().getSeq().equals(member.getSeq())
+                || item.getReceiver().getSeq().equals(member.getSeq())));
+        item.setDeletable(deletable);
     }
 }

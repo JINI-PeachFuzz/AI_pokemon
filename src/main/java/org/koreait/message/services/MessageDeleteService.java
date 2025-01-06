@@ -1,6 +1,7 @@
 package org.koreait.message.services;
 
 import lombok.RequiredArgsConstructor;
+import org.koreait.file.services.FileDeleteService;
 import org.koreait.global.exceptions.UnAuthorizedException;
 import org.koreait.member.entities.Member;
 import org.koreait.member.libs.MemberUtil;
@@ -16,6 +17,7 @@ import org.springframework.util.StringUtils;
 public class MessageDeleteService {
     private final MessageInfoService infoService;
     private final MessageRepository repository;
+    private final FileDeleteService fileDeleteService; // DB에서 지우고 gid를 가지고 삭제하면 될 듯
     private final MemberUtil memberUtil;
 
     /***
@@ -40,7 +42,30 @@ public class MessageDeleteService {
 
             } // endif
 
+            if (mode.equals("send")) { // 보낸 쪽
+                item.setDeletedBySender(true);
+            } else { // 받는 쪽
+                item.setDeletedByReceiver(true);
+            }
 
+            if (item.isDeletedBySender() && item.isDeletedByReceiver()) {
+                isProceedDelete = true; //보낸 쪽, 받는 쪽 모두 삭제 한 경우 -> DB에서 삭제
+            }
+
+            // 삭제 진행이 필요한 경우 처리
+            if (isProceedDelete) {
+                String gid = item.getGid();
+
+                // DB에서 삭제
+                repository.delete(item);
+                repository.flush();
+
+                // 파일 삭제
+                fileDeleteService.deletes(gid);
+            } else { // 보내는 쪽 또는 받는 쪽 한군데서만 삭제 처리를 한 경우}
+                repository.saveAndFlush(item);
+
+            }
         }
     }
 }

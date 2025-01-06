@@ -19,5 +19,12 @@
             <a th:href="@{/api/file/download/{seq}(seq=*{seq})}" th:text="*{fileName}"></a>
         </li>
     </ul>
+    <div class="links">
+        <a th:href="@{/message}" th:text="#{쪽지_보내기}"></a>
+        <a th:if="*{deletable}" th:href="@{/message/delete/{seq}?mode={mode}(seq=*{seq}, mode=${mode})}" th:text="#{삭제하기}" onclick="return confirm('정말 삭제하겠습니까?');"></a>
+        <!--mode={mode}의 모드는 직전 투입된값을 가지고 판단해보고 설정할 수 있게할 거
+        list?sopt=SUBJECT&skey=&mode=send라고 모드값이 나오는데 이걸가지고 판단! / 헤더의 Referer 정보확인해보면 알 수 있음-->
+        <a th:href="@{/message/list}" th:text="#{쪽지함}"></a>
+    </div>
 </main>
 </html>
