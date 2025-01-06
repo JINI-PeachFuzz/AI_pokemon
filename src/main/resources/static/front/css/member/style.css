@@ -9,6 +9,7 @@ main {
 .login-box {
     width: 470px;
     margin: 0 auto;
+    padding: 5px 0px 0px 150px;
 }
 
 .login-logo {

@@ -86,6 +86,18 @@ public class MessageInfoService {
         mode = StringUtils.hasText(mode) ? mode : "receive";
 
         // send - 보낸 쪽지 목록, receive - 받은 쪽지 목록
+        if (mode.equals("send")) {
+            andBuilder.and(message.sender.eq(member));
+        } else {
+            BooleanBuilder orBuilder = new BooleanBuilder(); // 공지사항일때와 아닌때를 구분하기 위해서 불리언으로 했음
+            BooleanBuilder andBuilder1 = new BooleanBuilder();
+
+            orBuilder.or(andBuilder1.and(message.notice.eq(true)).and(message.receiver.isNull())) // 공지쪽지
+                    .or(message.receiver.eq(member)); // 공지사항일때는 널임 / 널인지 아닌지로 체크해볼수있음
+
+            andBuilder.and(orBuilder);
+        }
+
         andBuilder.and(mode.equals("send") ? message.sender.eq(member) : message.receiver.eq(member));
         andBuilder.and(mode.equals("send") ? message.deletedBySender.eq(false) : message.deletedByReceiver.eq(false)); // 쪽지 삭제를 할때 양쪽에서 지워지면 안되기 때문에 따로따로 삭제하는걸 넣었음
 

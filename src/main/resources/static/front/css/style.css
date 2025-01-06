@@ -264,10 +264,12 @@ footer .top_right li::before {
   content: ""; /* 커스텀 요소 삽입 */
   position: absolute;
   left: 0; /* 수직선 위치 */
-  top: 0;
+  top: 5px;
   bottom: 0;
-  width: 0.3px; /* 수직선 두께 */
-  background-color: white; /* 수직선 색상 */
+  width: 0.1px; /* 수직선 두께 */
+  height: 13px;
+  background-color: gray; /* 수직선 색상 */
+
 }
 
 footer .top_right li:first-child::before {
