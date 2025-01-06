@@ -1,5 +1,6 @@
 package org.koreait.member.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.ToString;
@@ -56,6 +57,7 @@ public class Member extends BaseEntity implements Serializable {
     @Column(length = 50)
     private String optionalTerms; // 선택 약관
 
+    @JsonIgnore // 순환참조문제 발생해서 추가했음
     @ToString.Exclude // 투스트링에서 배제하는거 // 순환참조가 나오는데 롬복때문에 // N+1문제
     @OneToMany(mappedBy = "member")
     private List<Authorities> authorities; // 역할을 중복으로 할 수 있게 복수로 구현했음

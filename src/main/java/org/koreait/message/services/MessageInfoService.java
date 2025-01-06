@@ -13,6 +13,7 @@ import org.koreait.global.paging.ListData;
 import org.koreait.global.paging.Pagination;
 import org.koreait.member.entities.Member;
 import org.koreait.member.libs.MemberUtil;
+import org.koreait.message.constants.MessageStatus;
 import org.koreait.message.controllers.MessageSearch;
 import org.koreait.message.entities.Message;
 import org.koreait.message.entities.QMessage;
@@ -166,5 +167,19 @@ public class MessageInfoService {
                 || (!item.isNotice() && (item.getSender().getSeq().equals(member.getSeq())
                 || item.getReceiver().getSeq().equals(member.getSeq())));
         item.setDeletable(deletable);
+        // /message/delete/1 이렇게 직접 입력하면 열람하지 않고 삭제는 가능함 / 하나의 레코드에 수신, 발신 모두 정보가 표기되기 때문
+    }
+
+    /***
+     * 미열람 메세지 갯수 / 보통 받은쪽에서 갯수를 확인해보면 될 듯
+     * @return
+     */
+    public long totalUnRead() {
+        BooleanBuilder andBuilder = new BooleanBuilder();
+        QMessage message = QMessage.message;
+        andBuilder.and(message.receiver.eq(memberUtil.getMember())) // 받은 쪽에서
+                .and(message.status.eq(MessageStatus.UNREAD)); // 읽지않은 걸 조회 / 미열람 메시지 갯수
+
+        return messageRepository.count(andBuilder);
     }
 }

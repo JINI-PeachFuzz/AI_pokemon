@@ -23,8 +23,8 @@ public class MessageSendService {
     private final FileDoneService fileDoneService; // 파일업로드 완료 처리
 
 
-    public void process(RequestMessage form) {
-
+    public Message process(RequestMessage form) {
+    // void가 아니라 Message로 변경했음
         String email = form.getEmail();
         Member receiver = !form.isNotice() ? memberRepository.findByEmail(email).orElseThrow(MemberNotFoundException::new) : null; // 이메일이 없는 사람도 있으니까 추가한거 / orElse를 예외로 던져버리고 null은 전체 공지일때임
 
@@ -40,6 +40,8 @@ public class MessageSendService {
 
         repository.saveAndFlush(message);
         fileDoneService.process(form.getGid()); // 파일 업로드 완료 처리
+
+        return message;
     }
 
 }

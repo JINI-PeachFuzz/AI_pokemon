@@ -1,5 +1,7 @@
 package org.koreait.message.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,10 +22,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 @Controller
 @ApplyErrorPage
@@ -38,6 +37,7 @@ public class MessageController {
     private final MessageInfoService infoService;
     private final MessageStatusService statusService;
     private final MessageDeleteService deleteService;
+    private final ObjectMapper om;
 
     @ModelAttribute("addCss")
     public List<String> addCss() {
@@ -66,7 +66,7 @@ public class MessageController {
      * @return
      */
     @PostMapping
-    public String process(@Valid RequestMessage form, Errors errors, Model model) { // 쪽지작성 처리
+    public String process(@Valid RequestMessage form, Errors errors, Model model, HttpServletRequest request) { // 쪽지작성 처리
         commonProcess("send", model);
 
         messageValidator.validate(form, errors);
@@ -81,8 +81,30 @@ public class MessageController {
             return utils.tpl("message/form"); // 검증실패시에는 넘어가는게 아니라 양식을 보여주는 걸로~
         }
 
-        sendService.process(form); // 전송이 되었는지 확인하고 조회쪽으로 넘어가게 됨 // 서비스 연동
+        Message message = sendService.process(form); // 전송이 되었는지 확인하고 조회쪽으로 넘어가게 됨 // 서비스 연동
+        long totalUnRead = infoService.totalUnRead();
 
+        // 데이터 가공 S
+        Map<String, Object> data = new HashMap<>();
+        data.put("item", message);
+        data.put("totalUnRead", totalUnRead); // JSON문자열로 바꿔서 보내볼거임
+
+
+        StringBuffer sb = new StringBuffer();
+
+        try {
+            String json = om.writeValueAsString(data);
+            sb.append(String.format("if (typeof webSocket != undefined) { webSocket.onopen = () => webSocket.send('%s'); }", json));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace(); // 유입이 되는지 확인위해서 넣었음 / 순환참조가 발생해서 안보였던것
+        }
+
+        sb.append(String.format("location.replace('%s');",request.getContextPath() + "/message/list"));
+
+        System.out.println(sb);
+
+        // 여기까지가 데이터 가공한거 E
+        model.addAttribute("script", sb.toString());
 
         return "common/_execute_script";
     }
