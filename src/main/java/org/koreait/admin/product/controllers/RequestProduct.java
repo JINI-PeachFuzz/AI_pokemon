@@ -19,8 +19,8 @@ public class RequestProduct {
     private String summary; // 상품 요약 설명
     private String description; // 상품 상세 설명
 
-    private int consumerPrice; // 소비자가
-    private int salePrice; // 판매가
+    private int consumerPrice; // 소비자가 / 할인되면 취소선이 추가되는 형태로 할 꺼
+    private int salePrice; // 판매가 / 무료나눔의 경우 0원일 경우도 있음 배송비만 받는다던지..
 
     private DiscountType discountType; // 할인 종류
     private double discount; // 정가할인 금액(1000), 할인율(10.5%)
