@@ -83,7 +83,8 @@ public class MessageController {
 
         sendService.process(form); // 전송이 되었는지 확인하고 조회쪽으로 넘어가게 됨 // 서비스 연동
 
-        return "redirect:/message/list";
+
+        return "common/_execute_script";
     }
 
     /**
