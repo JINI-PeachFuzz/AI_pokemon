@@ -116,11 +116,13 @@ public class MessageController {
         return utils.tpl("message/view");
     }
 
-    @DeleteMapping
-    public String delete(@RequestParam(name = "seq", required = false) List<String> seq) { // 쪽지 삭제기능
-        return "redirect:/message/list";
+    @GetMapping("/delete/{seq}")
+    public String delete(@PathVariable("seq") Long seq) { // 쪽지 삭제기능
 
+
+        return "redirect:/message/list";
     }
+
 
     /***
      * 컨트롤러 공통 처리
