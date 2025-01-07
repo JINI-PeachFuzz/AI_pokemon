@@ -82,8 +82,8 @@ public class MessageController {
         }
 
         Message message = sendService.process(form); // 전송이 되었는지 확인하고 조회쪽으로 넘어가게 됨 // 서비스 연동
-        long totalUnRead = infoService.totalUnRead();
-
+        long totalUnRead = infoService.totalUnRead(form.getEmail());
+        System.out.println("totalUnRead:" + totalUnRead); // totalUnRead 값이 0으로 나와서 확인하기 위해서 테스트!!
         // 데이터 가공 S
         Map<String, Object> data = new HashMap<>();
         data.put("item", message);

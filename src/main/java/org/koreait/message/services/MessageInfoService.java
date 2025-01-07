@@ -174,12 +174,19 @@ public class MessageInfoService {
      * 미열람 메세지 갯수 / 보통 받은쪽에서 갯수를 확인해보면 될 듯
      * @return
      */
-    public long totalUnRead() {
+    public long totalUnRead(String email) {
         BooleanBuilder andBuilder = new BooleanBuilder();
         QMessage message = QMessage.message;
-        andBuilder.and(message.receiver.eq(memberUtil.getMember())) // 받은 쪽에서
+        andBuilder.and(message.receiver.email.eq(email)) // 받은 쪽에서
                 .and(message.status.eq(MessageStatus.UNREAD)); // 읽지않은 걸 조회 / 미열람 메시지 갯수
 
         return messageRepository.count(andBuilder);
     }
+
+    public long totalUnRead() {
+        Member member = memberUtil.getMember();
+
+        return totalUnRead(member.getEmail());
+    }
+
 }

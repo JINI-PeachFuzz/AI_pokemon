@@ -19,7 +19,7 @@ public class CommonInterceptor implements HandlerInterceptor {
 
     private final CodeValueService codeValueService;
     private final MemberUtil memberUtil;
-    private final MessageInfoService messageInfoService;
+    private final MessageInfoService messageInfoService; // 읽지 않은 메세지갯수 확인하기 위해서
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {

@@ -19,14 +19,15 @@ webSocket.addEventListener("message", function(data) { // 이게 연동될때마
 
 
     if (isShow) { // 메세지 팝업
-        commonLib.message("쪽지가 왔습니다.");
+        commonLib.message("새로운 쪽지가 도착했습니다.");
     }
     console.log(totalUnRead, JSON.parse(data.data));
+
     if (totalUnRead > 0) {
         const badge = document.querySelector(".link-mypage .badge");
         if (badge) {
-            badge.innerText = totalUnRead;
-            badge.classList.remove("dn");
+            badge.innerText = totalUnRead; // 뱃지가 있을때
+            badge.classList.remove("dn"); // dn을 제거
         }
     }
 });
