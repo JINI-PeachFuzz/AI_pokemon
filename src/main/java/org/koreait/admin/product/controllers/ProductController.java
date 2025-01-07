@@ -13,6 +13,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @ApplyErrorPage
@@ -139,6 +141,12 @@ public class ProductController implements SubMenus {
         return "redirect:/admin/product/category";
     }
 
+    /**
+     * 배송 정책 관리
+     *
+     * @param model
+     * @return
+     */
     @GetMapping("/delivery")
     public String delivery(Model model) {
         commonProcess("delivery", model);
@@ -147,13 +155,40 @@ public class ProductController implements SubMenus {
     }
 
 
-    /***
+    /**
      * 공통 처리 부분
      *
      * @param mode
      * @param model
      */
     private void commonProcess(String mode, Model model) {
+        mode = StringUtils.hasText(mode) ? mode : "list"; // 기본값, 상품목록이 나오게
+
+        List<String> addCommonScript = new ArrayList<>();
+        List<String> addScript = new ArrayList<>();
+
+        String pageTitle = "";
+
+        if (mode.equals("list")) {
+            pageTitle = "상품목록";
+        } else if (mode.equals("add") || mode.equals("edit")) {
+            pageTitle = mode.equals("edit") ? "상품수정" : "상품등록";
+            addCommonScript.add("fileManager");
+            addCommonScript.add("ckeditor5/ckeditor");
+            addScript.add("product/product");
+
+        } else if (mode.equals("category")) {
+            pageTitle = "분류관리";
+
+        } else if (mode.equals("delivery")) {
+            pageTitle = "배송정책관리";
+        }
+
+        pageTitle += " - 상품관리";
+
+        model.addAttribute("pageTitle", pageTitle);
+        model.addAttribute("addCommonScript", addCommonScript);
+        model.addAttribute("addScript", addScript);
         model.addAttribute("subMenuCode", mode);
     }
 }

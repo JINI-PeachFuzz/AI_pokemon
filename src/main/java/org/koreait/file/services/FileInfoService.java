@@ -20,6 +20,7 @@ import java.util.Objects;
 
 import static org.springframework.data.domain.Sort.Order.asc;
 
+
 @Lazy
 @Service
 @RequiredArgsConstructor
@@ -55,7 +56,7 @@ public class FileInfoService {
             andBuilder.and(fileInfo.done.eq(status == FileStatus.DONE));
         }
 
-        List<FileInfo> items = (List<FileInfo>) infoRepository.findAll(andBuilder, Sort.by(asc("createdAt"))); // Builder는 하나일때
+        List<FileInfo> items = (List<FileInfo>)infoRepository.findAll(andBuilder, Sort.by(asc("listOrder"), asc("createdAt"))); // Builder는 하나일때
         // 오름차순으로 정리하게 추가했음
 
 
@@ -69,7 +70,7 @@ public class FileInfoService {
         return getList(gid, location, FileStatus.DONE);
     }// 상세페이지, 게시글 보기 등 다 완료된 페이지를 더 많이 보게됨. / 그래서 기본값을 넣은거
 
-    public List<FileInfo> getList(String gid) { // 파일 그룹작업 완료된 파일 // gid 파일만 확인이 가능하게 오버로드를 이용해서 처리했음
+    public List<FileInfo> getList(String gid) { // 파일 그룹작업 완료된 파일
         return getList(gid, null);
     }
 
@@ -79,6 +80,7 @@ public class FileInfoService {
     public void addInfo(FileInfo item) {
         // filePath - 서버에 올라간 실제 경로(다운로드, 삭제시 활용...)
         item.setFilePath(getFilePath(item));
+
         // fileUrl - 접근할 수 있는 주소(브라우저)
         item.setFileUrl(getFileUrl(item));
 
@@ -103,7 +105,7 @@ public class FileInfoService {
     public String getFileUrl(FileInfo item) {
         Long seq = item.getSeq();
         String extension = Objects.requireNonNullElse(item.getExtension(), "");
-        return String.format("%S%s%s/%s", request.getContextPath(), properties.getUrl(), getFolder(seq), seq + extension);
+        return String.format("%s%s%s/%s", request.getContextPath(), properties.getUrl(), getFolder(seq), seq + extension);
     }
 
     public String getFileUrl(Long seq) {
@@ -113,7 +115,6 @@ public class FileInfoService {
 
     private long getFolder(long seq) {
         return seq % 10L;
-
     }
 
 }

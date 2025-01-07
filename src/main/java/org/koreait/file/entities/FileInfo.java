@@ -11,8 +11,8 @@ import java.io.Serializable;
 @Data
 @Entity // 파일이 올라오면 거기에 대한 정보들을 기록해야함 / 엔티티를 정의했음
 @Table(indexes = {
-        @Index(name="idx_gid", columnList = "gid, createdAt"),
-        @Index(name="idx_gid_location", columnList = "gid, location, createdAt")
+        @Index(name="idx_gid", columnList = "gid, listOrder, createdAt"),
+        @Index(name="idx_gid_location", columnList = "gid, location, listOrder, createdAt")
 })
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class FileInfo extends BaseMemberEntity implements Serializable {
@@ -48,6 +48,8 @@ public class FileInfo extends BaseMemberEntity implements Serializable {
     // 예를 들면 게시글 작성하다가 중간에 나가면 그건 이도저도 아닌거 그런것들은 모아서 한번에
     // 삭제한다던지 해야하는데 그런거 관련
 
+    private boolean selected; // 노출을 1개 하는 경우 대표 이미지 선택
+    private long listOrder; // 정렬 순서, 오름 차순
 
     // 이미지 형식 여부
     public boolean isImage() {

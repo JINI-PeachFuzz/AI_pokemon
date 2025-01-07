@@ -27,8 +27,8 @@ import java.util.List;
 public class BoardController implements SubMenus {
 
     private final Utils utils; // 템플릿은 아니지만 제목이라던지 필요할때가 있을 거 같아서 추가함
-    private final BoardValidator boardValidator;
-    private final BoardConfigUpdateService configUpdateService;
+    private final BoardValidator boardValidator; // 게시판설정에대한 추가검증을 얘가 함
+    private final BoardConfigUpdateService configUpdateService; // 게시판설정=게시판하나 라서 설정을 추가함
     private final BoardConfigInfoService configInfoService;
 
     @Override
@@ -65,7 +65,7 @@ public class BoardController implements SubMenus {
     public String add(@ModelAttribute RequestBoard form, Model model) {
         commonProcess("add", model);
 
-        form.setSkin("default");
+        form.setSkin("default"); // 게시판스킨은 기본값을 사용할 거임
         form.setListAuthority(Authority.ALL);
         form.setViewAuthority(Authority.ALL);
         form.setWriteAuthority(Authority.ALL);
@@ -81,10 +81,10 @@ public class BoardController implements SubMenus {
      * @return
      */
     @GetMapping("/edit/{bid}")
-    public String edit(@PathVariable("bid") String bid, Model model) {
+    public String edit(@PathVariable("bid") String bid, Model model) { // bid = 보드게시판 id
         commonProcess("edit", model);
 
-        RequestBoard form = configInfoService.getForm(bid); // bid = 보드게시판 id
+        RequestBoard form = configInfoService.getForm(bid); // 커맨드객체
         model.addAttribute("requestBoard", form);
 
         return "admin/board/edit";
@@ -106,6 +106,8 @@ public class BoardController implements SubMenus {
         if (errors.hasErrors()) {
             return "admin/board/" + mode; // 여기 모드에 따라서 등록이 될지 , 수정이 될지 결정 // 쇼핑몰과 비슷
         }
+
+        // 여기부분에는 서비스가 추가될 예정
 
         configUpdateService.process(form);
 

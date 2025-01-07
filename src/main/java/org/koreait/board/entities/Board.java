@@ -53,5 +53,5 @@ public class Board extends BaseMemberEntity {
     private Authority commentAuthority;
 
     @Transient
-    private List<String> categories;
+    private List<String> categories; // 줄개행문자관련
 }
