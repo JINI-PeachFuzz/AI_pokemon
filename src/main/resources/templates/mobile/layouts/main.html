@@ -10,6 +10,7 @@
     <meta name="_csrf_header" th:content="${_csrf.headerName}">
     <!--   csrf가 토큰 검증 방식 관련 내용 / 기본 검증이라 다 들어감    -->
     <meta name="rootUrl" th:content="@{/}">
+    <meta th:if="${@memberUtil.isLogin()}" name="user" th:content="${profile.email}">
 
     <!--    <title th:if="${pageTitle != null}" th:text="${pageTitle}">-->
     <title>

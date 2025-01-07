@@ -88,7 +88,9 @@ commonLib.ajaxLoad = function(url, callback, method = 'GET', data, headers, isTe
 * 레이어 팝업
 *
 */
-commonLib.popup = function(url, width = 350, height = 350, isAjax = false) {
+commonLib.popup = function(url, width = 350, height = 350, isAjax = false, message) {
+// 팝업 마지막 매개변수에 message를 추가해서 있으면 띄워주는걸로
+
     /* 레이어팝업 요소 동적 추가 S */
     const layerEls = document.querySelectorAll(".layer-dim, .layer-popup");
     layerEls.forEach(el => el.parentElement.removeChild(el));
@@ -136,7 +138,11 @@ commonLib.popup = function(url, width = 350, height = 350, isAjax = false) {
         const { ajaxLoad } = commonLib;
         ajaxLoad(url, null, 'GET', null, null, true)
             .then((text) => content.innerHTML = text);
-
+    } else if (message) { // 메세지 팝업 // 콘텐츠에다가 아래코드를 넣어주면 띄워주게 됨.
+        content.innerHTML = `<div class='message'>
+                                        <i class='xi-info'></i>
+                                        ${message}
+                                     </div>`;
     } else { // iframe으로 로드
         const iframe = document.createElement("iframe");
         iframe.width = width - 80;
@@ -147,6 +153,16 @@ commonLib.popup = function(url, width = 350, height = 350, isAjax = false) {
     }
     /* 팝업 컨텐츠 로드 E */
 }
+
+/**
+* 메세지 출력 팝업
+*
+*/
+commonLib.message = function(message, width = 350, height = 200) {
+    commonLib.popup(null, width, height, false, message); // false는 ajax가 아니라서 펄스임
+    // commonLib.popup = function(url, width = 350, height = 350, isAjax = false, message) 순서 참고
+};
+
 
 /**
 * 레이어팝업 제거
