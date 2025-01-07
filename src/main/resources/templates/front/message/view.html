@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{front/layouts/main}">
-<main layout:fragment="content" th:object="${item}">
+      layout:decorate="~{front/layouts/mypage}">
+<section layout:fragment="content" th:object="${item}">
     <div class="subject" th:text="*{subject}"></div>
     <div class="info">
         <div class="sender">
@@ -26,5 +26,5 @@
         list?sopt=SUBJECT&skey=&mode=send라고 모드값이 나오는데 이걸가지고 판단! / 헤더의 Referer 정보확인해보면 알 수 있음-->
         <a th:href="@{/message/list}" th:text="#{쪽지함}"></a>
     </div>
-</main>
+</section>
 </html>
