@@ -49,10 +49,6 @@ public class MypageController {
         return memberUtil.getMember(); // 로그인은 회원정보에서 조회하는 거임
     }
 
-    @ModelAttribute("addCss")
-    public List<String> addCss() { // 이거는 addCss 그냥 여기에 다 넣은거임 공통과 따로 분리안한거
-        return List.of("mypage/style");
-    }
 
     @GetMapping // "/mypage" 와 동일함
     public String index(Model model) {
