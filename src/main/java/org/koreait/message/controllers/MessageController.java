@@ -170,7 +170,7 @@ public class MessageController {
         if (mode.equals("send")) { // 쪽지 보내기
             pageTitle = utils.getMessage("쪽지_보내기");
             addCommonScript.add("fileManager");
-            addCommonScript.add("ckeditor/ckeditor");
+            addCommonScript.add("ckeditor5/ckeditor");
             addScript.add("message/send");
 
         }
