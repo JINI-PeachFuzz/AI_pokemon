@@ -1,5 +1,6 @@
 package org.koreait.admin.board.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.koreait.admin.board.validators.BoardValidator;
@@ -30,6 +31,7 @@ public class BoardController implements SubMenus {
     private final BoardValidator boardValidator; // 게시판설정에대한 추가검증을 얘가 함
     private final BoardConfigUpdateService configUpdateService; // 게시판설정=게시판하나 라서 설정을 추가함
     private final BoardConfigInfoService configInfoService;
+    private final HttpServletRequest request; // 패치인지 delete인지 확인
 
     @Override
     @ModelAttribute("menuCode")
@@ -53,6 +55,15 @@ public class BoardController implements SubMenus {
         model.addAttribute("pagination", data.getPagination());
 
         return "admin/board/list";
+    }
+
+    @RequestMapping(path="/list", method={RequestMethod.PATCH, RequestMethod.DELETE})
+    public String listPs(@RequestParam(name="chk", required = false) List<Integer> chks, Model model) {
+
+        configUpdateService.process(chks, request.getMethod().equalsIgnoreCase("DELETE") ? "delete" : "edit");
+
+        model.addAttribute("script", "parent.location.reload();");
+        return "common/_execute_script";
     }
 
     /**
