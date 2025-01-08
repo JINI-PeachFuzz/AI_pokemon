@@ -182,7 +182,7 @@ commonLib.popupClose = function() {
 commonLib.loadEditor = function(id, height = 350) {
 
     if (typeof ClassicEditor === 'undefined' || !id) {
-        return;
+        return Promise.resolve(); // 프로미스 then반환하기 위해서. / 오류발생해서 추가했음
     }
 
     return new Promise((resolve, reject) => {
@@ -216,7 +216,15 @@ commonLib.loadEditor = function(id, height = 350) {
 
 };
 
+commonLib.insertEditorImage = function(imageUrls, editor) {
+    editor = editor ?? window.editor;
+    if (!editor) return; // 두번째 매개변수는 필수는 아니지만 쓰고싶을때 쓸수 있게 공통기능으로 추가했음
 
+    imageUrls = typeof imageUrls === 'string' ? [imageUrls] : imageUrls; // 예를들어 이미지를 하나만 추가했다가 또 2~3개 더 추가할 수 도 있는거고.. 그럴경우를 대비해서 배열로 만들어주는거라 보면됨.
+    // 통일성있게 담아줌
+
+    editor.execute('insertImage', { source: imageUrls }); // insertImage 이미 정해져있는 명령어! / location 값이랑 fileName, seq, file URL 이 필요함
+};
 
 
 window.addEventListener("DOMContentLoaded", function() {

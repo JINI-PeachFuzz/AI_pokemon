@@ -5,6 +5,7 @@ import lombok.Data;
 import org.koreait.global.entities.BaseMemberEntity;
 import org.koreait.member.constants.Authority;
 
+import java.io.Serializable;
 import java.util.List;
 
 // RequestBoard 참고
@@ -12,7 +13,7 @@ import java.util.List;
 
 @Data
 @Entity
-public class Board extends BaseMemberEntity {
+public class Board extends BaseMemberEntity implements Serializable { // 직렬화를 하기때문에 Serializable 필요
     @Id
     @Column(length=30)
     private String bid; // 게시판 설정쪽이라서 bid가 기본키임
@@ -33,6 +34,7 @@ public class Board extends BaseMemberEntity {
     private boolean useEditorImage;
     private boolean useAttachFile;
     private boolean useComment; // 댓글 사용 여부
+    private String locationAfterWriting; // 글 작성후 이동 경로 - list : 목록, view : 글보기
 
     private String skin; // 게시판 스킨?
 

@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="skin"> <!--추후 게시글데이터로 연동할거임-->
+
+    <th:block th:if="${board.useComment}">
+        <th:block th:replace="~{front/board/default/_comment::comment}"></th:block>
+    </th:block>
+</th:block>
+</html>

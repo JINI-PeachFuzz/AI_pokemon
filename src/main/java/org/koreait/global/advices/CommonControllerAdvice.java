@@ -3,11 +3,13 @@ package org.koreait.global.advices;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.koreait.global.annotations.ApplyErrorPage;
+import org.koreait.global.entities.SiteConfig;
 import org.koreait.global.exceptions.CommonException;
 import org.koreait.global.exceptions.scripts.AlertBackException;
 import org.koreait.global.exceptions.scripts.AlertException;
 import org.koreait.global.exceptions.scripts.AlertRedirectException;
 import org.koreait.global.libs.Utils;
+import org.koreait.global.services.CodeValueService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -16,11 +18,15 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+
 // 자바형태로서 보여지는 쪽이고 아래 Rest는 제이슨형태로 데이터가 보여지는거
 @ControllerAdvice(annotations = ApplyErrorPage.class)
 @RequiredArgsConstructor
 public class CommonControllerAdvice {
     private final Utils utils;
+    private final CodeValueService codeValueService;
+
 
     // 아래에 에러페이지에 대한 공통처리를 넣었음
     @ExceptionHandler(Exception.class)
@@ -65,6 +71,10 @@ public class CommonControllerAdvice {
         data.put("status", status.value());
         data.put("_status", status);
         data.put("message", message);
+
+        SiteConfig siteConfig = Objects.requireNonNullElseGet(codeValueService.get("siteConfig", SiteConfig.class), SiteConfig::new);
+        data.put("siteConfig",siteConfig);
+
         ModelAndView mv = new ModelAndView();
         mv.setStatus(status); // 응답코드
         mv.addAllObjects(data);

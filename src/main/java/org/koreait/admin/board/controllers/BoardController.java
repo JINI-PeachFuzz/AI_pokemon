@@ -33,6 +33,7 @@ public class BoardController implements SubMenus {
     private final BoardConfigInfoService configInfoService;
     private final HttpServletRequest request; // 패치인지 delete인지 확인
 
+
     @Override
     @ModelAttribute("menuCode")
     public String menuCode() {
@@ -77,6 +78,7 @@ public class BoardController implements SubMenus {
         commonProcess("add", model);
 
         form.setSkin("default"); // 게시판스킨은 기본값을 사용할 거임
+        form.setLocationAfterWriting("list");
         form.setListAuthority(Authority.ALL);
         form.setViewAuthority(Authority.ALL);
         form.setWriteAuthority(Authority.ALL);
