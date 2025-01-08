@@ -8,4 +8,11 @@
         <i class="remove xi-close" data-seq="[seq]"></i>
     </span>
 </script>
+
+<script th:fragment="image-item" type="text/html" id="tpl-image-item">
+    <div class="image-item" id="file-[seq]">
+        <i class="remove xi-close" data-seq="[seq]"></i>
+        <div class="inner show-image" style="background:url('[thumbUrl]') no-repeat center center; background-size: cover;" data-seq="[seq]"></div> <!--클릭하면 원본이미지를 볼수있게/팝업이랑 비슷하게했음-->
+    </div>
+</script>
 </html>

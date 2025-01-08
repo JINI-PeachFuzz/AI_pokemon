@@ -7,6 +7,7 @@ import org.koreait.file.constants.FileStatus;
 import org.koreait.file.services.FileInfoService;
 import org.koreait.global.annotations.ApplyErrorPage;
 import org.koreait.global.libs.Utils;
+import org.koreait.product.constants.DiscountType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -59,6 +60,7 @@ public class ProductController implements SubMenus {
         commonProcess("add", model); // save를 해서 상품등록 수정을 같이
 
         form.setGid(UUID.randomUUID().toString()); // 중복되지않는 ID생성
+        form.setDiscountType(DiscountType.NONE); // 기본값설정
 
         return "admin/product/add";
     }
