@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.koreait.board.entities.Board;
 import org.koreait.board.entities.BoardData;
+import org.koreait.board.services.BoardInfoService;
 import org.koreait.board.services.BoardUpdateService;
 import org.koreait.board.services.configs.BoardConfigInfoService;
 import org.koreait.board.validators.BoardValidator;
@@ -12,6 +13,7 @@ import org.koreait.file.constants.FileStatus;
 import org.koreait.file.services.FileInfoService;
 import org.koreait.global.annotations.ApplyErrorPage;
 import org.koreait.global.libs.Utils;
+import org.koreait.global.paging.ListData;
 import org.koreait.member.libs.MemberUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,6 +39,7 @@ public class BoardController {
     private final FileInfoService fileInfoService; // 실패했다고 해서 파일정보를 안보여주면 안되니까 이것도 추가했음
     private final BoardValidator boardValidator;
     private final BoardUpdateService boardUpdateService;
+    private final BoardInfoService boardInfoService;
 
     /**
      * 사용자별 공통 데이터
@@ -56,9 +59,12 @@ public class BoardController {
      * @return
      */
     @GetMapping("/list/{bid}")
-    public String list(@PathVariable("bid") String bid, Model model) {
+    public String list(@PathVariable("bid") String bid, BoardSearch search, Model model) {
         commonProcess(bid, "list", model);
 
+        ListData<BoardData> data = boardInfoService.getList(bid, search);
+        model.addAttribute("items", data.getItems());
+        model.addAttribute("pagination", data.getPagination());
 
         return utils.tpl("board/list");
     }
@@ -188,16 +194,18 @@ public class BoardController {
             addScript.add(String.format("board/%s/form", board.getSkin())); // 갤러리에서는 여러개중에 하나를 선택하는것도 필요하기 때문에 추가했음
         }
 
-
-        CommonValue commonValue = commonValue();
-        commonValue.setBoard(board);
+        // 게시글 번호가 있는 mode가 view이거나 edit인 경우는 배제
+        if (List.of("view", "edit").contains(mode)) {
+            CommonValue commonValue = commonValue();
+            commonValue.setBoard(board);
+            model.addAttribute("commonValue", commonValue);
+            model.addAttribute("pageTitle", pageTitle);
+        }
 
         model.addAttribute("board", board); // 얘를 가지고 스킨을 분리함
-        model.addAttribute("commonValue", commonValue);
         model.addAttribute("addCommonScript", addCommonScript);
         model.addAttribute("addScript", addScript);
         model.addAttribute("addCss", addCss);
-        model.addAttribute("pageTitle", pageTitle);
     }
 
     private void commonProcess(Long seq, String mode, Model model) {

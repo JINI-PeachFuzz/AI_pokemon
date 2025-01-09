@@ -7,15 +7,20 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.koreait.board.controllers.BoardSearch;
+import org.koreait.board.controllers.RequestBoard;
 import org.koreait.board.entities.Board;
 import org.koreait.board.entities.BoardData;
 import org.koreait.board.entities.QBoardData;
 import org.koreait.board.exceptions.BoardDataNotFoundException;
 import org.koreait.board.repositories.BoardDataRepository;
 import org.koreait.board.services.configs.BoardConfigInfoService;
+import org.koreait.file.services.FileInfoService;
 import org.koreait.global.libs.Utils;
 import org.koreait.global.paging.ListData;
 import org.koreait.global.paging.Pagination;
+import org.koreait.member.entities.Member;
+import org.koreait.member.libs.MemberUtil;
+import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -30,9 +35,13 @@ public class BoardInfoService {
 
     private final BoardConfigInfoService configInfoService;
     private final BoardDataRepository boardDataRepository;
+    private final FileInfoService fileInfoService;
     private final JPAQueryFactory queryFactory;
     private final HttpServletRequest request;
+    private final MemberUtil memberUtil;
+    private final ModelMapper modelMapper;
     private final Utils utils; // 모바일여부 확인위함 -> 설정달리할려고
+
 
     /**
      * 게시글 한개 조회
@@ -44,9 +53,25 @@ public class BoardInfoService {
 
         BoardData item = boardDataRepository.findById(seq).orElseThrow(BoardDataNotFoundException::new);
 
-        addInfo(item); // 추가 정보 처리
+        addInfo(item, true); // 추가 정보 처리
 
         return item;
+    }
+
+    public RequestBoard getForm(Long seq) {
+        return getForm(get(seq));
+    }
+
+    /***
+     * 수정 처리시 커맨드 객체 RequestBoard로 변환
+     * @param item
+     * @return
+     */
+    public RequestBoard getForm(BoardData item) {
+        RequestBoard form = modelMapper.map(item, RequestBoard.class); // 이건 수정할때밖에 안쓰임
+        form.setMode("edit");
+
+        return form;
     }
 
     /***
@@ -199,10 +224,56 @@ public class BoardInfoService {
     }
 
     /***
+     * 로그인한 회원이 작성한 게시글 목록
+     * @param search
+     * @return
+     */
+    public ListData<BoardData> getMyList(BoardSearch search) {
+        if (!memberUtil.isLogin()) {
+            return new ListData<>(List.of(), null); // 오류방지를 위해 추가했음
+        }
+
+        Member member = memberUtil.getMember();
+        String email = member.getEmail();
+        search.setEmail(List.of(email)); // 이렇게 하면 본인것만 나옴
+
+        return getList(search);
+    }
+
+    /***
      * 추가 정보 처리
+     * // 파일, 이전게시글과 다음게시글의 정보
      * @param item
      */
-    private void addInfo(BoardData item) {
+    private void addInfo(BoardData item, boolean isView) {
+        // 게시판 파일 정보 S
+        String gid = item.getGid();
+        item.setEditorImages(fileInfoService.getList(gid, "editor"));
+        item.setAttachFiles(fileInfoService.getList(gid, "attach"));
+        // 게시판 파일 정보 E
 
+        // 이전, 다음 게시글
+        if (isView) { // 보기 페이지 데이터를 조회하는 경우만 이전, 다음 게시글을 조회
+            QBoardData boardData = QBoardData.boardData;
+            Long seq = item.getSeq();
+
+            BoardData prev = queryFactory.selectFrom(boardData)
+                    .where(boardData.seq.lt(seq))
+                    .orderBy(boardData.seq.desc()) // 직전게시글이면 바로앞에 있는 걸 가져와여해서 내림차순
+                    .fetchFirst();
+
+            BoardData next = queryFactory.selectFrom(boardData)
+                    .where(boardData.seq.gt(seq)) // gt는 큰것중에서 가장 작은걸 가져와야해서 작은순으로 정렬
+                    .orderBy(boardData.seq.asc())
+                    .fetchFirst();
+
+            item.setPrev(prev);
+            item.setNext(next);
+
+        }
+    }
+
+    private void addInfo(BoardData item) {
+        addInfo(item, false);
     }
 }
