@@ -29,11 +29,15 @@ public class RequestBoard {
 
     @NotBlank
     private String subject; // 글 제목
-    private String content; // 글 내용
 
     @NotBlank
+    private String content; // 글 내용
     private boolean notice; // 공지글 여부 // 게시글 양식, 규칙같은걸 가장 상단에 배치하는 거
+
+    private String externalLink; // 외부링크
+    private String youtubeUrl; // Youtube 주소
 
     private List<FileInfo> editorImages;
     private List<FileInfo> attachFiles;
+
 }

@@ -47,6 +47,8 @@ public class BoardData extends BaseEntity implements Serializable {
     private long viewCount; // 조회수
     // 조회수 long으로 하거나 int로 하거나 ... max가 어느정도일지 보고..
 
+    private long commentCount; // 댓글수
+
     @Column(length = 20)
     private String ipAddr; // ip 주소 // 차단하는기능도 있음.. // 한다면 환경변수로 추가해야될수도..?
 
