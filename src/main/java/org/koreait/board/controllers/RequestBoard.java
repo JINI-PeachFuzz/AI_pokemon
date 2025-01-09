@@ -27,6 +27,8 @@ public class RequestBoard {
     @Size(min=4)
     private String guestPw; // 비회원 비밀번호
 
+    private String confirmPw;
+
     @NotBlank
     private String subject; // 글 제목
 

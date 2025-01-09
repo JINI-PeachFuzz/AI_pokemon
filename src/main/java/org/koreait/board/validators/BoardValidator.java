@@ -36,6 +36,13 @@ public class BoardValidator implements Validator, PasswordValidator {
             if (StringUtils.hasText(guestPw) && (!alphaCheck(guestPw, true) || !numberCheck(guestPw))) {
                 errors.rejectValue("guestPw", "Complexity");
             }
+
+            String confirmPw = form.getConfirmPw();
+            ValidationUtils.rejectIfEmptyOrWhitespace(errors, "confirmPw", "NotBlank");
+
+            if (StringUtils.hasText(guestPw) && StringUtils.hasText(confirmPw) && !guestPw.equals(confirmPw)) {
+                errors.rejectValue("confirmPw", "Mismatch");
+            }
         }
 
         // 수정일때 seq 필수 여부

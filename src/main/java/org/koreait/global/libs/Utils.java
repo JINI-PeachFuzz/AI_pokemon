@@ -162,7 +162,7 @@ public class Utils {
             className = Objects.requireNonNullElse(className, "image");
             if (mode.equals("background")) { // 배경 이미지
 
-                return String.format("<div style='width: %dpx; height: %dpx; background:url(\"%s\") no-repeat center center; background-size:cover;' class='%s'></div>", width, height, imageurl, className);
+                return String.format("<div style='width: %dpx; height: %dpx; background:url(\"%s\") no-repeat center center; background-size:cover;' class='%s'%s></div>", width, height, imageurl, className, seq != null && seq > 0L ? "data-seq='" + seq + "'":"");
             } else { // 이미지 태그
                 return String.format("<img src='%s' class='%s'>", imageurl, className); // 단일 태그에서는 /로 안닫아도 됌 // 리액트에서는 꼭 닫아야함
             }

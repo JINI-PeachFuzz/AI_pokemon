@@ -27,13 +27,22 @@
                 </th:block>
             </dd>
         </dl>
-        <dl th:if="${(requestBoard.mode == 'write' && !@memberUtil.isLogin()) || (requestBoard.mode == 'edit' && boardData.member == null)}">
-            <dt th:text="#{비밀번호}"></dt>
-            <dd>
-                <input type="password" name="guestPw" th:field="*{guestPw}">
-                <div class="error" th:each="err : ${#fields.errors('guestPw')}" th:text="${err}"></div>
-            </dd>
-        </dl>
+        <th:block  th:if="${(requestBoard.mode == 'write' && !@memberUtil.isLogin()) || (requestBoard.mode == 'edit' && boardData.member == null)}">
+            <dl>
+                <dt th:text="#{비밀번호}"></dt>
+                <dd>
+                    <input type="password" name="guestPw" th:field="*{guestPw}">
+                    <div class="error" th:each="err : ${#fields.errors('guestPw')}" th:text="${err}"></div>
+                </dd>
+            </dl>
+            <dl>
+                <dt th:text="#{비밀번호_확인}"></dt>
+                <dd>
+                    <input type="password" name="confirmPw" th:field="*{confirmPw}">
+                    <div class="error" th:each="err : ${#fields.errors('confirmPw')}" th:text="${err}"></div>
+                </dd>
+            </dl>
+        </th:block>
         <dl>
             <dt th:text="#{제목}"></dt>
             <dd>

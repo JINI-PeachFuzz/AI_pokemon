@@ -49,7 +49,7 @@ public class FileInfo extends BaseMemberEntity implements Serializable {
     // 삭제한다던지 해야하는데 그런거 관련
 
     private boolean selected; // 노출을 1개 하는 경우 대표 이미지 선택
-    private long listOrder; // 정렬 순서, 오름 차순
+    private long listOrder; // 정렬 순서, 오름 차순 // 순서를 업데이트할때 사용할 예정
 
     // 이미지 형식 여부
     public boolean isImage() {

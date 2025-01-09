@@ -79,6 +79,6 @@ public class BoardUpdateService {
         fileDoneService.process(form.getGid()); // 완료처리
 
 
-        return null;
+        return data;
     }
 }

@@ -99,7 +99,7 @@ public class BoardController {
     @GetMapping("/write/{bid}")
     public String write(@PathVariable("bid") String bid, @ModelAttribute RequestBoard form, Model model) {
         commonProcess(bid, "write", model);
-
+        form.setMode("write");
         form.setBid(bid);
         form.setGid(UUID.randomUUID().toString());
 
@@ -206,7 +206,7 @@ public class BoardController {
         }
 
         // 게시글 번호가 있는 mode가 view이거나 edit인 경우는 배제
-        if (List.of("view", "edit").contains(mode)) {
+        if (!List.of("view", "edit").contains(mode)) {
             CommonValue commonValue = commonValue();
             commonValue.setBoard(board);
             model.addAttribute("commonValue", commonValue);

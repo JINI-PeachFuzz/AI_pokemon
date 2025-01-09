@@ -39,6 +39,16 @@
                         <textarea name="description" th:field="*{description}" id="description"></textarea>
                         <button type="button" class="sbtn file-upload" th:data-gid="*{gid}" data-location="editor" data-image-only="true">이미지 업로드</button>
                         <div class="upload-files" id="editor-images"></div>
+
+                        <button type="button" class="file-upload" th:text="#{파일_업로드}" th:data-gid="*{gid}" data-location="attach"></button>
+                        <!--data-location="attach" 파일 첨부-->
+                        <div class="uploaded-files" id="attach-files">
+                    <span th:if="*{attachFiles != null}" th:each="item : *{attachFiles}" class="file-item" th:id="${'file-' + item.seq}">
+                       <a th:href="@{/api/file/download/{seq}(seq=${item.seq})}" th:text="${item.fileName}"></a>
+                        <i class="remove xi-close" th:data-seq="${item.seq}"></i>
+                    </span>
+                        </div>
+
                   </td>
             </tr>
       </table>
@@ -49,14 +59,24 @@
                   <th width="180">메인이미지</th>
                   <td>
                         <button type="button" class="file-upload sbtn" th:data-gid="*{gid}" data-location="main" data-image-only="true">이미지 업로드</button>
-                        <div class="uploaded-files" id="main-images"></div>
+                        <div class="uploaded-files" id="main-images">
+                              <div th:if="*{mainImages != null}" th:each="item : *{mainImages}" th:object="${item}" class="image-item" th:id="*{'file-' + seq}">
+                                    <i class="remove xi-close" th:data-seq="*{'file-' + seq}"></i>
+                                    <div class="inner show-image" style="background:url('[thumbUrl]') no-repeat center center;background-size: cover;" data-seq="[seq]"></div> <!--클릭하면 원본이미지를 볼수있게/팝업이랑 비슷하게했음-->
+                              </div>
+                        </div>
                   </td>
             </tr>
             <tr>
                   <th>목록이미지</th>
                   <td>
                         <button type="button" class="file-upload sbtn" th:data-gid="*{gid}" data-location="list" data-image-only="true">이미지 업로드</button>
-                        <div class="uploaded-files" id="list-images"></div>
+                        <div class="uploaded-files" id="list-images">
+                              <div th:if="*{listImages != null}" th:each="item : *{listImages}" th:object="${item}" class="image-item" th:id="*{'file-' + seq}">
+                                    <i class="remove xi-close" th:data-seq="*{'file-' + seq}"></i>
+                                    <div class="inner show-image" style="background:url('[thumbUrl]') no-repeat center center;background-size: cover;" data-seq="[seq]"></div> <!--클릭하면 원본이미지를 볼수있게/팝업이랑 비슷하게했음-->
+                              </div>
+                        </div>
                   </td>
             </tr>
       </table>
