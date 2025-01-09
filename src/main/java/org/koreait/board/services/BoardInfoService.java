@@ -70,6 +70,7 @@ public class BoardInfoService {
     public RequestBoard getForm(BoardData item) {
         RequestBoard form = modelMapper.map(item, RequestBoard.class); // 이건 수정할때밖에 안쓰임
         form.setMode("edit");
+        form.setBid(item.getBoard().getBid()); // 게시글 수정시 오류발생 -> 값이 안들어가는거 확인하고 추가했음
 
         return form;
     }

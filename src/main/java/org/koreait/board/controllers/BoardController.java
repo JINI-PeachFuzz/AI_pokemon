@@ -135,7 +135,9 @@ public class BoardController {
     public String save(@Valid RequestBoard form, Errors errors, @SessionAttribute("commonValue") CommonValue commonValue, Model model) {
         String mode = form.getMode(); // 값이 없을때는 기본값 write.
         mode = StringUtils.hasText(mode) ? mode : "write";
-        commonProcess(form.getBid(), mode, model);
+
+        if (mode.equals("edit")) commonProcess(form.getSeq(), mode, model);
+        else commonProcess(form.getBid(), mode, model); // 보드save 순환참조발생해서 분기했음
 
         boardValidator.validate(form, errors);
 
@@ -216,6 +218,7 @@ public class BoardController {
         model.addAttribute("addCommonScript", addCommonScript);
         model.addAttribute("addScript", addScript);
         model.addAttribute("addCss", addCss);
+        model.addAttribute("mode", mode);
     }
 
     // 게시글 보기, 게시글 수정 // seq를 가지고 가공할거임
