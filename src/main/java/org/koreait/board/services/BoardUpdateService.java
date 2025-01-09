@@ -73,6 +73,7 @@ public class BoardUpdateService {
         data.setContent(form.getContent());
         data.setExternalLink(form.getExternalLink());
         data.setYoutubeUrl(form.getYoutubeUrl());
+        data.setCategory(form.getCategory());
 
         boardDataRepository.saveAndFlush(data); // DB반영
         fileDoneService.process(form.getGid()); // 완료처리

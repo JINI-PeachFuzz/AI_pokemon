@@ -7,6 +7,7 @@ import org.koreait.board.entities.Board;
 import org.koreait.board.entities.BoardData;
 import org.koreait.board.services.BoardInfoService;
 import org.koreait.board.services.BoardUpdateService;
+import org.koreait.board.services.BoardViewUpdateService;
 import org.koreait.board.services.configs.BoardConfigInfoService;
 import org.koreait.board.validators.BoardValidator;
 import org.koreait.file.constants.FileStatus;
@@ -40,6 +41,7 @@ public class BoardController {
     private final BoardValidator boardValidator;
     private final BoardUpdateService boardUpdateService;
     private final BoardInfoService boardInfoService;
+    private final BoardViewUpdateService boardViewUpdateService;
 
     /**
      * 사용자별 공통 데이터
@@ -80,6 +82,10 @@ public class BoardController {
     public String view(@PathVariable("seq") Long seq, Model model) {
         commonProcess(seq, "view", model);
 
+        long viewCount = boardViewUpdateService.process(seq); // 조회수 업데이트
+        BoardData data = (BoardData)model.getAttribute("boardData");
+        data.setViewCount(viewCount);
+
         return utils.tpl("board/view");
     }
 
@@ -112,8 +118,11 @@ public class BoardController {
      * @return
      */
     @GetMapping("/edit/{seq}")
-    public String edit(@PathVariable("seq") Long seq, Model model) {
+    public String edit(@PathVariable("seq") Long seq, Model model, @SessionAttribute("commonValue") CommonValue commonValue) {
         commonProcess(seq, "edit", model);
+
+        RequestBoard form = boardInfoService.getForm(commonValue.getData());
+        model.addAttribute("requestBoard", form);
 
         return utils.tpl("board/edit");
     }
@@ -203,19 +212,34 @@ public class BoardController {
         }
 
         model.addAttribute("board", board); // 얘를 가지고 스킨을 분리함
+        model.addAttribute("categories", board.getCategories());
         model.addAttribute("addCommonScript", addCommonScript);
         model.addAttribute("addScript", addScript);
         model.addAttribute("addCss", addCss);
     }
 
+    // 게시글 보기, 게시글 수정 // seq를 가지고 가공할거임
     private void commonProcess(Long seq, String mode, Model model) {
-        String bid = null;
+        BoardData item = boardInfoService.get(seq);
+        Board board = item.getBoard();
 
+        String pageTitle = String.format("%s - %s", item.getSubject(), board.getName());
+
+        String bid = board.getBid();
         commonProcess(bid, mode, model);
+
+        CommonValue commonValue = commonValue();
+        commonValue.setBoard(board);
+        commonValue.setData(item);
+
+        model.addAttribute("commonValue", commonValue);
+        model.addAttribute("pageTitle", pageTitle);
+        model.addAttribute("boardData", item);
     }
 
     @Data // 게터와 세터사용할려고 추가했음
     static class CommonValue implements Serializable {
         private Board board;
+        private BoardData data;
     }
 }
