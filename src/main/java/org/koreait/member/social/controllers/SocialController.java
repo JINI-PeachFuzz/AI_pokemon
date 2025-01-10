@@ -21,11 +21,14 @@ public class SocialController {
 
     private final RestTemplate restTemplate;
 
-    @GetMapping("/callback")
-    public void callback(@RequestParam(name="code", required = false) String code) {
-        HttpHeaders headers = new HttpHeaders(); // 헤더스는 스프링껄로 넣어줘야함
+    @GetMapping("/callback/kakao")
+    public void callback(@RequestParam(name = "code", required = false) String code) {
+
+
+     /*   HttpHeaders headers = new HttpHeaders(); // 헤더스는 스프링껄로 넣어줘야함
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
+        // 이건 테스트 코드로 나오는지 확인한거
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", "authorization_code");
         params.add("client_id", "f0ac580a42d382cfa7a1b66b82576a0a"); // id는 관리자쪽에 기록될 필요가 있음
@@ -46,11 +49,11 @@ public class SocialController {
         HttpEntity<Void> request2 = new HttpEntity<>(headers2); // 헤더만 실을거라 반환값이 필요없어서 보이드사용
 
         ResponseEntity<String> response2 = restTemplate.exchange(URI.create("https://kapi.kakao.com/v2/user/me"), HttpMethod.GET, request2, String.class); // 겟방식으로 요청헤더에 토큰을 실어서 보내고 있는거
-        System.out.println(response2); // 필수인 id밖에 안나옴
+        System.out.println(response2); // 필수인 id밖에 안나옴*/
     }
-
+}
 
 //    f0ac580a42d382cfa7a1b66b82576a0a
 
 //    https://kauth.kakao.com/oauth/authorize?client_id=f0ac580a42d382cfa7a1b66b82576a0a&redirect_uri=http://localhost:3000/member/social/callback&response_type=code
-}
+

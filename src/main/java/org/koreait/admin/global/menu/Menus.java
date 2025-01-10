@@ -14,7 +14,8 @@ public class Menus {
         // 기본 설정
         submenus.put("basic", List.of(
             new MenuDetail("siteConfig", "사이트 기본 정보", "/admin/basic/siteConfig"),
-                new MenuDetail("terms", "약관 관리", "/admin/basic/terms") // 약관관리라고 해서 따로 뺄거 / 쇼핑몰같은데보면 약관이 많이 사용되기 때문
+                new MenuDetail("terms", "약관 관리", "/admin/basic/terms"), // 약관관리라고 해서 따로 뺄거 / 쇼핑몰같은데보면 약관이 많이 사용되기 때문
+                new MenuDetail("social", "소셜로그인", "/admin/basic/social") // 바뀔수도 있어서 코드로 하는 것보단 (다시빌드해야함) 관리자쪽에서 관리할 수 있도록 해주는게 좋음
         ));
 
         // 회원관리

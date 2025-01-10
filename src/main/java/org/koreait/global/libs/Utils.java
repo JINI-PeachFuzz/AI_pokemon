@@ -219,6 +219,15 @@ public class Utils {
             return Objects.hash(ip, ua);
         }
     }
+
+    /***
+     * 전체 주소 // 반환
+     * @param url
+     * @return
+     */
+    public String getUrl(String url) {
+        return String.format("%s://%s:%d%s%s", request.getScheme(), request.getServerName(), request.getServerPort(), request.getContextPath(), url); // 스키마가 프로토콜임
+    }
 }
 
 

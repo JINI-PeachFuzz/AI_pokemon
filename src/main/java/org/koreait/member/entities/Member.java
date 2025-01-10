@@ -7,6 +7,7 @@ import lombok.ToString;
 import org.koreait.file.entities.FileInfo;
 import org.koreait.global.entities.BaseEntity;
 import org.koreait.member.constants.Gender;
+import org.koreait.member.social.constants.SocialChannel;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -56,6 +57,13 @@ public class Member extends BaseEntity implements Serializable {
 
     @Column(length = 50)
     private String optionalTerms; // 선택 약관
+
+    @Enumerated(EnumType.STRING)
+    @Column(length = 20)
+    private SocialChannel socialChannel; // 소셜 로그인 채널
+
+    @Column(length = 65)
+    private String socialToken; // 소셜 로그인 채널
 
     @JsonIgnore // 순환참조문제 발생해서 추가했음
     @ToString.Exclude // 투스트링에서 배제하는거 // 순환참조가 나오는데 롬복때문에 // N+1문제
