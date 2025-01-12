@@ -117,7 +117,7 @@ public class JoinValidator implements Validator, PasswordValidator {
         // 4. 생년월일을 입력받으면 만 14세 이상만 가입 가능하게 통제 E
 
         // 5. 이메일 인증 여부 체크
-        Boolean authCodeVerified = (Boolean) session.getAttribute("authCodeVerified");
+        Boolean authCodeVerified = (Boolean)session.getAttribute("authCodeVerified");
         if (authCodeVerified == null || !authCodeVerified) {
             errors.reject("NotVerified.authCode");
         }

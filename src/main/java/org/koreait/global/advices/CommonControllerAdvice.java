@@ -11,7 +11,6 @@ import org.koreait.global.exceptions.scripts.AlertRedirectException;
 import org.koreait.global.libs.Utils;
 import org.koreait.global.services.CodeValueService;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
@@ -73,12 +72,15 @@ public class CommonControllerAdvice {
         data.put("message", message);
 
         SiteConfig siteConfig = Objects.requireNonNullElseGet(codeValueService.get("siteConfig", SiteConfig.class), SiteConfig::new);
-        data.put("siteConfig",siteConfig);
+        data.put("siteConfig", siteConfig);
 
         ModelAndView mv = new ModelAndView();
         mv.setStatus(status); // 응답코드
         mv.addAllObjects(data);
         mv.setViewName(tpl);
+
+        e.printStackTrace();
+
         return mv;
     }
 }

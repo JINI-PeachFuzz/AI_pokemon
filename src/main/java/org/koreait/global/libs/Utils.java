@@ -3,7 +3,6 @@ package org.koreait.global.libs;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.aspectj.weaver.MemberUtils;
 import org.koreait.file.entities.FileInfo;
 import org.koreait.file.services.FileInfoService;
 import org.koreait.member.libs.MemberUtil;
@@ -143,28 +142,28 @@ public class Utils {
 // seq : 파일등록번호 , url은 원격번호 주소 / 너비, 높이, / 모드:이미지태그, 백그라운드(이미지) // 어느 이미지로 할지 구분 // 썸네일관련 // 크기 맞추는거 api쪽에 sum이라는게 있는게 거기에 들어가서 맞춰지는 거
 
         try {
-            String imageurl = null;
+            String imageUrl = null;
             if (seq != null && seq > 0L) {
                 FileInfo item = fileInfoService.get(seq); // 화면에 꽉채울때등등
                 if (!item.isImage()) {
                     return ""; // null 보단 비어있는 문자열이 오류방지위해서는 좋음
                 }
 
-                imageurl = String.format("%s&width=%d&height=%d", item.getThumbUrl(), width, height); // getThumbUrl 2차가공!
+                imageUrl = String.format("%s&width=%d&height=%d", item.getThumbUrl(), width, height); // getThumbUrl 2차가공!
 
             } else if (StringUtils.hasText(url)) {
-                imageurl = String.format("%s/api/file/thumb?url=%s&width=%d&height=%d", request.getContextPath(), url, width, height);
+                imageUrl = String.format("%s/api/file/thumb?url=%s&width=%d&height=%d", request.getContextPath(), url, width, height);
             } // url을 가지고 썸네일을 만듦
 
-            if(!StringUtils.hasText(imageurl)) return "";
+            if(!StringUtils.hasText(imageUrl)) return "";
 
             mode = Objects.requireNonNullElse(mode, "image");
             className = Objects.requireNonNullElse(className, "image");
             if (mode.equals("background")) { // 배경 이미지
 
-                return String.format("<div style='width: %dpx; height: %dpx; background:url(\"%s\") no-repeat center center; background-size:cover;' class='%s'%s></div>", width, height, imageurl, className, seq != null && seq > 0L ? "data-seq='" + seq + "'":"");
+                return String.format("<div style='width: %dpx; height: %dpx; background:url(\"%s\") no-repeat center center; background-size:cover;' class='%s'%s></div>", width, height, imageUrl, className, seq != null && seq > 0L ? "data-seq='" + seq + "'":"");
             } else { // 이미지 태그
-                return String.format("<img src='%s' class='%s'>", imageurl, className); // 단일 태그에서는 /로 안닫아도 됌 // 리액트에서는 꼭 닫아야함
+                return String.format("<img src='%s' class='%s'>", imageUrl, className);// 단일 태그에서는 /로 안닫아도 됌 // 리액트에서는 꼭 닫아야함
             }
         } catch (Exception e) {}
 
@@ -178,20 +177,19 @@ public class Utils {
     public void showSessionMessage(String message) {
         HttpSession session = request.getSession();
         session.setAttribute("showMessage", message);
-
     }
 
     public void removeSessionMessage() {
         HttpSession session = request.getSession();
         session.removeAttribute("showMessage");
     }
+
     public String getParam(String name) {
         return request.getParameter(name);
     }
 
     public String[] getParams(String name) {
         return request.getParameterValues(name);
-
     }
 
     /***
@@ -226,7 +224,8 @@ public class Utils {
      * @return
      */
     public String getUrl(String url) {
-        return String.format("%s://%s:%d%s%s", request.getScheme(), request.getServerName(), request.getServerPort(), request.getContextPath(), url); // 스키마가 프로토콜임
+        return String.format("%s://%s:%d%s%s", request.getScheme(), request.getServerName(), request.getServerPort(), request.getContextPath(), url);
+        // 스키마가 프로토콜임
     }
 }
 

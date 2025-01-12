@@ -18,36 +18,35 @@ import java.util.List;
 @Data
 @Entity
 public class Member extends BaseEntity implements Serializable {
-
     @Id @GeneratedValue
     private Long seq; // 회원 번호
 
-    @Column(length = 65, nullable = false, unique = true)
+    @Column(length=65, nullable = false, unique = true)
     private String email; // 이메일
 
-    @Column(length = 65, nullable = false)
+    @Column(length=65)
     private String password;
 
-    @Column(length = 40, nullable = false)
+    @Column(length=40, nullable = false)
     private String name;
 
-    @Column(length = 40, nullable = false)
+    @Column(length=40, nullable = false)
     private String nickName;
 
     @Column(nullable = false)
     private LocalDate birthDt; // 생년월일
 
     @Enumerated(EnumType.STRING)
-    @Column(length = 10, nullable = false)
+    @Column(length=10, nullable = false)
     private Gender gender;
 
-    @Column(length = 10, nullable = false)
+    @Column(length=10, nullable = false)
     private String zipCode;
 
-    @Column(length = 100, nullable = false)
+    @Column(length=100, nullable = false)
     private String address;
 
-    @Column(length = 100)
+    @Column(length=100)
     private String addressSub;
 
     private boolean requiredTerms1;
@@ -56,15 +55,15 @@ public class Member extends BaseEntity implements Serializable {
 
     private boolean requiredTerms3;
 
-    @Column(length = 50)
+    @Column(length=50)
     private String optionalTerms; // 선택 약관
 
     @Enumerated(EnumType.STRING)
-    @Column(length = 20)
-    private SocialChannel socialChannel; // 소셜 로그인 채널
+    @Column(length=20)
+    private SocialChannel socialChannel; // 소설 로그인 채널
 
-    @Column(length = 65)
-    private String socialToken; // 소셜 로그인 채널
+    @Column(length=65)
+    private String socialToken; // 소셜 로그인 기본 ID
 
     @JsonIgnore // 순환참조문제 발생해서 추가했음
     @ToString.Exclude // 투스트링에서 배제하는거 // 순환참조가 나오는데 롬복때문에 // N+1문제
