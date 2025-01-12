@@ -13,6 +13,7 @@ import org.koreait.member.services.MemberInfoService;
 import org.koreait.member.services.MemberUpdateService;
 import org.koreait.member.social.constants.SocialChannel;
 import org.koreait.member.social.entities.SocialConfig;
+import org.koreait.member.social.services.KakaoLoginService;
 import org.koreait.member.validators.JoinValidator;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -37,11 +38,11 @@ import java.util.Objects;
 public class MemberController {
 
     private final Utils utils;
-    private final MemberUtil memberUtil;
     private final JoinValidator joinValidator; // 회원 가입 검증
     private final MemberUpdateService updateService; // 회원 가입 처리
     private final MemberInfoService infoService; // 회원 정보 조회
     private final CodeValueService codeValueService;
+    private final KakaoLoginService kakaoLoginService;
 
     @ModelAttribute("requestAgree")
     public RequestAgree requestAgree() {
@@ -53,6 +54,7 @@ public class MemberController {
         return new RequestLogin();
     }
 
+    // 이메일 인증 여부
     @ModelAttribute("authCodeVerified")
     public boolean authCodeVerified() {
         return false;
@@ -65,7 +67,7 @@ public class MemberController {
 
     @ModelAttribute("socialToken")
     public String socialToken() {
-        return "";
+        return null;
     }
 
     /* 회원 페이지 CSS */
@@ -81,7 +83,7 @@ public class MemberController {
         session.setAttribute("socialChannel", SocialChannel.NONE);
         session.setAttribute("socialToken", null);
 
-        form.setKa
+        form.setKakaoLoginUrl(kakaoLoginService.getLoginUrl(form.getRedirectUrl()));
 
         if (form.getErrorCodes() != null) { // 검증 실패 // 쪼개논거
             form.getErrorCodes().stream().map(s -> s.split("_"))
@@ -98,31 +100,7 @@ public class MemberController {
         // 유틸쪽에 만들어져있음
     }
 
-    @ResponseBody
-    @GetMapping("/test")
-    public void test() {
-        /*
-        MemberInfo memberInfo = (MemberInfo)SecurityContextHolder.getContext()
-                .getAuthentication().getPrincipal();
-        System.out.println(memberInfo);
 
-         */
-        System.out.println(SecurityContextHolder.getContext()
-                .getAuthentication().getPrincipal()); // 미로그인 상태 anonymousUser 문자열
-    }
-    /*
-    public void test(@AuthenticationPrincipal MemberInfo memberInfo) {
-        System.out.println(memberInfo);
-    } */
-    /*
-    public void test(Principal principal) {
-        String email = principal.getName();
-        System.out.println(email);
-    } */
-
-
-    // 세션에 데이터를 넣어서 확장가능하게 해준거 // 페이지를 각각 나눠놨음
-    // "member/agree" -> RequestAgree agree -> @SessionAttribute("requestAgree") 방식으로
     /**
      * 회원가입 약관 동의
      *
@@ -132,14 +110,15 @@ public class MemberController {
     public String joinAgree(Model model) {
         commonProcess("agree", model);
 
-//        if (channel == null || channel == SocialChannel.NONE) {
-//            session.removeAttribute("socialChannel");
-//            session.removeAttribute("socialToken");
-//            // 테스트하던게 남아있어서 일반회원가입시 비밀번호가 나오지않는 현상발생하여 지워주는 걸 추가했음
-//        } // 여전히 남아있었음 -> 로그인쪽으로 옮겼음
+// if (channel == null || channel == SocialChannel.NONE) {
+// session.removeAttribute("socialChannel");
+// session.removeAttribute("socialToken");
+// // 테스트하던게 남아있어서 일반회원가입시 비밀번호가 나오지않는 현상발생하여 지워주는 걸 추가했음
+// } // 여전히 남아있었음 -> 로그인쪽으로 옮겼음
 
         return utils.tpl("member/agree");
     }
+
 
     /**
      * 회원 가입 양식 페이지
@@ -148,7 +127,7 @@ public class MemberController {
      * @return
      */
     @PostMapping("/join")
-    public String join(RequestAgree agree, Errors errors, @ModelAttribute RequestJoin form, Model model, @SessionAttribute("socialChannel") SocialChannel socialChannel, @SessionAttribute("socialToken") String socialToken) {
+    public String join(RequestAgree agree, Errors errors, @ModelAttribute RequestJoin form, Model model, @SessionAttribute(name="socialChannel", required = false) SocialChannel socialChannel, @SessionAttribute(name="socialToken", required = false) String socialToken) {
         commonProcess("join", model); // 회원 가입 공통 처리
 
         form.setSocialChannel(socialChannel);
@@ -166,6 +145,33 @@ public class MemberController {
 
         return utils.tpl("member/join");
     }
+
+
+//    @ResponseBody
+//    @GetMapping("/test")
+//    public void test() {
+//
+//        MemberInfo memberInfo = (MemberInfo)SecurityContextHolder.getContext()
+//                .getAuthentication().getPrincipal();
+//        System.out.println(memberInfo);
+//
+//
+//        System.out.println(SecurityContextHolder.getContext()
+//                .getAuthentication().getPrincipal()); // 미로그인 상태 anonymousUser 문자열
+//    }
+//
+//    public void test(@AuthenticationPrincipal MemberInfo memberInfo) {
+//        System.out.println(memberInfo);
+//    }
+//
+//    public void test(Principal principal) {
+//        String email = principal.getName();
+//        System.out.println(email);
+//    }
+//
+//
+//    // 세션에 데이터를 넣어서 확장가능하게 해준거 // 페이지를 각각 나눠놨음
+//    // "member/agree" -> RequestAgree agree -> @SessionAttribute("requestAgree") 방식으로
 
     /***
      * 회원가입 처리
@@ -210,6 +216,7 @@ public class MemberController {
     @GetMapping("/refresh")
     @PreAuthorize("isAuthenticated()") // 회원만 접근가능함
     public void refresh(Principal principal, HttpSession session){
+
         MemberInfo memberInfo = (MemberInfo) infoService.loadUserByUsername(principal.getName());
         session.setAttribute("member", memberInfo.getMember());
     }
@@ -229,7 +236,6 @@ public class MemberController {
 
         // 소셜 로그인 설정
         SocialConfig socialConfig = Objects.requireNonNullElseGet(codeValueService.get("socialConfig", SocialConfig.class), SocialConfig::new);
-
 
 
         if (mode.equals("login")) {  // 로그인 공통 처리
@@ -262,5 +268,4 @@ public class MemberController {
         // 소셜 로그인 설정
         model.addAttribute("socialConfig", socialConfig);
     }
-
 }
