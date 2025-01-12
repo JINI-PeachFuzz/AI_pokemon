@@ -68,6 +68,9 @@ public class MypageController {
             form.setOptionalTerms(Arrays.stream(optionalTerms.split("\\|\\|")).toList());
         }
 
+        form.setKakaoLoginConnectUrl(kakaoLoginService.getLoginUrl("connect")); // 소셜카카오로 연동될수있는 주소를 넣었음
+        form.setKakaoLoginDisconnectUrl(kakaoLoginService.getLoginUrl("disconnect"));
+
         model.addAttribute("requestProfile", form);
 
         return utils.tpl("mypage/profile");

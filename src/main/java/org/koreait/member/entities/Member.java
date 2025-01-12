@@ -8,6 +8,7 @@ import org.koreait.file.entities.FileInfo;
 import org.koreait.global.entities.BaseEntity;
 import org.koreait.member.constants.Gender;
 import org.koreait.member.social.constants.SocialChannel;
+import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -75,4 +76,10 @@ public class Member extends BaseEntity implements Serializable {
 
     @Transient
     private FileInfo profileImage;
+
+    // 카카오 로그인 연동된 상태인지
+    public boolean isKakaoConnected() {
+        // 소설이 아닐때는 연결해제를 해줘도 좋을 듯
+        return socialChannel != null && socialChannel == socialChannel.KAKAO && StringUtils.hasText(socialToken);
+    }
 }

@@ -1,29 +1,67 @@
 package org.koreait.member.social.controllers;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.koreait.global.annotations.ApplyErrorPage;
+import org.koreait.global.exceptions.scripts.AlertBackException;
+import org.koreait.global.libs.Utils;
+import org.koreait.member.social.constants.SocialChannel;
 import org.koreait.member.social.entities.AuthToken;
+import org.koreait.member.social.services.KakaoLoginService;
 import org.springframework.http.*;
+import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
 
 
-@RestController
+@Controller
+@ApplyErrorPage // 뒤로 빽해야하니까 넣어줬음
 @RequestMapping("/member/social")
 @RequiredArgsConstructor // 의존성 주입
 public class SocialController {
 
-    private final RestTemplate restTemplate;
+//    private final RestTemplate restTemplate;
+
+    private final KakaoLoginService kakaoLoginService;
+    private final HttpSession session;
+    private final Utils utils;
+
 
     @GetMapping("/callback/kakao")
-    public void callback(@RequestParam(name = "code", required = false) String code) {
+    public String callback(@RequestParam(name = "code", required = false) String code, @RequestParam(name="state", required = false) String redirectUrl) {
+        // void에서 String으로 변경했는데 토큰인증시 넘어갈테고 반환값이될테니 String으로 변경?
 
+
+        // 연결 해제 요청 처리 S
+        if (StringUtils.hasText(redirectUrl) &&redirectUrl)
+
+
+        // 연결 해제 요청 처리 E
+
+        String token = kakaoLoginService.getToken(code);
+        if (!StringUtils.hasText(token)) {
+            throw new AlertBackException(utils.getMessage("UnAuthorized"), HttpStatus.UNAUTHORIZED);
+        }
+
+        boolean result = kakaoLoginService.login(token);
+        if (result) { // 로그인 성공
+            redirectUrl = StringUtils.hasText(redirectUrl) ? redirectUrl : "/";
+            return "redirect:" + redirectUrl;
+
+        }
+
+        // 소셜 회원 미가입 -> 회원가입 페이지 이동
+        session.setAttribute("socialChannel", SocialChannel.KAKAO);
+        session.setAttribute("socialToken", token);
+
+        return "redirect:/member/agree";
+    }
+}
 
      /*   HttpHeaders headers = new HttpHeaders(); // 헤더스는 스프링껄로 넣어줘야함
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -50,10 +88,12 @@ public class SocialController {
 
         ResponseEntity<String> response2 = restTemplate.exchange(URI.create("https://kapi.kakao.com/v2/user/me"), HttpMethod.GET, request2, String.class); // 겟방식으로 요청헤더에 토큰을 실어서 보내고 있는거
         System.out.println(response2); // 필수인 id밖에 안나옴*/
-    }
-}
+
 
 //    f0ac580a42d382cfa7a1b66b82576a0a
 
 //    https://kauth.kakao.com/oauth/authorize?client_id=f0ac580a42d382cfa7a1b66b82576a0a&redirect_uri=http://localhost:3000/member/social/callback&response_type=code
+
+// https://kauth.kakao.com/oauth/authorize?client_id=f0ac580a42d382cfa7a1b66b82576a0a&redirect_uri=http://localhost:3000/member/social/callback/kakao&response_type=code
+
 

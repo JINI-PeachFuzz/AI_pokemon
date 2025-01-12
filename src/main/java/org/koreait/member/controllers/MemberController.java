@@ -5,7 +5,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.koreait.global.annotations.ApplyErrorPage;
-import org.koreait.global.exceptions.BadRequestException;
 import org.koreait.global.libs.Utils;
 import org.koreait.global.services.CodeValueService;
 import org.koreait.member.MemberInfo;
@@ -27,6 +26,7 @@ import org.springframework.web.bind.support.SessionStatus;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @Controller
@@ -60,12 +60,12 @@ public class MemberController {
 
     @ModelAttribute("socialChannel")
     public SocialChannel socialChannel() {
-        return null;
+        return SocialChannel.NONE;
     }
 
     @ModelAttribute("socialToken")
     public String socialToken() {
-        return null;
+        return "";
     }
 
     /* 회원 페이지 CSS */
@@ -75,8 +75,13 @@ public class MemberController {
     }
 
     @GetMapping("/login")
-    public String login(@ModelAttribute RequestLogin form, Errors errors, Model model) {
+    public String login(@ModelAttribute RequestLogin form, Errors errors, Model model, HttpSession session) {
         commonProcess("login", model); // 로그인 페이지 공통 처리
+
+        session.setAttribute("socialChannel", SocialChannel.NONE);
+        session.setAttribute("socialToken", null);
+
+        form.setKa
 
         if (form.getErrorCodes() != null) { // 검증 실패 // 쪼개논거
             form.getErrorCodes().stream().map(s -> s.split("_"))
@@ -126,6 +131,12 @@ public class MemberController {
     @GetMapping("/agree")
     public String joinAgree(Model model) {
         commonProcess("agree", model);
+
+//        if (channel == null || channel == SocialChannel.NONE) {
+//            session.removeAttribute("socialChannel");
+//            session.removeAttribute("socialToken");
+//            // 테스트하던게 남아있어서 일반회원가입시 비밀번호가 나오지않는 현상발생하여 지워주는 걸 추가했음
+//        } // 여전히 남아있었음 -> 로그인쪽으로 옮겼음
 
         return utils.tpl("member/agree");
     }
@@ -217,7 +228,8 @@ public class MemberController {
         List<String> addScript = new ArrayList<>(); // front쪽에 추가하는 자바스크립트 // 공통으로 처리할 것들도 있지만 여기서만 처리할 것도 있는데 그런거 프론트쪽에만 추가할려고 만든 스크립트 // 위치가 다름
 
         // 소셜 로그인 설정
-        SocialConfig socialConfig = codeValueService.get("socialConfig", SocialConfig.class);
+        SocialConfig socialConfig = Objects.requireNonNullElseGet(codeValueService.get("socialConfig", SocialConfig.class), SocialConfig::new);
+
 
 
         if (mode.equals("login")) {  // 로그인 공통 처리
