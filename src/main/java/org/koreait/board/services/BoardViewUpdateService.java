@@ -3,6 +3,7 @@ package org.koreait.board.services;
 import lombok.RequiredArgsConstructor;
 import org.koreait.board.entities.*;
 import org.koreait.board.repositories.BoardDataRepository;
+import org.koreait.board.repositories.BoardViewRepository;
 import org.koreait.global.libs.Utils;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
