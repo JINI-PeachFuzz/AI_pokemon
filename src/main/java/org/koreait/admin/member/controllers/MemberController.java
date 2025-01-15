@@ -38,17 +38,15 @@ public class MemberController implements SubMenus {
     }
 
     @ModelAttribute("authorities")
-    public Authority[] authorities(){
+    public Authority[] authorities() {
         return Authority.values();
-
     }
 
-    /***
+    /**
      * 회원목록
      * @param model
      * @return
      */
-
     @GetMapping({"", "/list"})
     public String list(@ModelAttribute MemberSearch search, Model model) {
         commonProcess("list", model);
@@ -58,25 +56,22 @@ public class MemberController implements SubMenus {
         model.addAttribute("items", data.getItems());
         model.addAttribute("pagination", data.getPagination());
 
-
         return "admin/member/list";
-
     }
 
-    /***
+    /**
      * 회원목록 수정 처리
      * @param model
      * @return
      */
     @PatchMapping("/list")
-    public String listPs(@RequestParam(name="chk", required=false) List<Integer> chks, Model model) {
+    public String listPs(@RequestParam(name="chk", required = false) List<Integer> chks, Model model) {
 
         memberUpdateService.updateList(chks);
 
         utils.showSessionMessage("수정하였습니다.");
         model.addAttribute("script", "parent.location.reload();");
         return "common/_execute_script";
-
     }
 
     /**

@@ -5,6 +5,9 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.koreait.file.entities.FileInfo;
 import org.koreait.file.services.FileInfoService;
+import org.koreait.global.constants.Device;
+import org.koreait.global.entities.SiteConfig;
+import org.koreait.global.services.CodeValueService;
 import org.koreait.member.libs.MemberUtil;
 import org.springframework.context.MessageSource;
 import org.springframework.context.support.ResourceBundleMessageSource;
@@ -24,6 +27,7 @@ public class Utils {
     private final MessageSource messageSource;
     private final FileInfoService fileInfoService;
     private final MemberUtil memberUtil;
+    private final CodeValueService codeValueService;
 
     public boolean isMobile() {
 
@@ -42,7 +46,13 @@ public class Utils {
      * @return
      */
     public String tpl(String path) { // 템플릿 / 모바일과 pc를 구분하기 위해만든거서
+        SiteConfig config = codeValueService.get("siteConfig", SiteConfig.class);
+
         String prefix = isMobile() ? "mobile" : "front"; // 모바일인지 프론트인지 구분할 수 있게 해줌
+
+        if (config != null && config.getDevice() != Device.ALL) {
+            prefix = config.getDevice() == Device.MOBILE ?
+        }
 
         return String.format("%s/%s", prefix, path);
     }

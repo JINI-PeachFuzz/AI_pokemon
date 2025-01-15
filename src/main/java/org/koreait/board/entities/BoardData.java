@@ -12,27 +12,28 @@ import java.util.List;
 @Data
 @Entity
 @Table(indexes = {
-        @Index(name = "idx_bd_created_at", columnList = "createdAt DESC"), // createdAt는 필드명임
-        @Index(name = "idx_bd_notice_created_at", columnList = "notice DESC, createdAt DESC")
+        @Index(name="idx_bd_created_at", columnList = "createdAt DESC"),
+        // createdAt는 필드명임
+        @Index(name="idx_bd_notice_created_at", columnList = "notice DESC, createdAt DESC")
 })
 public class BoardData extends BaseEntity implements Serializable {
     @Id @GeneratedValue
     private Long seq;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "bid")
+    @JoinColumn(name="bid")
     private Board board;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member; // 회원이 쓴 게시글도 있으니까
 
-    @Column(length = 45, nullable = false)
+    @Column(length=45, nullable = false)
     private String gid;
 
-    @Column(length = 45, nullable = false)
+    @Column(length=45, nullable = false)
     private String poster; // 작성자명
 
-    @Column(length = 65)
+    @Column(length=65)
     private String guestPw; // 글 수정, 삭제 비밀번호 // 해시화시킬꺼
     // 비회원일때만 필수기 때문에 nullable은 넣으면 안됨.
 
@@ -75,4 +76,19 @@ public class BoardData extends BaseEntity implements Serializable {
     @Transient
     private List<FileInfo> attachFiles; // 다운로드용 첨부 파일
 
+    @Transient
+    private FileInfo selectedImage; // 목록 노출 이미지
+
+    @Transient
+    private boolean listable; // 목록 버튼 노출 여부
+
+    @Transient
+    private boolean editable; // 수정, 삭제 버튼 노출 여부
+
+    @Transient
+    private boolean writable; // 글쓰기 버튼 노출 여부
+
+    @Transient
+    private boolean mine; // 내가 작성한 게시글 여부
 }
+

@@ -31,14 +31,15 @@ public class TermsUpdateService {
         service.save(code, terms);
     }
 
-    /***
+    /**
      * 목록에서 수정, 삭제
+     *
      * @param chks
      */
     public void processList(List<Integer> chks) {
         String mode = request.getMethod().equalsIgnoreCase("DELETE") ? "delete" : "modify";
         if (chks == null || chks.isEmpty()) {
-            throw new AlertException(String.format("%s할 약관을 선택하세요.", mode.equals ("delete") ? "삭제":"수정"));
+            throw new AlertException(String.format("%s할 약관을 선택하세요.", mode.equals("delete") ? "삭제":"수정"));
         }
 
         List<String> deleteCodes = new ArrayList<>();

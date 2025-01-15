@@ -226,6 +226,15 @@ commonLib.insertEditorImage = function(imageUrls, editor) {
     editor.execute('insertImage', { source: imageUrls }); // insertImage 이미 정해져있는 명령어! / location 값이랑 fileName, seq, file URL 이 필요함
 };
 
+commonLib.selectImage = function(seq)
+for (const el of showPopups) {
+        el.addEventListener("click", function() {
+            const { url, width, height } = this.dataset;
+            commonLib.popup(url, width, height);
+        });
+    }
+    이부분 확인해보기
+
 
 window.addEventListener("DOMContentLoaded", function() {
     // 체크박스 전체 토글 기능 S

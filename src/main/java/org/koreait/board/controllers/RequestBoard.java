@@ -7,6 +7,7 @@ import org.koreait.file.entities.FileInfo;
 
 import java.util.List;
 
+
 // 보드컨트롤쪽에 있는 커맨드 객체임
 @Data
 public class RequestBoard {
@@ -26,8 +27,6 @@ public class RequestBoard {
 
     @Size(min=4)
     private String guestPw; // 비회원 비밀번호
-
-    private String confirmPw;
 
     @NotBlank
     private String subject; // 글 제목

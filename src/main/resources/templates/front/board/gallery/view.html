@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <th:block th:fragment="skin" th:object="${boardData}"> <!--추후 게시글데이터로 연동할거임-->
-    <div th:replace="~{front/board/default/_title::title}"></div>
+    <div th:replace="~{front/board/gallery/_title::title}"></div>
 
 
     <div class="view-content">
@@ -63,10 +63,11 @@
     <!--// view-buttons -->
 
     <th:block th:if="${board.useComment}">
-        <th:block th:replace="~{front/board/default/_comment::comment}"></th:block>
+        <th:block th:replace="~{front/board/gallery/_comment::comment}"></th:block>
     </th:block>
 
-    <th:block th:replace="~{front/board/default/}"
+    <th:block th:replace
+
 
 </th:block>
 </html>

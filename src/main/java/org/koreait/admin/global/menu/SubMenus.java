@@ -10,7 +10,5 @@ public interface SubMenus {
     @ModelAttribute("submenus")
     default List<MenuDetail> submenus() {
         return Menus.getMenus(menuCode());
-
     }
 }
-

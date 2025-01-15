@@ -77,7 +77,6 @@ public class ProductController implements SubMenus {
         commonProcess("edit", model);
 
         return "admin/product/edit";
-
     }
 
     /***
@@ -106,7 +105,7 @@ public class ProductController implements SubMenus {
         return "redirect:/admin/product/list"; // 상품목록 수정이 다되면 목록으로 돌아가게
     }
 
-    /***
+    /**
      * 상품 분류 목록
      *
      * @return
@@ -118,7 +117,7 @@ public class ProductController implements SubMenus {
         return "admin/product/category/list";
     }
 
-    /***
+    /**
      * 분류 등록
      *
      * @return
@@ -130,7 +129,7 @@ public class ProductController implements SubMenus {
         return "admin/product/category/add";
     }
 
-    /***
+    /**
      * 분류 등록, 수정 처리
      *
      * @param model

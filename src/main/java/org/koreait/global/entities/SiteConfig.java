@@ -2,6 +2,7 @@ package org.koreait.global.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
+import org.koreait.global.constants.Device;
 
 @Data
 // DB에 넣는 데이터 아님
@@ -13,4 +14,5 @@ public class SiteConfig {
     private int cssVersion;
     private int jsVersion;
     private boolean useEmailAuth;
+    private Device device;
 }

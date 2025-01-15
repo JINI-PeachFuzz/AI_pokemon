@@ -25,6 +25,7 @@ public class BoardValidator implements Validator {
         if (errors.hasErrors()) {
             return;
         }
+
         // 필수항목이 다 들어와야 다음꺼 진행가능하게
 
         RequestBoard form = (RequestBoard)target;

@@ -157,6 +157,11 @@ public class ApiFileController {
             out.write(bis.readAllBytes());
             // 바디쪽에 출력해서 이미지가 바로 보이게 만듦
         } catch (IOException e) {}
+    }
 
+    @GetMapping("/select/{seq}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void select(@PathVariable("seq") Long seq) {
+        imageService.select(seq);
     }
 }

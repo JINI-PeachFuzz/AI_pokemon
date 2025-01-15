@@ -2,6 +2,7 @@ package org.koreait.board.controllers;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
@@ -15,6 +16,7 @@ public class RequestComment {
     @NotBlank
     private String commenter;
 
+    @Size(min=4)
     private String guestPw;
 
     @NotBlank

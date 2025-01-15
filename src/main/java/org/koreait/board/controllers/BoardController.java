@@ -10,6 +10,7 @@ import org.koreait.board.entities.BoardData;
 import org.koreait.board.entities.CommentData;
 import org.koreait.board.exceptions.GuestPasswordCheckException;
 import org.koreait.board.services.*;
+import org.koreait.board.services.comment.CommentDeleteService;
 import org.koreait.board.services.comment.CommentInfoService;
 import org.koreait.board.services.comment.CommentUpdateService;
 import org.koreait.board.services.configs.BoardConfigInfoService;
@@ -29,7 +30,6 @@ import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
@@ -59,6 +59,7 @@ public class BoardController {
     private final CommentValidator commentValidator;
     private final CommentUpdateService commentUpdateService;
     private final CommentInfoService commentInfoService;
+    private final CommentDeleteService commentDeleteService;
     private final HttpServletRequest request;
 
     /**
@@ -216,6 +217,8 @@ public class BoardController {
         commonProcess(seq, "delete", model);
         Board board = commonValue.getBoard();
 
+        boardValidator.checkDelete(seq); // 게시글에 댓글이 있으면 삭제 불가
+
         boardDeleteService.delete(seq);
 
         return "redirect:/board/list/" + board.getBid();
@@ -233,6 +236,9 @@ public class BoardController {
     public String comment(@Valid RequestComment form, Errors errors, Model model) {
         String mode = form.getMode();
         mode = StringUtils.hasText(mode) ? mode : "write";
+        if (mode.equals("edit")) {
+            commonProcess(form.getSeq(), "comment", model);
+        }
 
         commentValidator.validate(form, errors);
 
@@ -279,6 +285,22 @@ public class BoardController {
         model.addAttribute("requestComment", form);
 
         return utils.tpl("board/comment");
+    }
+
+    /**
+     * 댓글 삭제 처리
+     *
+     * @param seq
+     * @param model
+     * @return
+     */
+    @GetMapping("/comment/delete/{seq}")
+    public String commentDelete(@PathVariable("seq") Long seq, Model model) {
+        commonProcess(seq, "comment", model);
+
+        BoardData item = commentDeleteService.delete(seq);
+
+        return "redirect:/board/view/" + item.getSeq();
     }
 
     /**
@@ -339,12 +361,11 @@ public class BoardController {
         return "common/_execute_script";
     }
 
-
     // 공통 처리
     private void commonProcess(String bid, String mode, Model model) {
 
         // 권한 체크
-        if (!List.of("edit", "delete").contains(mode)) {
+        if (!List.of("edit", "delete", "comment").contains(mode)) {
             boardAuthService.check(mode, bid);
         }
 

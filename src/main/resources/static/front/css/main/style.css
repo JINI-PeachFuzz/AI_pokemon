@@ -1,0 +1,31 @@
+/* 메인 배너 S */
+.main-banner .banner {
+    height: 768px;
+}
+
+.main-banner .banner1 {
+    background:url('../../image/main/main_banner1.jpg') no-repeat center center;
+    background-size: cover;
+}
+.main-banner .banner1 {
+    background:url('../../image/main/main_banner2.jpg') no-repeat center center;
+    background-size: cover;
+}
+.main-banner .banner1 {
+    background:url('../../image/main/main_banner3.jpg') no-repeat center center;
+    background-size: cover;
+}
+
+.main-banner .more-button {
+    width: 330px;
+    height: 63px;
+    bottom: 80px;
+    left: calc(50% - 165px);
+    border: 1px solid #000;
+    background:rgba((0, 0, 0, 0.8);
+    color: #fff;
+    text-align: center;
+
+}
+
+/* 메인 배너 E */

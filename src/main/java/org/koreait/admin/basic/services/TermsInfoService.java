@@ -24,7 +24,7 @@ public class TermsInfoService {
     private final ObjectMapper om;
 
     public Terms get(String code) {
-        return Objects.requireNonNullElseGet(service.get(String.format("term_$s", code), Terms.class), Terms::new);
+        return Objects.requireNonNullElseGet(service.get(String.format("term_%s", code), Terms.class), Terms::new);
     } // Objects.requireNonNullElseGet(service.get 코드 추가 / 약관쪽 내용 널일때 추가했음
 
     public List<Terms> getList() {

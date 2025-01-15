@@ -14,6 +14,7 @@ import org.koreait.board.entities.QBoardData;
 import org.koreait.board.exceptions.BoardDataNotFoundException;
 import org.koreait.board.repositories.BoardDataRepository;
 import org.koreait.board.services.configs.BoardConfigInfoService;
+import org.koreait.file.entities.FileInfo;
 import org.koreait.file.services.FileInfoService;
 import org.koreait.global.libs.Utils;
 import org.koreait.global.paging.ListData;
@@ -28,7 +29,6 @@ import org.springframework.util.StringUtils;
 import java.util.List;
 import java.util.Objects;
 
-@Lazy
 @Service
 @RequiredArgsConstructor
 public class BoardInfoService {
@@ -215,15 +215,21 @@ public class BoardInfoService {
      * @param limit
      * @return
      */
-    public List<BoardData> getLatest(String bid, int limit) {
+    public List<BoardData> getLatest(String bid, String category, int limit) {
         BoardSearch search = new BoardSearch();
         search.setLimit(limit); // 리밋은 게시글갯수
         search.setBid(List.of(bid));
+        search.setCategory(category == null ? null : List.of(category)); // 없을수도 있기 때문에 null조건을 추가했음
 
         ListData<BoardData> data = getList(search);
 
-        return data.getItems(); // 최신게시글도 가져올수 있는 편의기능도 완성!
+        List<BoardData> items = data.getItems();
+        return items == null ? List.of() : items;
 
+    }
+
+    public List<BoardData> getLatest(String bid, int limit) {
+        return getLatest(bid, null, limit);
     }
 
     public List<BoardData> getLatest(String bid) {
@@ -255,10 +261,11 @@ public class BoardInfoService {
     private void addInfo(BoardData item, boolean isView) {
         // 게시판 파일 정보 S
         String gid = item.getGid();
-        item.setEditorImages(fileInfoService.getList(gid, "editor"));
+        List<FileInfo> editorImages = fileInfoService.getList(gid, "editor");
+        item.setEditorImages(editorImages);
         item.setAttachFiles(fileInfoService.getList(gid, "attach"));
         // 게시판 파일 정보 E
-
+여기 수정
         // 이전, 다음 게시글
         if (isView) { // 보기 페이지 데이터를 조회하는 경우만 이전, 다음 게시글을 조회
             QBoardData boardData = QBoardData.boardData;
