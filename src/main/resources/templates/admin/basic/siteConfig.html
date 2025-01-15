@@ -4,8 +4,7 @@
       layout:decorate="~{admin/layouts/main}">
 <div layout:fragment="content">
     <h1>사이트 기본정보 설정</h1>
-    <form name="frmConfig" method="POST" th:action="@{/admin/basic/siteConfig}"
-          autocomplete="off" th:object="${siteConfig}">
+    <form name="frmConfig" method="POST" th:action="@{/admin/basic/siteConfig}" autocomplete="off" th:object="${siteConfig}">
         <input type="hidden" name="_method" value="PATCH">
         <h2>기본 정보</h2>
         <table class="table-cols mb30">
@@ -32,15 +31,15 @@
                 <td>
                     <span class="radio">
                         <input type="radio" name="device" value="ALL" th:field="*{device}" id="device-ALL">
-                        <label for="device-ALL">PC</label>
+                        <label for="device-ALL">PC + MOBILE</label>
                     </span>
                     <span class="radio">
-                        <input type="radio" name="device" value="ALL" th:field="*{device}" id="device-PC">
+                        <input type="radio" name="device" value="PC" th:field="*{device}" id="device-PC">
                         <label for="device-PC">PC</label>
                     </span>
                     <span class="radio">
-                        <input type="radio" name="device" value="ALL" th:field="*{device}" id="device-AL">
-                        <label for="device-ALL">PC</label>
+                        <input type="radio" name="device" value="MOBILE" th:field="*{device}" id="device-MOBILE">
+                        <label for="device-MOBILE">MOBILE</label>
                     </span>
                 </td>
             </tr>

@@ -6,7 +6,7 @@
     <form id="frmSearch" name="frmSearch" method="GET" th:action="@{/board/list/{bid}(bid=*{bid})}" autocomplete="off" th:object="${boardSearch}">
         <input type="hidden" name="sort" th:field="*{sort}">
         <input type="hidden" name="category" th:field="*{category}">
-        <!--같은 양식안에서 나와야하기 때문에 sort랑 category를 추가했음-->
+
         <select name="sopt" th:field="*{sopt}">
             <option value="ALL" th:text="#{통합검색}"></option>
             <option value="SUBJECT" th:text="#{제목}"></option>

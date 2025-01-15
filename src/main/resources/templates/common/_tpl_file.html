@@ -2,22 +2,34 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <script th:fragment="file-item" type="text/html" id="tpl-file-item">
     <span class="file-item" id="file-[seq]"> <!--[seq] 는 치환되는 코드(이미지)-->
-        <a th:href="@{/api/file/download/[seq]}">[fileName]</a> <!--[seq]를 누르면(링크) 다운로드가 될 수 있게-->
-        <i class="insert-editor xi-upload" data-url="[fileUrl]"></i>
+         <a th:href="@{/api/file/download/[seq]}">[fileName]</a> <!--[seq]를 누르면(링크) 다운로드가 될 수 있게-->
+       <i class="insert-editor xi-upload" data-url="[fileUrl]"></i>
         <!--<i class="insert-editor xi-upload" data-url="[fileUrl]"></i>는 다운로드일때는 동적으로 없어짐-->
         <i class="remove xi-close" data-seq="[seq]"></i>
     </span>
 </script>
 
-<script th:fragment="image-item2" type="text/html" id="tpl-image-item">
+<script th:fragment="image-item" type="text/html" id="tpl-image-item">
     <div class="image-item" id="file-[seq]">
+        <i class="remove xi-close" data-seq="[seq]"></i>
+        <div class="inner show-image" style="background:url('[thumbUrl]') no-repeat center center;background-size: cover;" data-seq="[seq]"></div>
+    </div>
+</script>
 
-        <div class="inner show-image" style="background:url('[thumbUrl]') no-repeat center center; background-size: cover;" data-seq="[seq]"></div> <!--클릭하면 원본이미지를 볼수있게/팝업이랑 비슷하게했음-->
+<script th:fragment="image-item2" type="text/html" id="tpl-image-item">
+    <div class="image-item[addClass]" id="file-[seq]">
 
+        <div class="inner show-image" style="background:url('[thumbUrl]') no-repeat center center;background-size: cover;" data-seq="[seq]"></div>
+        <div class="controls">
             <i class="insert-editor xi-upload" data-url="[fileUrl]"></i>
+            <i class="select-image xi-check" data-seq="[seq]"></i>
             <i class="remove xi-close" data-seq="[seq]"></i>
-
-
+        </div>
     </div>
 </script>
 </html>
+
+
+
+
+

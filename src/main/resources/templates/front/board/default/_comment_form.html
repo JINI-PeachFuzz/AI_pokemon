@@ -3,7 +3,7 @@
 <form th:fragment="form" id="commentForm" name="frmSave" method="POST" th:action="@{/board/comment}" autocomplete="off" th:object="${requestComment}" th:target="*{target}">
     <div class="error global" th:each="err : ${#fields.globalErrors()}" th:text="${err}"></div>
     <input type="hidden" name="mode" th:field="*{mode}">
-    <input th:if="${mode == 'edit'}" type="hidden" name="seq" th:field="*{seq}">
+    <input th:if="*{mode == 'edit'}" type="hidden" name="seq" th:field="*{seq}">
     <input type="hidden" name="boardDataSeq" th:field="*{boardDataSeq}">
 
     <div class="commenter">
@@ -20,8 +20,8 @@
     <!--// commenter -->
     <div class="comment-wrap">
         <textarea name="content" id="comment-content" th:field="*{content}"></textarea>
-        <button th:if="${mode != 'edit'}" type="submit" th:text="#{작성하기}"></button>
-        <button th:if="${mode == 'edit'}" type="submit" th:text="#{수정하기}"></button>
+        <button th:if="*{mode != 'edit'}" type="submit" th:text="#{작성하기}"></button>
+        <button th:if="*{mode == 'edit'}" type="submit" th:text="#{수정하기}"></button>
     </div>
     <div class="error" th:each="err : ${#fields.errors('content')}" th:text="${err}"></div>
 </form>

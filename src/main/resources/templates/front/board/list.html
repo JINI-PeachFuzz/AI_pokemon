@@ -4,10 +4,11 @@
       layout:decorate="~{front/layouts/main}">
 <main layout:fragment="content" th:object="${board}">
     <th:block th:if="*{skin == 'default'}">
-        <th:block th:replace="~{front/board/default/comment::skin}"></th:block>
+        <th:block th:replace="~{front/board/default/list::skin}"></th:block>
     </th:block>
+
     <th:block th:if="*{skin == 'gallery'}">
-        <th:block th:replace="~{front/board/gallery/comment::skin}"></th:block>
+        <th:block th:replace="~{front/board/gallery/list::skin}"></th:block>
     </th:block>
 </main>
 </html>
