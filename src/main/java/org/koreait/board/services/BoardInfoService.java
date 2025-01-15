@@ -27,8 +27,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
-import java.util.Objects;
 
+@Lazy
 @Service
 @RequiredArgsConstructor
 public class BoardInfoService {
@@ -41,7 +41,6 @@ public class BoardInfoService {
     private final MemberUtil memberUtil;
     private final ModelMapper modelMapper;
     private final Utils utils; // 모바일여부 확인위함 -> 설정달리할려고
-
 
     /**
      * 게시글 한개 조회
@@ -62,8 +61,9 @@ public class BoardInfoService {
         return getForm(get(seq));
     }
 
-    /***
+    /**
      * 수정 처리시 커맨드 객체 RequestBoard로 변환
+     *
      * @param item
      * @return
      */
@@ -99,7 +99,7 @@ public class BoardInfoService {
         BooleanBuilder andBuilder = new BooleanBuilder();
         QBoardData boardData = QBoardData.boardData;
 
-        // 게시판 아이디 / 검색조건 추가
+        // 게시판 아이디
         if (bids != null && !bids.isEmpty()) {
             andBuilder.and(boardData.board.bid.in(bids));
         }
@@ -110,14 +110,15 @@ public class BoardInfoService {
             andBuilder.and(boardData.category.in(categories));
         }
 
-        /***
+
+        /**
          * 키워드 검색
-         * sopt
-         *  - ALL - 제목 + 내용 + 작성자(작성자 + 이메일 + 회원명) // sopt값이 없을땐 ALL로 고정할거임
-         *  - SUBJECT - 제목만
-         *  - CONTENT - 내용만
-         *  - SUBJECT_CONTENT - 제목 + 내용
-         *  - POSTER - 작성자 + 이메일 + 회원명
+         *  sopt
+         *      - ALL - 제목 + 내용 + 작성자(작성자 + 이메일 + 회원명)
+         *      - SUBJECT - 제목
+         *      - CONTENT - 내용
+         *      - SUBJECT_CONTENT - 제목 + 내용
+         *      - POSTER - 작성자 + 이메일 + 회원명
          */
         String sopt = search.getSopt();
         String skey = search.getSkey();
@@ -127,7 +128,8 @@ public class BoardInfoService {
 
             StringExpression subject = boardData.subject;
             StringExpression content = boardData.content;
-            StringExpression poster = boardData.poster.concat(boardData.member.name).concat(boardData.member.email);
+            StringExpression poster = boardData.poster.concat(boardData.member.name)
+                    .concat(boardData.member.email);
 
             StringExpression condition = null;
             if (sopt.equals("SUBJECT")) { // 제목 검색
@@ -136,14 +138,13 @@ public class BoardInfoService {
                 condition = content;
             } else if (sopt.equals("SUBJECT_CONTENT")) { // 제목 + 내용
                 condition = subject.concat(content);
-            } else if (sopt.equals("POSTER")) {
+            } else if (sopt.equals("POSTER")){
                 condition = poster;
             } else { // 통합 검색
                 condition = subject.concat(content).concat(poster);
             }
 
             andBuilder.and(condition.contains(skey));
-
         }
 
         // 회원 이메일
@@ -151,7 +152,6 @@ public class BoardInfoService {
         if (emails != null && !emails.isEmpty()) {
             andBuilder.and(boardData.member.email.in(emails)); // 특정회원의 이메일로 조회해서 모아볼려고 추가
         }
-
 
         /* 검색 처리 E */
 
@@ -178,11 +178,11 @@ public class BoardInfoService {
             } else if (field.equals("commentCount")) {
                 query.orderBy(direction.equalsIgnoreCase("DESC") ? boardData.commentCount.desc() : boardData.commentCount.asc());
             } else {
-                query.orderBy(boardData.notice.desc(),boardData.createdAt.desc());
+                query.orderBy(boardData.notice.desc(), boardData.createdAt.desc());
             }
 
         } else { // 기본 정렬 조건 - notice DESC, createdAt DESC
-            query.orderBy(boardData.notice.desc(),boardData.createdAt.desc());
+            query.orderBy(boardData.notice.desc(), boardData.createdAt.desc());
         }
 
         /* 정렬 조건 처리 E */
@@ -236,8 +236,9 @@ public class BoardInfoService {
         return getLatest(bid, 5);
     }
 
-    /***
+    /**
      * 로그인한 회원이 작성한 게시글 목록
+     *
      * @param search
      * @return
      */
@@ -264,8 +265,14 @@ public class BoardInfoService {
         List<FileInfo> editorImages = fileInfoService.getList(gid, "editor");
         item.setEditorImages(editorImages);
         item.setAttachFiles(fileInfoService.getList(gid, "attach"));
+
+        if (editorImages != null && !editorImages.isEmpty()) {
+            FileInfo selectedImage = editorImages.stream().filter(FileInfo::isSelected).findFirst().orElseGet(() -> editorImages.get(0));
+            item.setSelectedImage(selectedImage);
+        }
+
         // 게시판 파일 정보 E
-여기 수정
+
         // 이전, 다음 게시글
         if (isView) { // 보기 페이지 데이터를 조회하는 경우만 이전, 다음 게시글을 조회
             QBoardData boardData = QBoardData.boardData;
@@ -283,16 +290,40 @@ public class BoardInfoService {
 
             item.setPrev(prev);
             item.setNext(next);
-
         }
+
+        /* listable, writable, editable, mine 처리 S */
+
+        Board board = item.getBoard();
+        configInfoService.addInfo(board);
+
+        boolean listable = board.isListable();
+
+        boolean writable = board.isWritable();
+
+        Member member = item.getMember();
+        Member loggedMember = memberUtil.getMember();
+
+        boolean editable = member == null || (memberUtil.isLogin() && loggedMember.getEmail().equals(member.getEmail())); // 비회원게시글은 비밀번호 확인이 필요하므로 버튼 노출, 회원게시글 로그인한 회원과 일치하면 버튼 노출
+
+        boolean mine = request.getSession().getAttribute("board_" + item.getSeq()) != null
+                || (member != null && memberUtil.isLogin() && loggedMember.getEmail().equals(member.getEmail()));
+
+        item.setListable(listable);
+        item.setWritable(writable);
+        item.setEditable(editable);
+        item.setMine(mine);
+
+        /* listable, writable, editable, mine 처리 E */
     }
 
     private void addInfo(BoardData item) {
         addInfo(item, false);
     }
 
-    /***
+    /**
      * 게시글 번호와 게시판 아이디로 현재 페이지 구하기
+     *
      * @param seq
      * @param limit
      * @return

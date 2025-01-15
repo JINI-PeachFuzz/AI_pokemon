@@ -16,8 +16,9 @@ public class CommentDeleteService {
     private final CommentInfoService infoService;
     private final CommentUpdateService updateService;
 
-    /***
+    /**
      * 댓글 삭제
+     *
      * @param seq
      * @return
      */

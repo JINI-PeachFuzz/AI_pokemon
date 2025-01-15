@@ -2,7 +2,6 @@ package org.koreait.dl.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.koreait.dl.entities.TrainItem;
-
 import org.koreait.dl.services.PredictService;
 import org.koreait.dl.services.SentimentService;
 import org.koreait.dl.services.TrainService;
@@ -11,8 +10,6 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Random;
-import java.util.stream.IntStream;
 
 @Profile("dl")
 @RestController
@@ -25,13 +22,13 @@ public class ApiDlController {
     private final SentimentService sentimentService;
 
     @GetMapping("/data")
-    public List<TrainItem> sendData(@RequestParam(name = "mode", required = false) String mode) {
+    public List<TrainItem> sendData(@RequestParam(name="mode", required = false) String mode) {
         List<TrainItem> items = trainService.getList(mode != null && mode.equals("ALL"));
 
         return items;
     }
 
-    @GetMapping("/predict")
+    @PostMapping("/predict")
     public JSONData predict(@RequestParam("items") List<int[]> items) {
 
         int[] predictions = predictService.predict(items);
@@ -45,5 +42,4 @@ public class ApiDlController {
 
         return new JSONData(predictions);
     }
-
 }

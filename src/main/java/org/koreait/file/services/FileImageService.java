@@ -7,7 +7,6 @@ import org.koreait.file.repositories.FileInfoRepository;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
 import java.util.List;
 
 @Lazy

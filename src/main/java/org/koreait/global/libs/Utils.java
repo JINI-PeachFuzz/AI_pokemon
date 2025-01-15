@@ -51,7 +51,7 @@ public class Utils {
         String prefix = isMobile() ? "mobile" : "front"; // 모바일인지 프론트인지 구분할 수 있게 해줌
 
         if (config != null && config.getDevice() != Device.ALL) {
-            prefix = config.getDevice() == Device.MOBILE ?
+            prefix = config.getDevice() == Device.MOBILE ? "mobile" : "front";
         }
 
         return String.format("%s/%s", prefix, path);

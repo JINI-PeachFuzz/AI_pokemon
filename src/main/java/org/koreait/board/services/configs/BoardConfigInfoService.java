@@ -112,7 +112,7 @@ public class BoardConfigInfoService {
     }
 
     // 추가 정보처리 / 보드-엔티티-보드 하단 추가했음
-    private void addInfo(Board item) {
+    public void addInfo(Board item) {
         String category = item.getCategory();
         if (StringUtils.hasText(category)) {
             List<String> categories = Arrays.stream(category.split("\\n"))

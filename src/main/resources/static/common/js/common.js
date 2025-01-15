@@ -226,15 +226,27 @@ commonLib.insertEditorImage = function(imageUrls, editor) {
     editor.execute('insertImage', { source: imageUrls }); // insertImage 이미 정해져있는 명령어! / location 값이랑 fileName, seq, file URL 이 필요함
 };
 
-commonLib.selectImage = function(seq)
-for (const el of showPopups) {
-        el.addEventListener("click", function() {
-            const { url, width, height } = this.dataset;
-            commonLib.popup(url, width, height);
-        });
-    }
-    이부분 확인해보기
+/**
+* 목록 노출 메인이미지 선택
+*
+*/
+commonLib.selectImage = function(seq) {
+    const { ajaxLoad } = commonLib;
+    const items = document.querySelectorAll(".image-item");
+    items.forEach(i => i.classList.remove("on"));
 
+    const el = document.getElementById(`file-${seq}`);
+
+    (async () => {
+        try {
+             await ajaxLoad(`/api/file/select/${seq}`);
+             el.classList.add("on");
+
+        } catch (err) {
+            console.error(err);
+        }
+    })();
+};
 
 window.addEventListener("DOMContentLoaded", function() {
     // 체크박스 전체 토글 기능 S
@@ -253,8 +265,6 @@ window.addEventListener("DOMContentLoaded", function() {
         });
     }
     // 체크박스 전체 토글 기능 E
-
-
 
     // 팝업 버튼 클릭 처리 S
     const showPopups = document.getElementsByClassName("show-popup");

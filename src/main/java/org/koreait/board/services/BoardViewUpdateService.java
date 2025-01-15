@@ -1,7 +1,9 @@
 package org.koreait.board.services;
 
 import lombok.RequiredArgsConstructor;
-import org.koreait.board.entities.*;
+import org.koreait.board.entities.BoardData;
+import org.koreait.board.entities.BoardView;
+import org.koreait.board.entities.QBoardView;
 import org.koreait.board.repositories.BoardDataRepository;
 import org.koreait.board.repositories.BoardViewRepository;
 import org.koreait.global.libs.Utils;
@@ -17,7 +19,7 @@ public class BoardViewUpdateService {
     private final Utils utils;
 
     public long process(Long seq) {
-        BoardData item = boardDataRepository.findById(seq).orElse(null); // 얘는 예외발생은 안하고 없으면 없는대로 넘기는걸로 처리할 거
+        BoardData item = boardDataRepository.findById(seq).orElse(null);// 얘는 예외발생은 안하고 없으면 없는대로 넘기는걸로 처리할 거
         if (item == null) return 0L;
 
         try {
@@ -25,7 +27,6 @@ public class BoardViewUpdateService {
             view.setSeq(seq);
             view.setHash(utils.getMemberHash());
             boardViewRepository.saveAndFlush(view);
-
         } catch (Exception e) {}
 
         // 조회수 업데이트

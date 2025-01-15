@@ -7,8 +7,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.koreait.file.constants.FileStatus;
 import org.koreait.file.entities.FileInfo;
@@ -16,7 +14,6 @@ import org.koreait.file.services.*;
 import org.koreait.global.exceptions.BadRequestException;
 import org.koreait.global.libs.Utils;
 import org.koreait.global.rests.JSONData;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
@@ -26,7 +23,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.*;
 import java.nio.file.Files;
 import java.util.List;
-
 
 // API가 붙어있으면 레스트임 JSON형태를 많이 사용하기 떄문에 그 형태로 만들어주는거
 @Tag(name="파일 API", description = "파일 업로드, 조회, 다운로드, 삭제기능을 제공합니다.")
@@ -48,6 +44,8 @@ public class ApiFileController {
     private final FileDoneService doneService;
 
     private final ThumbnailService thumbnailService;
+
+    private final FileImageService imageService;
 
     /**
      * 파일 업로드
@@ -113,7 +111,7 @@ public class ApiFileController {
     public JSONData list(@PathVariable("gid") String gid,
                          @PathVariable(name = "location", required = false) String location, // required=false 필수아니면 false / gid는 필순데 이거는 필수아님!
                          @RequestParam(name = "status", defaultValue = "DONE") FileStatus status) { // "DONE"으로 하면 완료된것만 보임
-// @RequestParam**은 Spring MVC에서 사용되는 어노테이션으로, HTTP 요청의 파라미터를 컨트롤러 메서드의 매개변수로 전달하는 데 사용됩니다. 주로 GET 요청의 쿼리 파라미터나 POST 요청의 폼 데이터를 처리할 때 사용됩니다. // FileStatus을 파일 완료와 미완에대해서 정의해놨음
+// @RequestParam**은 Spring MVC에서 사용되는 어노테이션으로, HTTP 요청의 파라미터를 컨트롤러 메서드의 매개변수로 전달하는 데 사용됨. 주로 GET 요청의 쿼리 파라미터나 POST 요청의 폼 데이터를 처리할 때 사용. // FileStatus에 파일 완료와 미완에대해서 정의해놨음
 
         List<FileInfo> items = infoService.getList(gid, location, status);
 

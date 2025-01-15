@@ -28,7 +28,6 @@ public class ThumbnailService {
     private final RestTemplate restTemplate;
 
 
-
     public String create(RequestThumb form) {
 
         Long seq = form.getSeq();
@@ -40,8 +39,8 @@ public class ThumbnailService {
         File file = new File(thumbPath);
         if (file.exists()) { // 이미 Thumbnail 이미지를 만든 경우
             return thumbPath; // 매번 요청할때마다 만드는것도 부담! / 그래서 한번만든건 그래도 남아있게!
-
         }
+
         try {
             if (seq != null && seq > 0L) { // 서버에 올라간 파일
                 FileInfo item = infoService.get(seq);
@@ -53,7 +52,6 @@ public class ThumbnailService {
                 String original = String.format("%s_original", thumbPath);
                 byte[] bytes = restTemplate.getForObject(URI.create(url), byte[].class);
                 Files.write(Paths.get(original), bytes);// URI.create(url) : url이미지를 바이트로 받음
-
 
                 Thumbnails.of(original)
                         .size(width, height)

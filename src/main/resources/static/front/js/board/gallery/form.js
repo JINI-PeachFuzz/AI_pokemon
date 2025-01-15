@@ -1,10 +1,8 @@
-// 후속처리에 대한 부분을 정의할 거임
 window.addEventListener("DOMContentLoaded", function() {
     const { loadEditor } = commonLib;
 
     loadEditor("content", 350)
         .then(editor => window.editor = editor);
-
 
         // 이미지 본문 추가 이벤트 처리
         const insertEditors = document.querySelectorAll(".insert-editor")
@@ -15,8 +13,8 @@ window.addEventListener("DOMContentLoaded", function() {
         // 목록 노출 이미지 선택 처리
         const selectImages = document.querySelectorAll(".select-image");
         selectImages.forEach(el => {
-            el.addEventListener("click", e=> commonLib.selectImage(e.currentTarget.))
-        })
+            el.addEventListener("click", e => commonLib.selectImage(e.currentTarget.dataset.seq));
+        });
 
         // 파일 삭제 버튼 이벤트 처리
         const removeEls = document.querySelectorAll(".file-item .remove");
@@ -62,7 +60,7 @@ function callbackFileUpload(files) {
         html = html.replace(/\[seq\]/g, seq) // 치환코드 /\[\]/g
                    .replace(/\[fileName\]/g, fileName)
                    .replace(/\[fileUrl\]/g, fileUrl)
-                   .replace(/\[thumbUrl\]/g, thumbUrl)
+                   .replace(/\[thumbUrl\]/g, `${thumbUrl}&width=100&height=50`)
                    .replace(/\[addClass\]/g, addClass);
 
         const dom = domParser.parseFromString(html, "text/html"); // 돔파셔객체로 변환되어있을거임
@@ -74,6 +72,7 @@ function callbackFileUpload(files) {
             if (!confirm('정말 삭제하겠습니까?')) {
                 return;
             }
+
             const { fileManager } = commonLib;
             fileManager.delete(seq, () => {
                 el.parentElement.removeChild(el);
@@ -84,11 +83,11 @@ function callbackFileUpload(files) {
            imageUrls.push(fileUrl); // 첨부할 이미지의 주소
 
            insertEditor.addEventListener("click", () => insertEditorImage(fileUrl));
-           if (selectImageEl) { // 리스트 노출 메일 이미지 선택 처리
-                selectImageEl.addEventListner("click", ()=> commonLib.selectImage(seq));
-           }
+          if (selectImageEl) { // 리스트 노출 메일 이미지 선택 처리
+            selectImageEl.addEventListener("click", () => commonLib.selectImage(seq));
+          }
 
-           targetEditor.append(el); // 데이터쪽에 추가하는 거
+          targetEditor.append(el); // 데이터쪽에 추가하는 거
 
 
         } else {
@@ -97,25 +96,9 @@ function callbackFileUpload(files) {
 
             targetAttach.append(el); // 첨부파일에 추가하는 거
         }
-
    } // endfor
 
    if (imageUrls.length > 0) { // 에디터에 추가할 이미지
        insertEditorImage(imageUrls);
    }
-}
-
-/**
-목록 노출 메인이미지 선택
-**/
-function selectImage(seq) {
-    const { ajaxLoad } = commonLib;
-    const items = document.querySelectorAll(".image-item");
-    items.forEach
-
-    (async () => {
-        try {
-        }
-    })
-
 }

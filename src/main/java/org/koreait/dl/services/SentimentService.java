@@ -37,7 +37,7 @@ public class SentimentService {
 
             process.waitFor();
 
-            return om.readValue(in.readAllBytes(), double[].class); // 더블형태로 반환값이 나올 거임
+            return om.readValue(in.readAllBytes(), double[].class);// 더블형태로 반환값이 나올 거임
 
         } catch (Exception e) {
             e.printStackTrace();

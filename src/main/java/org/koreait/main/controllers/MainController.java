@@ -1,6 +1,5 @@
 package org.koreait.main.controllers;
 
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.koreait.global.libs.Utils;
 import org.springframework.stereotype.Controller;
@@ -23,8 +22,10 @@ public class MainController {
         return List.of("board/gallery/style", "main/style");
     }
 
-    @ModelAttribute
-    d
+    @ModelAttribute("addScript")
+    public List<String> addScript() {
+        return List.of("main/common");
+    }
 
     @GetMapping
     public String index(Model model) {

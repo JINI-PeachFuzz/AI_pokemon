@@ -18,7 +18,6 @@ import java.util.List;
 
 import static org.springframework.data.domain.Sort.Order.asc;
 
-
 @Lazy
 @Service
 @Profile("dl") // dl이라는게 있으면 선별적으로 빈을 만들어서 하겠다.
@@ -39,17 +38,20 @@ public class TrainService {
     @Scheduled(cron="0 0 1 * * *") // 새벽 1시 마다 훈련
     public void process() {
         try {
-            ProcessBuilder builder = new ProcessBuilder(runPath, scriptPath + "train.py", dataUrl + "?mode=ALL", dataUrl); // 전체데이터+학습데이터
+            ProcessBuilder builder = new ProcessBuilder(runPath, scriptPath + "train.py", dataUrl + "?mode=ALL", dataUrl);
+            // 전체데이터+학습데이터
             Process process = builder.start();
             int exitCode = process.waitFor();
             System.out.println(exitCode);
 
         } catch (Exception e) {}
     }
+
     // 훈련기록 기억
     public void log(TrainItem item) {
         repository.saveAndFlush(item);
     }
+
 
     public List<TrainItem> getList(boolean isAll) {
 

@@ -26,7 +26,8 @@ public class BoardConfigUpdateService {
 
         String bid = form.getBid();
 
-        Board board = boardRepository.findById(bid).orElseGet(Board::new); // 있으면 엔티티가져오고 없으면 추가한다 // 영속성
+        Board board = boardRepository.findById(bid).orElseGet(Board::new);
+        // 있으면 엔티티가져오고 없으면 추가한다 // 영속성
 
         // RequestBoard 참고 / 기본값설정
 
@@ -49,6 +50,8 @@ public class BoardConfigUpdateService {
 
         String locationAfterWriting = form.getLocationAfterWriting();
         board.setLocationAfterWriting(StringUtils.hasText(locationAfterWriting) ? locationAfterWriting : "list");
+
+        board.setListUnderView(form.isListUnderView());
 
         boardRepository.saveAndFlush(board);
     }

@@ -2,6 +2,7 @@ package org.koreait.board.validators;
 
 import lombok.RequiredArgsConstructor;
 import org.koreait.board.controllers.RequestBoard;
+import org.koreait.board.entities.BoardData;
 import org.koreait.board.entities.QCommentData;
 import org.koreait.board.repositories.BoardDataRepository;
 import org.koreait.board.repositories.CommentDataRepository;
@@ -10,6 +11,7 @@ import org.koreait.global.libs.Utils;
 import org.koreait.global.validators.PasswordValidator;
 import org.koreait.member.libs.MemberUtil;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
@@ -25,7 +27,7 @@ public class BoardValidator implements Validator, PasswordValidator {
     private final Utils utils;
     private final BoardDataRepository boardDataRepository;
     private final CommentDataRepository commentDataRepository;
-    private final
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public boolean supports(Class<?> clazz) {
@@ -62,17 +64,34 @@ public class BoardValidator implements Validator, PasswordValidator {
         }
     }
 
-    /***
-     * 게시글 삭제 가능 여부 체크
-     * - 댓글이 존재하면 삭제 불가
+    /**
+     * 비회원 비밀번호 체크
+     *
+     * @param password
      * @param seq
      */
-    public  void checkDelete(Long seq) {
+    public boolean checkGuestPassword(String password, Long seq) {
+        if (seq == null) return false;
+
+        BoardData item = boardDataRepository.findById(seq).orElse(null);
+
+        if (item != null && StringUtils.hasText(item.getGuestPw())) {
+            return passwordEncoder.matches(password, item.getGuestPw());
+        }
+
+        return false;
+    }
+
+    /**
+     * 게시글 삭제 가능 여부 체크
+     *  - 댓글이 존재하면 삭제 불가
+     * @param seq
+     */
+    public void checkDelete(Long seq) {
         QCommentData commentData = QCommentData.commentData;
 
         if (commentDataRepository.count(commentData.data.seq.eq(seq)) > 0L) {
-            throw new AlertBackException(utils)
+            throw new AlertBackException(utils.getMessage("Exist.comment"));
         }
-
     }
 }

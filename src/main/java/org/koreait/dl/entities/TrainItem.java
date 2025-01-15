@@ -8,7 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.koreait.global.entities.BaseEntity;
-// 추천시스템
+
 @Data
 @Entity
 @Builder
@@ -28,5 +28,4 @@ public class TrainItem extends BaseEntity {
     private int item9;
     private int item10;
     private int result; // item은 실수여도 되는데 result는 정수로 나오게 할거임
-
 }
