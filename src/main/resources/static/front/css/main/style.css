@@ -6,6 +6,7 @@
 .main-banner a {
     position: relative;
     display: block;
+    height: 768px;
 }
 
 .main-banner .banner1 {
@@ -24,19 +25,19 @@
 }
 
 @media screen and (max-width: 1000px) {
-    .main-banner .banner {
+    .main-banner .banner, .main-banner a {
         height: 650px;
     }
 }
 
 @media screen and (max-width: 900px) {
-    .main-banner .banner {
+    .main-banner .banner, .main-banner a {
             height: 600px;
         }
 }
 
 @media screen and (max-width: 700px) {
-    .main-banner .banner {
+    .main-banner .banner, .main-banner a {
             height: 550px;
         }
 }
@@ -52,5 +53,56 @@
     cursor: pointer;
     color: #fff;
     text-align: center;
+    line-height: 61px; /*border 1px이 있어서 위아래로 1씩 빼면 61로 했을 때 가운데 옴*/
+    transform: skew(-20deg);
 }
+
+.main-banner .more-button::after {
+    content: '';
+    width: 10px;
+    height: 20px;
+    background:url('../../images.icon_more.png') no-repeat center center;
+    position: absolute;
+    right: 70px;
+    top: calc(50% - 10px);
+    transform: skew(20deg);
+}
+
+.main-banner .more-button > span {
+    color: #fff;
+    transform: skew(20deg);
+    display: block; /*블록형태여야 반영되어서 마름모에서 원래대로 돌아옴*/
+    font-size: 1.62rem;
+    font-weight: 700;
+}
+
+.main-banner .swiper-button-prev , .main-banner .swiper-button-next{
+    width:86px;
+    height:86px;
+    opacity: 1;
+    top: calc(50% -43px);
+
+}
+
+.main-banner .swiper-button-prev {
+    background: transparent url('../../images/prev.png') no-repeat center center;
+    left: 50px;
+}
+
+.main-banner .swiper-button-prev::after, .main-banner .swiper-button-next::after {
+    display: none;
+}
+
+.main-banner .swiper-button-next {
+    background: transparent url('../../images/next.png') no-repeat center center;
+    right: 50px;
+}
+
 /* 메인 배너 E */
+
+/* 새로운 소식 S */
+.latest-news {
+    background:url('../../images/main/bg_pattern.jpg');
+}
+
+/* 새로운 소식 E */
