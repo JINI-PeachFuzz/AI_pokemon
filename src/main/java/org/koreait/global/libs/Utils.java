@@ -129,10 +129,19 @@ public class Utils {
     }
 
     public String showImage(Long seq, int width, int height, String className) {
+        if (seq == null) {
+            String url = getUrl("/common/images/no_image.png");
+            return showImage(null, url, width,height, "image", className);
+        }
+
         return showImage(seq, null, width, height, "image", className);
     }
 
     public String showBackground(Long seq, int width, int height, String className) {
+        if (seq == null) {
+            String url = getUrl("/common/images/no_image.png");
+            return showImage(null, url, width,height, "background", className);
+        }
         return showImage(seq, null, width, height, "background", className);
     }
 
@@ -165,7 +174,10 @@ public class Utils {
                 imageUrl = String.format("%s/api/file/thumb?url=%s&width=%d&height=%d", request.getContextPath(), url, width, height);
             } // url을 가지고 썸네일을 만듦
 
-            if(!StringUtils.hasText(imageUrl)) return "";
+            if(!StringUtils.hasText(imageUrl)) {
+                imageUrl = String.format("%s/common/images/no_image.png", request.getContextPath());
+                // 이렇게 하면 추가한 이미지가 나옴 return "" 에서 변경했음
+            }
 
             mode = Objects.requireNonNullElse(mode, "image");
             className = Objects.requireNonNullElse(className, "image");
