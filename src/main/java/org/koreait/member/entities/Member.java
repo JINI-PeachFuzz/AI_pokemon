@@ -15,6 +15,14 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+Member Entity
+
+//@JsonIgnore // 순환 참조 발생 방지용
+//@ToString.Exclude
+//@OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
+//// 관계의 주인은 Many 쪽인 Authorities_member
+//private List<Authorities> authorities; // 회원쪽에서도 권한 조회 가능하도록
+
 @Data
 @Entity
 public class Member extends BaseEntity implements Serializable {
