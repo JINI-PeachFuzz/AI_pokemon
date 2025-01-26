@@ -81,7 +81,7 @@ public class SecurityConfig {
         return http.build(); // 설정 무력화
     }
 
-    @Bean
+    @Bean // 스프링의 관리를 받고있음 // 콩깍지가 스프링!
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }

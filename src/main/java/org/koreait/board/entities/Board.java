@@ -11,8 +11,8 @@ import java.util.List;
 // RequestBoard 참고
 // 게시판 설정
 
-@Data
-@Entity
+    @Data
+    @Entity
 public class Board extends BaseMemberEntity implements Serializable { // 직렬화를 하기때문에 Serializable 필요
     @Id
     @Column(length=30)
