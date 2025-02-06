@@ -15,7 +15,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-Member Entity
+
 
 //@JsonIgnore // 순환 참조 발생 방지용
 //@ToString.Exclude
