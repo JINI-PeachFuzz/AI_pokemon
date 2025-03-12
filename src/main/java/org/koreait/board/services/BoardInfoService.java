@@ -57,10 +57,10 @@ public class BoardInfoService {
         return item;
     }
 
+
     public RequestBoard getForm(Long seq) {
         return getForm(get(seq));
     }
-
     /**
      * 수정 처리시 커맨드 객체 RequestBoard로 변환
      *
@@ -216,16 +216,28 @@ public class BoardInfoService {
      * @return
      */
     public List<BoardData> getLatest(String bid, String category, int limit) {
-        BoardSearch search = new BoardSearch();
-        search.setLimit(limit); // 리밋은 게시글갯수
-        search.setBid(List.of(bid));
-        search.setCategory(category == null ? null : List.of(category)); // 없을수도 있기 때문에 null조건을 추가했음
+//        BoardSearch search = new BoardSearch();
+//        search.setLimit(limit); // 리밋은 게시글갯수
+//        search.setBid(List.of(bid));
+//        search.setCategory(category == null ? null : List.of(category)); // 없을수도 있기 때문에 null조건을 추가했음
+//
+//        ListData<BoardData> data = getList(search);
+//
+//        List<BoardData> items = data.getItems();
+//        return items == null ? List.of() : items;
 
-        ListData<BoardData> data = getList(search);
+        try {
+            BoardSearch search = new BoardSearch();
+            search.setLimit(limit);
+            search.setBid(List.of(bid));
+            search.setCategory(category == null ? null : List.of(category));
 
-        List<BoardData> items = data.getItems();
-        return items == null ? List.of() : items;
+            ListData<BoardData> data = getList(search);
 
+            List<BoardData> items = data.getItems();
+            return items == null ? List.of() : items;
+        } catch (Exception e) {}
+        return List.of();
     }
 
     public List<BoardData> getLatest(String bid, int limit) {
