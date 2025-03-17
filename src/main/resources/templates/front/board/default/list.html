@@ -3,7 +3,7 @@
 <th:block th:fragment="skin" th:object="${board}">
     <div th:replace="~{front/board/default/_title::title}"></div>
 
-    <form id="frmSearch" name="frmSearch" method="GET" th:action="@{/board/list/{bid}(bid=*{bid})}" autocomplete="off" th:object="${boardSearch}">
+    <form id="frmSearch" class='layout-width' name="frmSearch" method="GET" th:action="@{/board/list/{bid}(bid=*{bid})}" autocomplete="off" th:object="${boardSearch}">
         <input type="hidden" name="sort" th:field="*{sort}">
         <input type="hidden" name="category" th:field="*{category}">
 
@@ -20,7 +20,9 @@
 
     <nav th:replace="~{front/board/default/_category::category}"></nav>
 
-    <th:block th:replace="~{front/board/default/_items::items(items=${items})}"></th:block>
-    <th:block th:replace="~{common/_pagination::pagination}"></th:block>
+    <div class="layout-width post-items">
+        <th:block th:replace="~{front/board/default/_items::items(items=${items})}"></th:block>
+        <th:block th:replace="~{common/_pagination::pagination}"></th:block>
+    </div>
 </th:block>
 </html>
