@@ -247,7 +247,6 @@ public class BoardInfoService {
     public List<BoardData> getLatest(String bid) {
         return getLatest(bid, 5);
     }
-
     /**
      * 로그인한 회원이 작성한 게시글 목록
      *

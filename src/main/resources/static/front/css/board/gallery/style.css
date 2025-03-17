@@ -31,20 +31,20 @@
     margin-bottom: 40px;
     font-weight: 500;
     font-size: 1.539rem;
-    letter-spacing: -1px;/*글자간격*/
+    letter-spacing: -1px; /*글자간격*/
 }
 
-..gallery-items .post-info {
-     position: absolute;
-     bottom: 20px;
-     left: 20px;
-     color: #666;
-     font-size: 1.077rem;
- }
+.gallery-items .post-info {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    color: #666;
+    font-size: 1.077rem;
+}
 
 .gallery-items .post-info * { /*하위 모두!*/
-color: #666;
-font-size: 1.077rem;
+    color: #666;
+    font-size: 1.077rem;
 }
 
 .gallery-items .post-date::before {
@@ -66,3 +66,4 @@ font-size: 1.077rem;
     border-radius: 20px;
     background: #0080FF url('../../../images/icon_go.png') no-repeat center bottom 14px;
 }
+
