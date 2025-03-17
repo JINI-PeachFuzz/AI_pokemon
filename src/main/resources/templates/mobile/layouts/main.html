@@ -7,19 +7,18 @@
     <meta name="keywords" th:if="*{keywords != null}" th:content="*{keywords}">
     <meta name="description" th:if="*{description != null}" th:content="*{description}">
     <meta name="_csrf" th:content="${_csrf.token}">
-    <meta name="_csrf_header" th:content="${_csrf.headerName}">
-    <!--   csrf가 토큰 검증 방식 관련 내용 / 기본 검증이라 다 들어감    -->
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">  <!--csrf가 토큰 검증 방식 관련 내용 / 기본 검증이라 다 들어감-->
     <meta name="rootUrl" th:content="@{/}">
     <meta th:if="${@memberUtil.isLogin()}" name="user" th:content="${profile.email}">
+    <!--<title th:if="${pageTitle != null}" th:text="${pageTitle}">-->
 
-    <!--    <title th:if="${pageTitle != null}" th:text="${pageTitle}">-->
     <title>
         <th:block th:if="${pageTitle != null}"
         th:text="${#strings.concat(pageTitle, ' - ')}"></th:block>
         <th:block th:text="*{siteTitle}"></th:block>
     </title>
 
-    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/xeicon/2/xeicon.min.css">
     <link rel="stylesheet" type="text/css" th:href="@{/common/css/style.css?v={v}(v=*{cssVersion})}">
 
     <th:block th:if="${addCommonCss != null}">
@@ -64,5 +63,7 @@
 <main layout:fragment="content"></main>
 
 <footer th:replace="~{mobile/outlines/_footer::common}"></footer>
+
+<iframe name="ifrmProcess" class="dn"></iframe>
 </body>
 </html>
