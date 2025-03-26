@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.koreait.member.entities.Member;
 import org.koreait.wishlist.constants.WishType;
-import org.koreait.wishlist.entitis.WishId;
+
 
 @Data
 @Entity
