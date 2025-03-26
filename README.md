@@ -50,7 +50,7 @@ Anonymous 프로젝트 (MSA 기반 실전 적용) 진행 중
 ![img_7.png](src/main/resources/static/front/images/img_7.png)
 ![img11.png](src/main/resources/static/front/images/img11.png)
 - 찜한 목록 확인 ( 포켓몬, 게시글 ) / 포켓몬 이미지 좌측 상단에 하트로 구분 / 재 클릭시 즐겨찾기 해제
-![img_5.png](src/main/resources/static/front/images/img_5.png)
+![img_10.png](src/main/resources/static/front/images/img_10.png)
 
 - 회원 정보 수정 : 프로필이미지, 비밀번호/비밀번호 확인, 닉네임, 주소 / 이메일 수정 불가
 
