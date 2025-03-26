@@ -48,7 +48,7 @@ Anonymous 프로젝트 (MSA 기반 실전 적용) 진행 중
 - 쪽지함 ( 보낸 쪽지, 받은 쪽지 확인 )
 ![img_6.png](src/main/resources/static/front/images/img_6.png)
 ![img_7.png](src/main/resources/static/front/images/img_7.png)
-![img_8.png](src/main/resources/static/front/images/img_8.png)
+![img11.png](src/main/resources/static/front/images/img11.png)
 - 찜한 목록 확인 ( 포켓몬, 게시글 ) / 포켓몬 이미지 좌측 상단에 하트로 구분 / 재 클릭시 즐겨찾기 해제
 ![img_5.png](src/main/resources/static/front/images/img_5.png)
 
