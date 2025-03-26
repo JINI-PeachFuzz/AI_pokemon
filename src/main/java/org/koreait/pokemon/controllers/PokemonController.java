@@ -26,7 +26,6 @@ public class PokemonController {
     private final Utils utils;
     private final PokemonInfoService infoService;
 
-
     @GetMapping("/list")
     public String list(@ModelAttribute PokemonSearch search, Model model) {
         commonProcess("list", model);
@@ -41,7 +40,7 @@ public class PokemonController {
     @GetMapping("/view/{seq}")
     public String view(@PathVariable("seq") Long seq, Model model) {
         Pokemon item = infoService.get(seq);
-        model.addAttribute("item",item);
+        model.addAttribute("item", item);
 
         commonProcess("view", model);
         return utils.tpl("pokemon/view");
@@ -66,8 +65,7 @@ public class PokemonController {
             Pokemon item = (Pokemon) model.getAttribute("item");
             if (item != null) {
                 pageTitle = String.format("%s - %s", item.getName(), pageTitle);
-            } // 상단에 마이페이지라던지 나오는걸 포켓몬이름 - 포켓몬 도감으로 나오게!
-
+            }
         }
 
         model.addAttribute("pageTitle", pageTitle);

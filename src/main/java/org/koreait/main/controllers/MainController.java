@@ -1,7 +1,6 @@
 package org.koreait.main.controllers;
 
 import lombok.RequiredArgsConstructor;
-import org.koreait.board.services.BoardInfoService;
 import org.koreait.global.libs.Utils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,7 +16,6 @@ import java.util.List;
 public class MainController {
 
     private final Utils utils;
-    private final BoardInfoService infoService;
 
     @ModelAttribute("addCss")
     public List<String> addCss() {
@@ -31,6 +29,7 @@ public class MainController {
 
     @GetMapping
     public String index(Model model) {
+
 
         return utils.tpl("main/index");
     }

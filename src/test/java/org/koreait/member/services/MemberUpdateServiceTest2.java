@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ActiveProfiles({"default", "test"})
-@DisplayName("회원 정보 수정 기능 테스트") // 클래스명이 아니라 이걸로 변경됨.
+@DisplayName("회원 정보 수정 기능 테스트")
 public class MemberUpdateServiceTest2 {
 
     @Autowired
@@ -52,21 +52,19 @@ public class MemberUpdateServiceTest2 {
         service.process(form);
 
         Member member = repository.findByEmail(form.getEmail()).orElse(null);
-        profile = mapper.map(member, RequestProfile.class); // 여기서 통과되어야지 오류발생안함 / 기능적으로 문제없을거다란 뜻
+        profile = mapper.map(member, RequestProfile.class);
     }
 
     @Test
-    @DisplayName("회원정보 수정 성공시 예외가 발생하지 않는 테스트") // 어떤 테스트인지 설명을 달 수 있음
-    @WithUserDetails(value = "user01@test.org", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @DisplayName("회원정보 수정 성공시 예외가 발생하지 않는 테스트")
+    @WithUserDetails(value="user01@test.org", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     void updateSuccessTest() {
-        profile.setName("(수정)이이름"); // 변경한 회원데이터도 반영이 잘되는지 테스트
+        profile.setName("(수정)이이름");
         assertDoesNotThrow(() -> {
             service.process(profile);
         });
 
         Member member = repository.findByEmail(profile.getEmail()).orElse(null);
-
-        assertEquals(profile.getName(), member.getName()); // 예상했던게 통과되는지 확인
-
+        assertEquals(profile.getName(), member.getName());
     }
 }

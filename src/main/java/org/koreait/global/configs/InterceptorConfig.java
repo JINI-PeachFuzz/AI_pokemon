@@ -14,7 +14,6 @@ public class InterceptorConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(commonInterceptor);// 공통 인터셉터, 모든 주소에 적용
-//                .addPathPatterns("/**") <- 모두 적용은 경로 생략가능
+        registry.addInterceptor(commonInterceptor); // 공통 인터셉터, 모든 주소에 적용
     }
 }

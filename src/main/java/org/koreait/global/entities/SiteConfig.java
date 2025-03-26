@@ -5,7 +5,6 @@ import lombok.Data;
 import org.koreait.global.constants.Device;
 
 @Data
-// DB에 넣는 데이터 아님
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SiteConfig {
     private String siteTitle;

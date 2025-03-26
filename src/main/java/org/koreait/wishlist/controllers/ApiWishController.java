@@ -17,11 +17,9 @@ public class ApiWishController {
 
     @GetMapping({"/add", "/remove"})
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void process(@RequestParam("seq") Long seq, @RequestParam("type") WishType type) { // seq가 어떤거의 번호인지 모르니까 string
+    public void process(@RequestParam("seq") Long seq, @RequestParam("type") WishType type) {
         String mode = request.getRequestURI().contains("/remove") ? "remove" : "add";
 
         service.process(mode, seq, type);
-
     }
-
 }

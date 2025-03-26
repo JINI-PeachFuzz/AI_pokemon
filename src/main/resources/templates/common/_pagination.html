@@ -10,8 +10,9 @@
                 <i class="xi-angle-left"></i>
             </a>
         </th:block>
-        <a th:each="page : *{pages}" th:href="${page[1]}" th:text="${page[0]}" class="page" th:classappend="${(''+ pagination.page) == page[0]} ? 'on'"></a> <!-- 페이지번호, 쿼리 링크 int기 때문에 '' 로 문자열로 변형시킴-->
-<!--*{pages}" : 페이지네이션에서 겟페이지 구현한게 여기로 들어감-->
+
+        <a th:each="page : *{pages}" th:href="${page[1]}" th:text="${page[0]}" class="page" th:classappend="${('' + pagination.page) == page[0]} ? 'on'"></a>
+
         <th:block th:if="*{nextRangeFirstPage > 0}">
             <a th:href="*{#strings.concat(baseUrl, nextRangeFirstPage)}" class="page">
                 <i class="xi-angle-right"></i>

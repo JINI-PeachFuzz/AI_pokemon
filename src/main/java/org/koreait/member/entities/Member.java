@@ -15,14 +15,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-
-
-//@JsonIgnore // 순환 참조 발생 방지용
-//@ToString.Exclude
-//@OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
-//// 관계의 주인은 Many 쪽인 Authorities_member
-//private List<Authorities> authorities; // 회원쪽에서도 권한 조회 가능하도록
-
 @Data
 @Entity
 public class Member extends BaseEntity implements Serializable {
@@ -73,10 +65,10 @@ public class Member extends BaseEntity implements Serializable {
     @Column(length=65)
     private String socialToken; // 소셜 로그인 기본 ID
 
-    @JsonIgnore // 순환참조문제 발생해서 추가했음
-    @ToString.Exclude // 투스트링에서 배제하는거 // 순환참조가 나오는데 롬복때문에 // N+1문제
+    @JsonIgnore
+    @ToString.Exclude
     @OneToMany(mappedBy = "member")
-    private List<Authorities> authorities; // 역할을 중복으로 할 수 있게 복수로 구현했음
+    private List<Authorities> authorities;
 
     // 비밀번호 변경 일시
     private LocalDateTime credentialChangedAt;
@@ -86,7 +78,6 @@ public class Member extends BaseEntity implements Serializable {
 
     // 카카오 로그인 연동된 상태인지
     public boolean isKakaoConnected() {
-        // 소설이 아닐때는 연결해제를 해줘도 좋을 듯
         return socialChannel != null && socialChannel == socialChannel.KAKAO && StringUtils.hasText(socialToken);
     }
 }

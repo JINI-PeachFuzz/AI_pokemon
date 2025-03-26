@@ -15,7 +15,7 @@ public class ApiTest1 {
     private RestTemplate tpl;
 
     @BeforeEach
-    void init(){
+    void init() {
         tpl = new RestTemplate();
     }
 
@@ -23,12 +23,9 @@ public class ApiTest1 {
     void requestTest1() {
         String url = "https://pokeapi.co/api/v2/pokemon";
 
-        RestTemplate tpl = new RestTemplate();
-
         ApiResponse response = tpl.getForObject(URI.create(url), ApiResponse.class);
 
         System.out.println(response);
-
     }
 
     @Test
@@ -40,7 +37,7 @@ public class ApiTest1 {
     }
 
     @Test
-    void requestTest3(){
+    void requestTest3() {
         String url = "https://pokeapi.co/api/v2/pokemon-species/1";
         ApiPokemon response = tpl.getForObject(URI.create(url), ApiPokemon.class);
         System.out.println(response);

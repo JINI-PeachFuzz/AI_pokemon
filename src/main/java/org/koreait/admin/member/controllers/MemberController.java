@@ -24,7 +24,7 @@ import java.util.List;
 @ApplyErrorPage
 @RequiredArgsConstructor
 @RequestMapping("/admin/member")
-@Controller("adminMemberController") // 중복이 있기 때문에 이름바꿔준거!
+@Controller("adminMemberController")
 public class MemberController implements SubMenus {
 
     private final Utils utils;
@@ -113,7 +113,6 @@ public class MemberController implements SubMenus {
         return "admin/member/message";
     }
 
-
     /**
      * 공통 처리 부분
      *
@@ -148,4 +147,3 @@ public class MemberController implements SubMenus {
         model.addAttribute("addScript", addScript);
     }
 }
-        // 이렇게 했을 때 상단에 검정색배경으로 체크되고 사이트이름태그같은게 변경되었음

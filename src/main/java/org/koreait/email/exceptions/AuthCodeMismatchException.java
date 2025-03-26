@@ -6,6 +6,5 @@ public class AuthCodeMismatchException extends BadRequestException {
     public AuthCodeMismatchException() {
         super("Mismatch.authCode");
         setErrorCode(true);
-
     }
 }

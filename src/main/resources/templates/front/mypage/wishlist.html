@@ -5,8 +5,8 @@
 <section layout:fragment="content">
     <h1 th:text="#{My_WishList}"></h1>
     <nav>
-        <a th:href="@{/mypage/wishlist/POKEMON}" class="tab"  th:text="#{포켓몬}"></a>
-        <a th:href="@{/mypage/wishlist/BOARD}" class="tab" th:classappend="${mode != null && mode.name == 'BOARD' } ? 'on'" th:text="#{게시글}"></a>
+        <a th:href="@{/mypage/wishlist/POKEMON}" class="tab" th:classappend="${mode == null || mode.name == 'POKEMON'} ? 'on'" th:text="#{포켓몬}"></a>
+        <a th:href="@{/mypage/wishlist/BOARD}" class="tab" th:classappend="${mode != null && mode.name == 'BOARD'} ? 'on'" th:text="#{게시글}"></a>
     </nav>
 
     <th:block th:if="${mode != null && mode.name == 'BOARD'}">
@@ -15,6 +15,6 @@
     <th:block th:unless="${mode != null && mode.name == 'BOARD'}">
         <th:block th:replace="~{front/mypage/_wish_pokemon::pokemon}"></th:block>
     </th:block>
-    <th:block th:replace="~{common/_pagination::pagination}"></th:block> <!--페이지네이션에 찜하기가 있으니까!-->
+    <th:block th:replace="~{common/_pagination::pagination}"></th:block>
 </section>
 </html>

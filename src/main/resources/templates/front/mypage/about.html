@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{front/layouts/mypage}">
+<section layout:fragment="content">
+
+    <th:block th:replace="~{front/mypage/_member::member}"></th:block>
+
+    <th:block th:replace="~{front/mypage/_myPokemons::myPokemons}"></th:block>
+
+    <!--    <th:block th:replace="~{front/mypage/_followButton::followButton(seq=${seq})}"></th:block>-->
+
+</section>
+</html>

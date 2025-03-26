@@ -7,5 +7,5 @@ import java.util.List;
 
 @Data
 public class BoardConfigSearch extends CommonSearch {
-    private List<String> bid; // 게시판 id 가지고 찾는 기능추가
+    private List<String> bid;
 }

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="followButton">
+    <!--        <div class="item" th:unless="${items == null || items.isEmpty()}" th:each="item : ${items}" th:object="${item}">-->
+    <!--            <div>123123</div>-->
+    <!--            <th:block th:if="${isLogin}">-->
+    <!--                <button type="button" th:if="*{@followService.isFollowing(seq)}" class="follow_action unfollow" th:data-seq="*{seq}">UnFollow</button>-->
+    <!--                <button type="button" th:unless="*{@followService.isFollowing(seq)}" class="follow_action" th:data-seq="*{seq}">Follow</button>-->
+    <!--            </th:block>-->
+    <!--        </div>-->
+    <!--        <div class="item" th:if="${@memberUtil.isLogin() && profile != null}">-->
+
+    <div class="item" th:if="${profile != null}">
+        <th:block>
+            <button type="button" th:if="${@followService.isFollowing(seq)}" class="follow_action unfollow" th:data-seq="${seq}">UnFollow</button>
+            <button type="button" th:unless="${@followService.isFollowing(seq)}" th:class="${@memberUtil.isLogin ? 'follow_action' : 'follow_action guest'}" th:data-seq="${seq}">Follow</button>
+        </th:block>
+    </div>
+</th:block>
+</html>

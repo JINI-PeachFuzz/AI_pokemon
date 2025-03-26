@@ -40,7 +40,7 @@ public class BoardInfoService {
     private final HttpServletRequest request;
     private final MemberUtil memberUtil;
     private final ModelMapper modelMapper;
-    private final Utils utils; // 모바일여부 확인위함 -> 설정달리할려고
+    private final Utils utils;
 
     /**
      * 게시글 한개 조회
@@ -57,10 +57,10 @@ public class BoardInfoService {
         return item;
     }
 
-
     public RequestBoard getForm(Long seq) {
         return getForm(get(seq));
     }
+
     /**
      * 수정 처리시 커맨드 객체 RequestBoard로 변환
      *
@@ -68,32 +68,30 @@ public class BoardInfoService {
      * @return
      */
     public RequestBoard getForm(BoardData item) {
-        RequestBoard form = modelMapper.map(item, RequestBoard.class); // 이건 수정할때밖에 안쓰임
+        RequestBoard form = modelMapper.map(item, RequestBoard.class);
         form.setMode("edit");
-        form.setBid(item.getBoard().getBid()); // 게시글 수정시 오류발생 -> 값이 안들어가는거 확인하고 추가했음
+        form.setBid(item.getBoard().getBid());
 
         return form;
     }
 
-    /***
+    /**
      * 게시글 목록
+     *
      * @param search
      * @return
      */
     public ListData<BoardData> getList(BoardSearch search) {
-        // 조회를 위한 커맨드객체가 들어갈 예정
-        int page = Math.max(search.getPage(), 1); // 기본적으로 1페이지가 나올수 있게
+        int page = Math.max(search.getPage(), 1);
         Board board = null;
         int rowsPerPage = 0;
-        // 시작번호 오프셋도 만들어줘야함
-        List<String> bids = search.getBid(); // 이건 필수는 아님 / 그래서 값이 안들어올 수 있음
-        if (bids != null && bids.isEmpty()) {
+        List<String> bids = search.getBid();
+        if (bids != null && !bids.isEmpty()) {
             board = configInfoService.get(bids.get(0));
             rowsPerPage = board.getRowsPerPage();
         }
-
-        int limit = search.getLimit() > 0 ? search.getLimit() : rowsPerPage; // 예를 들면 10개 보기 / 기본설정대로 보여지지만 리미트가 몇인지에 따라서 그만큼보여주게 하는거
-        int offset = (page - 1 ) * limit; // 쿼리dsl을 사용하므로 이렇게 해줬음 / 검색 시작위치용
+        int limit = search.getLimit() > 0 ? search.getLimit() : rowsPerPage;
+        int offset = (page - 1) * limit;
 
         /* 검색 처리 S */
         BooleanBuilder andBuilder = new BooleanBuilder();
@@ -109,7 +107,6 @@ public class BoardInfoService {
         if (categories != null && !categories.isEmpty()) {
             andBuilder.and(boardData.category.in(categories));
         }
-
 
         /**
          * 키워드 검색
@@ -150,22 +147,19 @@ public class BoardInfoService {
         // 회원 이메일
         List<String> emails = search.getEmail();
         if (emails != null && !emails.isEmpty()) {
-            andBuilder.and(boardData.member.email.in(emails)); // 특정회원의 이메일로 조회해서 모아볼려고 추가
+            andBuilder.and(boardData.member.email.in(emails));
         }
 
         /* 검색 처리 E */
 
         JPAQuery<BoardData> query = queryFactory.selectFrom(boardData)
-                .leftJoin(boardData.board) // 지연로딩
-                .fetchJoin() // 바로가져오게 하는것도 추가
+                .leftJoin(boardData.board)
+                .fetchJoin()
                 .leftJoin(boardData.member)
                 .fetchJoin()
                 .where(andBuilder)
-                .offset(offset) // 쿼리dsl 그때 검색 시작위치용으로 필수
+                .offset(offset)
                 .limit(limit);
-
-//        .orderBy(boardData.notice.desc(), boardData.createdAt.desc()) // 1번이 가장 상단위치 / 우선 공지사항이 가장 상단에 표시되도록 했음
-//                .fetch(); // 쿼리빌딩
 
         /* 정렬 조건 처리 S */
         String sort = search.getSort();
@@ -191,14 +185,14 @@ public class BoardInfoService {
 
         long total = boardDataRepository.count(andBuilder);
 
-        items.forEach(this::addInfo); // 추가 정보 처리 // 추가 정보 처리도 필요하니까 이것도 추가해줬음
+        items.forEach(this::addInfo); // 추가 정보 처리
 
-        int ranges = utils.isMobile() ? 5 : 10; // 게시판 설정이 없을때
+        int ranges = utils.isMobile() ? 5 : 10;
         if (board != null) { // 게시판별 설정이 있는 경우
-            ranges = utils.isMobile() ? board.getPageRangesMobile() : board.getPageRanges(); // 게시판설정 가져옴 / 그래서 설정을 우선적으로 작업해야함
+            ranges = utils.isMobile() ? board.getPageRangesMobile() : board.getPageRanges();
         }
 
-        Pagination pagination = new Pagination(page, (int)total, ranges, limit, request); // 게시판설정반영을 추가한거
+        Pagination pagination = new Pagination(page, (int)total, ranges, limit, request);
 
         return new ListData<>(items, pagination);
     }
@@ -209,23 +203,14 @@ public class BoardInfoService {
         return getList(search);
     }
 
-    /***
+    /**
      * 게시판별 최신 게시글
+     *
      * @param bid
      * @param limit
      * @return
      */
     public List<BoardData> getLatest(String bid, String category, int limit) {
-//        BoardSearch search = new BoardSearch();
-//        search.setLimit(limit); // 리밋은 게시글갯수
-//        search.setBid(List.of(bid));
-//        search.setCategory(category == null ? null : List.of(category)); // 없을수도 있기 때문에 null조건을 추가했음
-//
-//        ListData<BoardData> data = getList(search);
-//
-//        List<BoardData> items = data.getItems();
-//        return items == null ? List.of() : items;
-
         try {
             BoardSearch search = new BoardSearch();
             search.setLimit(limit);
@@ -247,6 +232,7 @@ public class BoardInfoService {
     public List<BoardData> getLatest(String bid) {
         return getLatest(bid, 5);
     }
+
     /**
      * 로그인한 회원이 작성한 게시글 목록
      *
@@ -255,19 +241,19 @@ public class BoardInfoService {
      */
     public ListData<BoardData> getMyList(BoardSearch search) {
         if (!memberUtil.isLogin()) {
-            return new ListData<>(List.of(), null); // 오류방지를 위해 추가했음
+            return new ListData<>(List.of(), null);
         }
 
         Member member = memberUtil.getMember();
         String email = member.getEmail();
-        search.setEmail(List.of(email)); // 이렇게 하면 본인것만 나옴
+        search.setEmail(List.of(email));
 
         return getList(search);
     }
 
-    /***
+    /**
      * 추가 정보 처리
-     * // 파일, 이전게시글과 다음게시글의 정보
+     *
      * @param item
      */
     private void addInfo(BoardData item, boolean isView) {
@@ -291,11 +277,11 @@ public class BoardInfoService {
 
             BoardData prev = queryFactory.selectFrom(boardData)
                     .where(boardData.seq.lt(seq))
-                    .orderBy(boardData.seq.desc()) // 직전게시글이면 바로앞에 있는 걸 가져와여해서 내림차순
+                    .orderBy(boardData.seq.desc())
                     .fetchFirst();
 
             BoardData next = queryFactory.selectFrom(boardData)
-                    .where(boardData.seq.gt(seq)) // gt는 큰것중에서 가장 작은걸 가져와야해서 작은순으로 정렬
+                    .where(boardData.seq.gt(seq))
                     .orderBy(boardData.seq.asc())
                     .fetchFirst();
 
@@ -344,7 +330,7 @@ public class BoardInfoService {
         BooleanBuilder builder = new BooleanBuilder();
 
         builder.and(boardData.board.bid.eq(bid))
-                .and(boardData.seq.goe(seq)); // 크거나 같다 goe
+                .and(boardData.seq.goe(seq));
 
         long total = boardDataRepository.count(builder);
         int page = (int)Math.ceil((double)total / limit);

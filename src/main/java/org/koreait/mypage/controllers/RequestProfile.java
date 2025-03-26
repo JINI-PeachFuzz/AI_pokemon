@@ -28,7 +28,7 @@ public class RequestProfile {
     private String password;
     private String confirmPassword;
 
-    @NotNull // ENUM이기때문에 낫널사용
+    @NotNull
     private Gender gender; // 성별
 
     @NotNull

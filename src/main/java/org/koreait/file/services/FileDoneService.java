@@ -18,16 +18,15 @@ public class FileDoneService {
     private final FileInfoRepository repository;
 
 
-    public void process(String gid, String location){
+    public void process(String gid, String location) {
         List<FileInfo> items = infoService.getList(gid, location, FileStatus.ALL);
 
         items.forEach(item -> item.setDone(true));
 
         repository.saveAllAndFlush(items);
-
     }
-    public void process(String gid){
-        process(gid, null);
 
+    public void process(String gid) {
+        process(gid, null);
     }
 }

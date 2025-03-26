@@ -12,7 +12,7 @@ import org.springframework.validation.Validator;
 
 @Lazy
 @Component
-@RequiredArgsConstructor // 관리자인지 아닌지 체크해봐야하니까
+@RequiredArgsConstructor
 public class MessageValidator implements Validator {
 
     private final MemberUtil memberUtil;
@@ -29,7 +29,6 @@ public class MessageValidator implements Validator {
         String email = form.getEmail();
         boolean notice = form.isNotice();
         if (!memberUtil.isAdmin() && notice) { // 관리자가 아니지만 공지 쪽지이면 X
-            // 관리자가 아닌데 공지쪽지를 보낼수 있으면 안됌
             notice = false;
             form.setNotice(notice);
         }
@@ -37,6 +36,7 @@ public class MessageValidator implements Validator {
         if (!memberUtil.isAdmin() && !notice && !StringUtils.hasText(email)) {
             errors.rejectValue("email", "NotBlank");
         }
+
         if (!notice && !memberRepository.exists(email)) {
             errors.reject("NotFound.member");
         }

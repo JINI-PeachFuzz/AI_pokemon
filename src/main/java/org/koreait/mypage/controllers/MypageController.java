@@ -35,7 +35,7 @@ import java.util.Objects;
 @ApplyErrorPage
 @RequestMapping("/mypage")
 @RequiredArgsConstructor
-@SessionAttributes("profile")  // 직렬화 되어있음
+@SessionAttributes("profile")
 public class MypageController {
     private final Utils utils;
     private final MemberUtil memberUtil;
@@ -48,11 +48,10 @@ public class MypageController {
 
     @ModelAttribute("profile")
     public Member getMember() {
-        return memberUtil.getMember(); // 로그인은 회원정보에서 조회하는 거임
+        return memberUtil.getMember();
     }
 
-
-    @GetMapping // "/mypage" 와 동일함
+    @GetMapping
     public String index(Model model) {
         commonProcess("main", model);
 
@@ -64,13 +63,13 @@ public class MypageController {
         commonProcess("profile", model);
 
         Member member = memberUtil.getMember();
-        RequestProfile form = modelMapper.map(member, RequestProfile.class); // 새로운 객체가 만들어질거임, 참조가 끊기기때문에 속성이 연결되지않음
+        RequestProfile form = modelMapper.map(member, RequestProfile.class);
         String optionalTerms = member.getOptionalTerms();
         if (StringUtils.hasText(optionalTerms)) {
             form.setOptionalTerms(Arrays.stream(optionalTerms.split("\\|\\|")).toList());
         }
 
-        form.setKakaoLoginConnectUrl(kakaoLoginService.getLoginUrl("connect")); // 소셜카카오로 연동될수있는 주소를 넣었음
+        form.setKakaoLoginConnectUrl(kakaoLoginService.getLoginUrl("connect"));
         form.setKakaoLoginDisconnectUrl(kakaoLoginService.getLoginUrl("disconnect"));
 
         model.addAttribute("requestProfile", form);
@@ -78,10 +77,9 @@ public class MypageController {
         return utils.tpl("mypage/profile");
     }
 
-    @PatchMapping("/profile") // 일반 html에서 이걸 사용할려면 한가지 양식을 추가해야함
-    // MVC설정에 public HiddenHttpMethodFilter 를 추가해야함
+    @PatchMapping("/profile")
     public String updateProfile(@Valid RequestProfile form, Errors errors, Model model) {
-        commonProcess("profile", model); // get방식이든 아니든 RequestProfile form 이건 필요함
+        commonProcess("profile", model);
 
         profileValidator.validate(form, errors);
 
@@ -104,7 +102,7 @@ public class MypageController {
         MemberInfo memberInfo = (MemberInfo) infoService.loadUserByUsername(principal.getName());
         session.setAttribute("member", memberInfo.getMember());
 
-        model.addAttribute("profile", memberInfo.getMember()); // 새로 정보를 업뎃함
+        model.addAttribute("profile", memberInfo.getMember());
     }
 
     /**
@@ -114,10 +112,10 @@ public class MypageController {
      * @return
      */
     @GetMapping({"/wishlist", "/wishlist/{mode}"})
-    public String wishlist(@PathVariable(name="mode", required = false) WishType mode, CommonSearch search, Model model) { // WishType에 상수로 만들어놓은게 있으니까!
-        commonProcess("wishlist", model); // 여기에 자스나 CSS를 넣어주면 좋을듯
+    public String wishlist(@PathVariable(name="mode", required = false) WishType mode, CommonSearch search, Model model) {
+        commonProcess("wishlist", model);
 
-        mode = Objects.requireNonNullElse(mode, WishType.POKEMON); // 위시타입을 안해도 포켓몬이 기본값!
+        mode = Objects.requireNonNullElse(mode, WishType.POKEMON);
         if (mode == WishType.BOARD) { // 게시글 찜하기 목록
 
         } else { // 포켓몬 찜하기 목록
@@ -140,22 +138,21 @@ public class MypageController {
         mode = StringUtils.hasText(mode) ? mode : "main";
         String pageTitle = utils.getMessage("마이페이지");
 
-        List<String> addCommonScript = new ArrayList<>(); // 공통 추가될 자스
-        List<String> addScript = new ArrayList<>(); // 이거는 프론트에만 추가될 자스
+        List<String> addCommonScript = new ArrayList<>();
+        List<String> addScript = new ArrayList<>();
 
         if (mode.equals("profile")) { // 회원정보 수정
             addCommonScript.add("fileManager");
             addCommonScript.add("address");
-            addScript.add("mypage/profile"); // 분리해서 추가한거
+            addScript.add("mypage/profile");
             pageTitle = utils.getMessage("회원정보_수정");
         } else if (mode.equals("wishlist")) { // 찜하기 목록
-            addCommonScript.add("wish"); // 찜해제하는거 공통부분 추가한거
+            addCommonScript.add("wish");
             pageTitle = utils.getMessage("나의_WISH");
         }
 
         model.addAttribute("addCommonScript", addCommonScript);
         model.addAttribute("addScript", addScript);
         model.addAttribute("pageTitle", pageTitle);
-        // 최종적으로 모델에 넣어줌
     }
 }

@@ -32,13 +32,13 @@ public class ThumbnailService {
 
         Long seq = form.getSeq();
         String url = form.getUrl();
-        int width = Math.max(form.getWidth(), 50); // 최소 크기이고 없으면 이걸로 넣겠다는 것(기본값)
+        int width = Math.max(form.getWidth(), 50);
         int height = Math.max(form.getHeight(), 50);
 
         String thumbPath = getThumbPath(seq, url, width, height);
         File file = new File(thumbPath);
         if (file.exists()) { // 이미 Thumbnail 이미지를 만든 경우
-            return thumbPath; // 매번 요청할때마다 만드는것도 부담! / 그래서 한번만든건 그래도 남아있게!
+            return thumbPath;
         }
 
         try {
@@ -51,7 +51,7 @@ public class ThumbnailService {
             } else if (StringUtils.hasText(url)) { // 원격 URL 이미지
                 String original = String.format("%s_original", thumbPath);
                 byte[] bytes = restTemplate.getForObject(URI.create(url), byte[].class);
-                Files.write(Paths.get(original), bytes);// URI.create(url) : url이미지를 바이트로 받음
+                Files.write(Paths.get(original), bytes);
 
                 Thumbnails.of(original)
                         .size(width, height)
@@ -81,11 +81,11 @@ public class ThumbnailService {
                 extension = extension.split("[?#]")[0];
             }
             thumbPath = thumbPath + String.format("urls/%d_%d_%d%s", Objects.hash(url), width, height, extension);
-        } // Objects.hash(url) 해시코드를 이용해서 있냐없냐 확인함
+        }
 
         File file = new File(thumbPath);
         if (!file.getParentFile().exists()) {
-            file.getParentFile().mkdirs(); // 경로를 일괄로 만들어줄수있게 추가함
+            file.getParentFile().mkdirs();
         }
 
         return thumbPath;

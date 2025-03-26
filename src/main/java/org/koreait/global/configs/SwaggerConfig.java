@@ -6,16 +6,14 @@ import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-@OpenAPIDefinition(info=@Info(title = "포켓몬 도감 API", description = "/api/file - 파일 API")) // 문서 설명 달때 사용 / 필수는 아님 / description 에는 자세한 설명을 적으면 됨
-// yml파일에도 적어줘야함
+@OpenAPIDefinition(info=@Info(title="포켓몬 도감 API", description = "/api/file - 파일 API"))
 @Configuration
 public class SwaggerConfig {
     @Bean
     public GroupedOpenApi openApiGroup() {
         return GroupedOpenApi.builder()
                 .group("포켓몬 도감 API")
-                .pathsToMatch("/api/**") // api가 붙어있는건 자동으로 문서화 할 수 있게 한거
-                // 예를 들면 파일쪽에 API있음
+                .pathsToMatch("/api/**")
                 .build();
     }
 }

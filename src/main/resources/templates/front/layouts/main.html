@@ -7,12 +7,9 @@
     <meta name="description" th:if="*{description != null}" th:content="*{description}">
     <meta name="_csrf" th:content="${_csrf.token}">
     <meta name="_csrf_header" th:content="${_csrf.headerName}">
-    <!--csrf가 토큰 검증 방식 관련 내용 / 기본 검증이라 다 들어감-->
     <meta name="rootUrl" th:content="@{/}">
     <meta th:if="${@memberUtil.isLogin()}" name="user" th:content="${profile.email}">
-    <!--메시지를 확인할 목적으로 사용함 / 쪽지를 보내면 받는쪽에 알림을 보내야하기때문에 필요함-->
 
-    <!--<title th:if="${pageTitle != null}" th:text="${pageTitle}">-->
     <title>
         <th:block th:if="${pageTitle != null}"
         th:text="${#strings.concat(pageTitle, ' - ')}"></th:block>
@@ -24,15 +21,12 @@
 
     <th:block th:if="${addCommonCss != null}">
         <link rel="stylesheet" type="text/css"
-              th:each="cssPath : ${addCommonCss}"
-              th:href="@{/common/css/{path}.css?v={v}(path=${cssPath}, v=*{cssVersion})}">
+              th:each="cssPath : ${addCommonCss}" th:href="@{/common/css/{path}.css?v={v}(path=${cssPath}, v=*{cssVersion})}">
     </th:block>
 
     <th:block layout:fragment="addCommonCss"></th:block>
 
     <link rel="stylesheet" type="text/css" th:href="@{/front/css/style.css?v={v}(v=*{cssVersion})}">
-
-    <!--    <link rel="stylesheet" type="text/css" th:href="@{/front/css/footerStyle.css?v={v}(v=*{cssVersion})}">-->
 
     <th:block th:if="${addCss != null}">
         <link rel="stylesheet" type="text/css" th:each="cssPath : ${addCss}"

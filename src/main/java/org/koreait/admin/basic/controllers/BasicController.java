@@ -37,8 +37,7 @@ public class BasicController implements SubMenus {
 
     @ModelAttribute("menuCode")
     public String menuCode() {
-        return "basic"; // 컨트롤 상단쪽에 메뉴코드가 들어가 있다. 스타일적으로 구분하기 위해서 넣어준거
-        // 검사쪽에서 menu on 같이 on이 추가되게 하기 위해서
+        return "basic";
     }
 
     /**
@@ -57,7 +56,7 @@ public class BasicController implements SubMenus {
 
         model.addAttribute("siteConfig", form);
 
-        return "admin/basic/siteConfig"; // 템플릿 경로 / 위에 @RequestMapping("/admin/basic")와 관련없음
+        return "admin/basic/siteConfig";
     }
 
     /**
@@ -105,17 +104,17 @@ public class BasicController implements SubMenus {
         return "common/_execute_script";
     }
 
-    @RequestMapping(path = "/terms", method = {RequestMethod.PATCH, RequestMethod.DELETE}) // 수정되었는지 삭제되었는지 ~ 했습니다라는 메시지 나오게
+    @RequestMapping(path="/terms", method={RequestMethod.PATCH, RequestMethod.DELETE})
     public String updateTerms(@RequestParam(name="chk", required = false) List<Integer> chks, Model model) {
 
         termsUpdateService.processList(chks);
+
 
         String message = request.getMethod().equalsIgnoreCase("DELETE") ? "삭제" : "수정";
         message += "하였습니다.";
         utils.showSessionMessage(message);
 
         model.addAttribute("script", "parent.location.reload();");
-
         return "common/_execute_script";
     }
 
@@ -135,7 +134,7 @@ public class BasicController implements SubMenus {
     public String socialPs(SocialConfig form, Model model) {
         commonProcess("social", model);
 
-        codeValueService.save("socialConfig",form);
+        codeValueService.save("socialConfig", form);
 
         utils.showSessionMessage("저장되었습니다.");
 
@@ -149,7 +148,6 @@ public class BasicController implements SubMenus {
      * @param model
      */
     private void commonProcess(String mode, Model model) {
-        // 모드값이 코드가 될거임
 
         mode = StringUtils.hasText(mode) ? mode : "siteConfig";
         String pageTitle = null;
@@ -159,7 +157,6 @@ public class BasicController implements SubMenus {
             pageTitle = "약관 관리";
         } else if (mode.equals("social")) {
             pageTitle = "소셜 로그인";
-
         }
 
         pageTitle += " - 기본설정";

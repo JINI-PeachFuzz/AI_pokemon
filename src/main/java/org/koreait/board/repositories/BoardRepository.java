@@ -8,7 +8,7 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 public interface BoardRepository extends JpaRepository<Board, String>, QuerydslPredicateExecutor<Board> {
 
     default boolean exists(String bid) {
-        QBoard board = QBoard.board; // 게시판id가 들어오면 존재여부 확인
+        QBoard board = QBoard.board;
 
         return exists(board.bid.eq(bid));
     }

@@ -1,6 +1,4 @@
 <div xmlns:th="http://www.thymeleaf.org"
-     th:class="${isLogin ? 'wish-btn' : 'wish-btn guest'}" th:classappend="${isMine} ? 'on'" th:data-seq="${seq}" th:data-type="${type.name}">
-    <!--String보다는 상수느낌의 name을 사용하는게 더 좋음 / 공용으로 게시판에서도 사용할 수 있으니 추가한거-->
+     th:class="${isLogin ? 'wish-btn' : 'wish-btn guest'}" th:classappend="${isMine} ? 'on'"  th:data-seq="${seq}" th:data-type="${type.name}">
     <i th:classappend="${isMine ? 'xi-heart' : 'xi-heart-o'}"></i>
-
 </div>

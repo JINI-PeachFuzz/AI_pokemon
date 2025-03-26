@@ -25,7 +25,7 @@ public class JoinValidator implements Validator, PasswordValidator {
 
     @Override
     public boolean supports(Class<?> clazz) {
-        return clazz.isAssignableFrom(RequestAgree.class) || clazz.isAssignableFrom(RequestJoin.class); // 검증을 두가지 다 하기 때문
+        return clazz.isAssignableFrom(RequestAgree.class) || clazz.isAssignableFrom(RequestJoin.class);
     }
 
     @Override
@@ -49,7 +49,7 @@ public class JoinValidator implements Validator, PasswordValidator {
      * @param form
      * @param errors
      */
-    private void validateAgree(RequestAgree form, Errors errors) { // 상속을 통해서 검증을 하기 때문에 이런 구조로 만들었음
+    private void validateAgree(RequestAgree form, Errors errors) {
         if (!form.isRequiredTerms1()) {
             errors.rejectValue("requiredTerms1", "AssertTrue");
         }
@@ -91,10 +91,10 @@ public class JoinValidator implements Validator, PasswordValidator {
         }
 
         if (!isSocial) {
-            // 소셜이 아닐땐 비밀번호 필수여부 체크해야함
             // 필수 여부 체크
             ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "NotBlank");
-            ValidationUtils.rejectIfEmptyOrWhitespace(errors, "confirmpassword", "NotBlank");
+            ValidationUtils.rejectIfEmptyOrWhitespace(errors, "confirmPassword", "NotBlank");
+
             // 2. 비밀번호 복잡성 S
             if (!alphaCheck(password, false) || !numberCheck(password) || !specialCharsCheck(password)) {
                 errors.rejectValue("password", "Complexity");
@@ -123,4 +123,3 @@ public class JoinValidator implements Validator, PasswordValidator {
         }
     }
 }
-

@@ -13,12 +13,13 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class FileImageService {
-
     private final FileInfoService infoService;
     private final FileInfoRepository repository;
 
-    /***
+    /**
      * 목록 노출 이미지 선택
+     *
+     * @param seq
      */
     public void select(Long seq) {
         FileInfo item = infoService.get(seq);
@@ -30,5 +31,4 @@ public class FileImageService {
 
         repository.saveAllAndFlush(items);
     }
-
 }

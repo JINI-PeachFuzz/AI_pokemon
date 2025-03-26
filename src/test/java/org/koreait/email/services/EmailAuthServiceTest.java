@@ -14,8 +14,7 @@ public class EmailAuthServiceTest {
 
     @Test
     void test1() {
-        boolean result = service.sendCode("jj0411.park@gmail.com");
-        System.out.println(result); // 인증코드가 5자리로 메일로 왔음!
-
+        boolean result = service.sendCode("yonggyo00@kakao.com");
+        System.out.println(result);
     }
 }

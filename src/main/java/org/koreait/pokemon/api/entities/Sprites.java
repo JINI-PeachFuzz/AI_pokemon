@@ -7,5 +7,4 @@ import lombok.Data;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Sprites {
     private SpritesOther other;
-
 }

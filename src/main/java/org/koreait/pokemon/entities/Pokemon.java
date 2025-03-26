@@ -7,17 +7,16 @@ import org.koreait.global.entities.BaseEntity;
 import java.util.List;
 import java.util.Map;
 
-// db에 넣을 목록들
 @Data
 @Entity
 public class Pokemon extends BaseEntity {
     @Id
     private Long seq;
 
-    @Column(length = 50)
+    @Column(length=50)
     private String name; // 포켓몬 한글 이름
 
-    @Column(length = 50)
+    @Column(length=50)
     private String nameEn; // 포켓몬 영어 이름
     private int weight;
     private int height;
@@ -27,11 +26,11 @@ public class Pokemon extends BaseEntity {
 
     @Lob
     private String flavorText; // 설명
-    private String types; // 타입1||타입2||타입3 으로 가공할 예정
+    private String types; // 타입1||타입2||타입3
     private String abilities; // 능력1||능력2||능력3
 
-    @Column(length = 100)
-    private String genus; // 분류 / 혈통 종 가문??
+    @Column(length=100)
+    private String genus; // 분류
 
     @Transient
     private List<String> _types;

@@ -15,24 +15,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-
 @Controller
-@ApplyErrorPage // 뒤로 빽해야하니까 넣어줬음
+@ApplyErrorPage
 @RequestMapping("/member/social")
-@RequiredArgsConstructor // 의존성 주입
+@RequiredArgsConstructor
 public class SocialController {
-
-//    private final RestTemplate restTemplate;
 
     private final KakaoLoginService kakaoLoginService;
     private final HttpSession session;
     private final Utils utils;
 
-
     @GetMapping("/callback/kakao")
     public String callback(@RequestParam(name="code", required = false) String code, @RequestParam(name="state", required = false) String redirectUrl) {
-        // void에서 String으로 변경했는데 토큰인증시 넘어갈테고 반환값이될테니 String으로 변경?
-
 
         // 연결 해제 요청 처리 S
         if (StringUtils.hasText(redirectUrl) && redirectUrl.equals("disconnect")) {
@@ -46,7 +40,6 @@ public class SocialController {
         if (!StringUtils.hasText(token)) {
             throw new AlertBackException(utils.getMessage("UnAuthorized"), HttpStatus.UNAUTHORIZED);
         }
-
 
         // 카카오 로그인 연결 요청 처리 S
         if (StringUtils.hasText(redirectUrl) && redirectUrl.equals("connect")) {
@@ -71,40 +64,42 @@ public class SocialController {
         session.setAttribute("socialToken", token);
 
         return "redirect:/member/agree";
-    }
-}
 
-     /*   HttpHeaders headers = new HttpHeaders(); // 헤더스는 스프링껄로 넣어줘야함
+
+               /*
+        // Test 코드
+
+        HttpHeaders headers = new HttpHeaders();
+
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
-        // 이건 테스트 코드로 나오는지 확인한거
+        // 요청 데이터 실기
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+
         params.add("grant_type", "authorization_code");
-        params.add("client_id", "f0ac580a42d382cfa7a1b66b82576a0a"); // id는 관리자쪽에 기록될 필요가 있음
+        params.add("client_id", "1a5bea2e59af27746da39f680c35ce58");
         params.add("redirect_uri", "http://localhost:3000/member/social/callback");
         params.add("code", code);
 
-        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers); // MultiValueMap 사용 / 값나오는지 확인용
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
 
-        ResponseEntity<AuthToken> response = restTemplate.postForEntity(URI.create("https://kauth.kakao.com/oauth/token"), request, AuthToken.class); // 바디데이터에 넣음
+        ResponseEntity<AuthToken> response = restTemplate.postForEntity(URI.create("https://kauth.kakao.com/oauth/token"), request, AuthToken.class);
 
         AuthToken token = response.getBody();
-//        System.out.println(token);
+
+        // System.out.println(token);
 
         String accessToken = token.getAccessToken();
+
         HttpHeaders headers2 = new HttpHeaders();
+
         headers2.setBearerAuth(accessToken);
 
-        HttpEntity<Void> request2 = new HttpEntity<>(headers2); // 헤더만 실을거라 반환값이 필요없어서 보이드사용
+        HttpEntity<Void> request2 = new HttpEntity<>(headers2);
 
-        ResponseEntity<String> response2 = restTemplate.exchange(URI.create("https://kapi.kakao.com/v2/user/me"), HttpMethod.GET, request2, String.class); // 겟방식으로 요청헤더에 토큰을 실어서 보내고 있는거
-        System.out.println(response2); // 필수인 id밖에 안나옴*/
+        ResponseEntity<String> response2 = restTemplate.exchange(URI.create("https://kapi.kakao.com/v2/user/me"), HttpMethod.GET, request2, String.class);
 
-
-//    f0ac580a42d382cfa7a1b66b82576a0a
-
-//    https://kauth.kakao.com/oauth/authorize?client_id=f0ac580a42d382cfa7a1b66b82576a0a&redirect_uri=http://localhost:3000/member/social/callback&response_type=code
-
-// https://kauth.kakao.com/oauth/authorize?client_id=f0ac580a42d382cfa7a1b66b82576a0a&redirect_uri=http://localhost:3000/member/social/callback/kakao&response_type=code
-
-
+        System.out.println(response2);
+         */
+    }
+}

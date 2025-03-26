@@ -1,12 +1,10 @@
 package org.koreait.file.services;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.koreait.file.controllers.RequestUpload;
-import org.koreait.file.entities.FileInfo;
 import org.koreait.member.test.annotations.MockMember;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -17,11 +15,9 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.nio.charset.Charset;
-import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -66,22 +62,22 @@ public class FileUploadServiceTest {
     @MockMember
     void uploadControllerTest() throws Exception {
         String body = mockMvc.perform(multipart("/api/file/upload")
-                .file(files[0])
-                .file(files[1])
-                .param("gid", UUID.randomUUID().toString())
+                        .file(files[0])
+                        .file(files[1])
+                        .param("gid", UUID.randomUUID().toString())
                         .with(csrf().asHeader()))
-                .andDo(print()) // 디버깅시에 많이 사용함
-                .andExpect(status().isCreated()) // 응답헤더에서 체크
+                .andDo(print())
+                .andExpect(status().isCreated())
                 .andReturn().getResponse().getContentAsString(Charset.forName("UTF-8"));
-                // getContentAsString은 바디데이터검증, 인코딩을 추가로 해줘야함
 
         System.out.println(body);
 
-//        List<FileInfo> items = om.readValue(body, new TypeReference<>() {});
-//        boolean result1 = items.stream().anyMatch(i -> i.getFileName().equals(files[0].getOriginalFilename()));
-//        boolean result2 = items.stream().anyMatch(i -> i.getFileName().equals(files[1].getOriginalFilename()));
-//
-//        assertTrue(result1 && result2);
+        /*
+        List<FileInfo> items = om.readValue(body, new TypeReference<>() {});
+        boolean result1 = items.stream().anyMatch(i -> i.getFileName().equals(files[0].getOriginalFilename()));
+        boolean result2 = items.stream().anyMatch(i -> i.getFileName().equals(files[1].getOriginalFilename()));
+        */
+        //assertTrue(result1 && result2);
 
     }
 }

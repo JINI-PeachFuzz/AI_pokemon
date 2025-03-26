@@ -32,7 +32,6 @@ import java.net.URI;
 import java.util.Map;
 import java.util.Objects;
 
-
 @Lazy
 @Service
 @RequiredArgsConstructor
@@ -54,28 +53,28 @@ public class KakaoLoginService implements SocialLoginService {
         if (!socialConfig.isUseKakaoLogin() || !StringUtils.hasText(restApiKey)) {
             return null;
         }
+
         /* Access Token 발급 S */
-        HttpHeaders headers = new HttpHeaders(); // 헤더스는 스프링껄로 넣어줘야함
+        HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
-        // 이건 테스트 코드로 나오는지 확인한거
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", "authorization_code");
-        params.add("client_id", restApiKey); // id는 관리자쪽에 기록될 필요가 있음
+        params.add("client_id", restApiKey);
         params.add("redirect_uri", utils.getUrl("/member/social/callback/kakao"));
         params.add("code", code);
 
-        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers); // MultiValueMap 사용 / 값나오는지 확인용
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
 
-        ResponseEntity<AuthToken> response = restTemplate.postForEntity(URI.create("https://kauth.kakao.com/oauth/token"), request, AuthToken.class); // 바디데이터에 넣음
-        if (response.getStatusCode() != HttpStatus.OK) { // 정상 응답 X -> 종료 // 응답이 400이 아닐경우도 있어서.
+        ResponseEntity<AuthToken> response = restTemplate.postForEntity(URI.create("https://kauth.kakao.com/oauth/token"), request, AuthToken.class);
+        if (response.getStatusCode() != HttpStatus.OK) { // 정상 응답 X -> 종료
             return null;
         }
-
 
         AuthToken token = response.getBody();
         String accessToken = token.getAccessToken();
         /* Access Token 발급 E */
+
 
         /* 회원 ID - SocialToken S */
         String url = "https://kapi.kakao.com/v2/user/me";
@@ -92,8 +91,6 @@ public class KakaoLoginService implements SocialLoginService {
 
             } catch (JsonProcessingException e) {}
         }
-//        System.out.println(response2.getBody());
-
 
         /* 회원 ID - SocialToken E */
 
@@ -109,15 +106,12 @@ public class KakaoLoginService implements SocialLoginService {
 
         MemberInfo memberInfo = (MemberInfo)memberInfoService.loadUserByUsername(member.getEmail());
 
-        // 구현체
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(memberInfo, null, memberInfo.getAuthorities());
 
         SecurityContextHolder.getContext().setAuthentication(authentication); // 로그인 처리
-        // authentication을 넣으면 로그인처리됨.
 
         session.setAttribute("member", memberInfo.getMember());
         session.setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
-
         return true;
     }
 
@@ -178,5 +172,4 @@ public class KakaoLoginService implements SocialLoginService {
 
         return memberRepository.exists(builder);
     }
-
 }

@@ -47,7 +47,6 @@ public class MemberUpdateService {
      */
     public void process(RequestJoin form) {
         // 커맨드 객체 -> 엔티티 객체 데이터 옮기기
-        // modelMapper 를 사용하면서 셋셋셋하는거 그걸 안써도 되게 해줌 근데 조건이 자료형이랑 그런것들이 일치해야함
         Member member = modelMapper.map(form, Member.class);
 
         // 선택 약관 -> 약관 항목1||약관 항목2||...
@@ -75,16 +74,15 @@ public class MemberUpdateService {
         save(member, List.of(auth)); // 회원 저장 처리
     }
 
-    /***
+    /**
      * 회원정보 수정
      * @param form
      */
     public void process(RequestProfile form) {
         process(form, null);
     }
-    // 메서드 오버로드 사용함 / 열린구조
 
-    public void process(RequestProfile form, List<Authority> authorities) { // 관리자일때만 추가할 거
+    public void process(RequestProfile form, List<Authority> authorities) {
         String email = form.getEmail();
         Member member = memberUtil.isAdmin() && StringUtils.hasText(email) ? memberRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(email)) : memberUtil.getMember(); // 로그인한 사용자의 정보
 
@@ -103,19 +101,22 @@ public class MemberUpdateService {
 
         // 회원정보 수정일때는 비밀번호가 입력 된 경우만 저장
         String password = form.getPassword();
-        if (StringUtils.hasText(password)) { // 비번은 변경하지 않음
+        if (StringUtils.hasText(password)) {
             String hash = passwordEncoder.encode(password);
             member.setPassword(hash);
-            member.setCredentialChangedAt(LocalDateTime.now()); // 30일후 비번변경 디데이 다시 시작하게 할려고
+            member.setCredentialChangedAt(LocalDateTime.now());
         }
 
-        // 회원 권한은 관리자만 수정 가능!
+        /**
+         * 회원 권한은 관리자만 수정 가능!
+         *
+         */
         List<Authorities> _authorities = null;
-        if (authorities != null && memberUtil.isAdmin()) { // 관리자일때만 권한을 변경할 수있게 검증하는 곳
+        if (authorities != null && memberUtil.isAdmin()) {
             _authorities = authorities.stream().map(a -> {
                 Authorities auth = new Authorities();
                 auth.setAuthority(a);
-                auth.setMember(member); // 인터페이스 - 상수화가 됨 그래서 아래 멤버는 수정했음
+                auth.setMember(member);
                 return auth;
             }).toList();
         }
@@ -123,20 +124,16 @@ public class MemberUpdateService {
         save(member, _authorities);
 
         // 로그인 회원 정보 업데이트
-        // RequestProfile form이 회원정보 수정이라 젤 밑에서 이쪽으로 변경함
         if (!StringUtils.hasText(email)) {
-            Member _member = memberRepository.findByEmail(member.getEmail()).orElse(null); // 상수화가 되서 Member _member로 변경함
-
+            Member _member = memberRepository.findByEmail(member.getEmail()).orElse(null);
             if (_member != null) {
-                infoService.addInfo(_member); // 싱글톤 패턴이라 이것만 넣어도 됨
-                session.setAttribute("member", _member); // 2차 가공해야함
+                infoService.addInfo(_member);
+                session.setAttribute("member", _member);
             }
         }
     }
 
-
     /**
-     *
      * 회원정보 추가 또는 수정 처리
      *
      */
@@ -153,7 +150,7 @@ public class MemberUpdateService {
 
             QAuthorities qAuthorities = QAuthorities.authorities;
             List<Authorities> items = (List<Authorities>) authoritiesRepository.findAll(qAuthorities.member.eq(member));
-            if (items != null) { // 권한은 기존껄 삭제하고 추가하는게 더 편함
+            if (items != null) {
                 authoritiesRepository.deleteAll(items);
                 authoritiesRepository.flush();
             }
@@ -163,10 +160,9 @@ public class MemberUpdateService {
         }
 
         // 회원 권한 업데이트 처리 E
-
     }
 
-    /***
+    /**
      * 회원 목록 수정 처리
      *
      * @param chks

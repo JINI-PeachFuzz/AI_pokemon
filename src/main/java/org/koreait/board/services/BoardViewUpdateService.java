@@ -19,7 +19,7 @@ public class BoardViewUpdateService {
     private final Utils utils;
 
     public long process(Long seq) {
-        BoardData item = boardDataRepository.findById(seq).orElse(null);// 얘는 예외발생은 안하고 없으면 없는대로 넘기는걸로 처리할 거
+        BoardData item = boardDataRepository.findById(seq).orElse(null);
         if (item == null) return 0L;
 
         try {
@@ -34,7 +34,7 @@ public class BoardViewUpdateService {
         long total = boardViewRepository.count(boardView.seq.eq(seq));
 
         item.setViewCount(total);
-        boardDataRepository.saveAndFlush(item); // 쿠키는 지우면 사라지니까 DB에 넣는게 좋음
+        boardDataRepository.saveAndFlush(item);
 
         return total;
     }

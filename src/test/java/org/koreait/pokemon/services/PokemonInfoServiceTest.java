@@ -12,7 +12,6 @@ public class PokemonInfoServiceTest {
     @Autowired
     private PokemonInfoService infoService;
 
-    // 낱개 조회
     @Test
     void test1() {
         //Pokemon item = infoService.get(1L);
@@ -21,7 +20,5 @@ public class PokemonInfoServiceTest {
         search.setSkey("나무줄기");
         ListData<Pokemon> items = infoService.getList(search);
         items.getItems().forEach(System.out::println);
-
     }
-
 }

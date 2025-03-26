@@ -17,20 +17,21 @@ import java.util.Objects;
 
 @Service
 @Profile("email")
-@RequiredArgsConstructor //메일 의존성추가가 필요하므로
+@RequiredArgsConstructor
 public class EmailService {
 
     private final JavaMailSender javaMailSender;
     private final SpringTemplateEngine templateEngine;
 
-    /***
+    /**
      *
      * @param form
-     * @param tpl : 템플릿 코드 email/{tpl}.html
+     * @param tpl : 템플릿 코드  email/{tpl}.html
      * @param tplData : 템플릿에 전달하는 데이터(EL 속성으로 추가)
      * @return
      */
-    public boolean sendEmail(RequestEmail form, String tpl, Map<String, Object> tplData){
+    public boolean sendEmail(RequestEmail form, String tpl, Map<String, Object> tplData) {
+
         try {
             Context context = new Context();
             tplData = Objects.requireNonNullElseGet(tplData, HashMap::new);
@@ -49,7 +50,6 @@ public class EmailService {
 
             context.setVariables(tplData);
 
-
             String html = templateEngine.process("email/" + tpl, context);
 
             MimeMessage message = javaMailSender.createMimeMessage();
@@ -65,24 +65,22 @@ public class EmailService {
             }
 
             helper.setSubject(subject);
-            helper.setText(html, true); // html로 출력하는 거
+            helper.setText(html, true);
 
-            javaMailSender.send(message); // 얘는 반환값이 void라서 예외발생이 true인지 false인지에 따라 확인가능함
+            javaMailSender.send(message);
 
             return true;
-        } catch (Exception e) {
+        } catch(Exception e) {
             e.printStackTrace();
         }
 
         return false;
-
     }
 
     public boolean sendEmail(RequestEmail form, String tpl) {
         return sendEmail(form, tpl, null);
     }
 
-    // 일반적인 이메일 보낼경우 / 그냥 내용만 보낼 경우
     public boolean sendEmail(String to, String subject, String content) {
         RequestEmail form = new RequestEmail();
         form.setTo(List.of(to));

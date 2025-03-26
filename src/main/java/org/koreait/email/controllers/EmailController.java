@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/email")
-public class EmailController { // 인증코드를 발급하고 보내고...
+public class EmailController {
     private final EmailAuthService authService;
 
     /**
@@ -26,7 +26,6 @@ public class EmailController { // 인증코드를 발급하고 보내고...
             throw new AuthCodeIssueException();
         }
     }
-    // 인증성공시 204
 
     /**
      * 발급받은 인증코드 검증
@@ -39,4 +38,3 @@ public class EmailController { // 인증코드를 발급하고 보내고...
         authService.verify(authCode);
     }
 }
-

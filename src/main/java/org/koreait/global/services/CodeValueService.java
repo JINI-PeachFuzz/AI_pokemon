@@ -16,15 +16,16 @@ import java.util.List;
 public class CodeValueService {
     private final CodeValueRepository repository;
     private final ObjectMapper om;
-    /***
+
+    /**
      * JSON 문자열로 변환후 저장
+     *
      * @param code
      * @param value
      */
     public void save(String code, Object value) {
-        CodeValue item = repository.findById(code).orElseGet(CodeValue::new); // orElseGet으로 비어있는걸 만듦
+        CodeValue item = repository.findById(code).orElseGet(CodeValue::new);
 
-        //저장기능 만듦
         try {
             String json = om.writeValueAsString(value);
 
@@ -32,6 +33,7 @@ public class CodeValueService {
             item.setValue(json);
 
             repository.saveAndFlush(item);
+
         } catch (JsonProcessingException e) {}
     }
 
@@ -42,7 +44,9 @@ public class CodeValueService {
             String json = item.getValue();
             try {
                 return om.readValue(json, cls);
+
             } catch (JsonProcessingException e) {}
+
         }
 
         return null;
@@ -52,9 +56,8 @@ public class CodeValueService {
         remove(List.of(code));
     }
 
-    public void remove (List<String> codes) {
+    public void remove(List<String> codes) {
         repository.deleteAllById(codes);
         repository.flush();
     }
 }
-

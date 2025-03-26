@@ -16,6 +16,5 @@ public class PokemonControllerAdvice {
     @ModelAttribute("myPokemons")
     public List<Long> myPokemons() {
         return wishService.getMyWish(WishType.POKEMON);
-
     }
 }

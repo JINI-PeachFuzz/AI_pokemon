@@ -8,7 +8,7 @@
         <table class="table-cols">
             <tr>
                 <th width="180">키워드</th>
-                <td class="flex ac"> <!--날짜검색부분css-->
+                <td class="flex ac">
                     <select name="sopt" th:field="*{sopt}" class="w180 mr5">
                         <option value="ALL">통합검색</option>
                         <option value="BID">게시판 아이디</option>
@@ -27,9 +27,9 @@
             <thead>
             <tr>
                 <th width="40">
-                        <span class="radio">
-                            <input type="checkbox" class="check-all" id="check-all" data-target-class="chk">
-                            <label for="check-all" class="standalone"></label>
+                        <span class="checkbox">
+                            <input type="checkbox" class="check-all" id="checkall" data-target-class="chk">
+                            <label for="checkall" class="standalone"></label>
                         </span>
                 </th>
                 <th width="180">게시판 아이디</th>
@@ -69,7 +69,6 @@
                 <td>
                     <a th:href="@{/admin/board/edit/{bid}(bid=*{bid})}" class="sbtn">게시판설정</a>
                     <a th:href="@{/board/list/{bid}(bid=*{bid})}" class="sbtn black" target="_blank">미리보기</a>
-                    <!--미리보기는 새창으로 열어서 확인-->
                 </td>
             </tr>
             </tbody>

@@ -29,7 +29,7 @@ public class SentimentService {
 
     public double[] predict(List<String> items) {
         try {
-            String data = String.join("__", items); // 문자열결합
+            String data = String.join("__", items);
 
             ProcessBuilder builder = new ProcessBuilder(runPath, scriptPath + "naver.py", bertPath, data);
             Process process = builder.start();
@@ -37,7 +37,7 @@ public class SentimentService {
 
             process.waitFor();
 
-            return om.readValue(in.readAllBytes(), double[].class);// 더블형태로 반환값이 나올 거임
+            return om.readValue(in.readAllBytes(), double[].class);
 
         } catch (Exception e) {
             e.printStackTrace();

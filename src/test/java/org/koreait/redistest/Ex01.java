@@ -8,6 +8,9 @@
 //import org.springframework.boot.test.context.SpringBootTest;
 //import org.springframework.test.context.ActiveProfiles;
 //
+///**
+// * 삭제 & 조회 TEST
+// */
 //@SpringBootTest
 //@ActiveProfiles({"default", "test"})
 //public class Ex01 {
@@ -17,7 +20,9 @@
 //
 //    @BeforeEach
 //    void init() {
+//
 //        RedisItem redisItem = new RedisItem();
+//
 //        redisItem.setKey("testkey");
 //        redisItem.setPrice(1000);
 //        redisItem.setProductNm("테스트 상품명");
@@ -26,10 +31,10 @@
 //    }
 //
 //    @Test
-//    void test1(){
+//    void test1() {
+//
 //        RedisItem item = repository.findById("testkey").orElse(null);
+//
 //        System.out.println(item);
-//
 //    }
-//
 //}

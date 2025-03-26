@@ -27,12 +27,11 @@ import java.util.List;
 @RequestMapping("/admin/board")
 public class BoardController implements SubMenus {
 
-    private final Utils utils; // 템플릿은 아니지만 제목이라던지 필요할때가 있을 거 같아서 추가함
-    private final BoardValidator boardValidator; // 게시판설정에대한 추가검증을 얘가 함
-    private final BoardConfigUpdateService configUpdateService; // 게시판설정=게시판하나 라서 설정을 추가함
+    private final Utils utils;
+    private final BoardValidator boardValidator;
+    private final BoardConfigUpdateService configUpdateService;
     private final BoardConfigInfoService configInfoService;
-    private final HttpServletRequest request; // 패치인지 delete인지 확인
-
+    private final HttpServletRequest request;
 
     @Override
     @ModelAttribute("menuCode")
@@ -69,7 +68,7 @@ public class BoardController implements SubMenus {
 
     /**
      * 게시판 설정 등록
-     * // 게시판설정 하나가 게시판하나!
+     *
      * @param model
      * @return
      */
@@ -77,7 +76,7 @@ public class BoardController implements SubMenus {
     public String add(@ModelAttribute RequestBoard form, Model model) {
         commonProcess("add", model);
 
-        form.setSkin("default"); // 게시판스킨은 기본값을 사용할 거임
+        form.setSkin("default");
         form.setLocationAfterWriting("list");
         form.setListAuthority(Authority.ALL);
         form.setViewAuthority(Authority.ALL);
@@ -94,10 +93,10 @@ public class BoardController implements SubMenus {
      * @return
      */
     @GetMapping("/edit/{bid}")
-    public String edit(@PathVariable("bid") String bid, Model model) { // bid = 보드게시판 id
+    public String edit(@PathVariable("bid") String bid, Model model) {
         commonProcess("edit", model);
 
-        RequestBoard form = configInfoService.getForm(bid); // 커맨드객체
+        RequestBoard form = configInfoService.getForm(bid);
         model.addAttribute("requestBoard", form);
 
         return "admin/board/edit";
@@ -110,17 +109,15 @@ public class BoardController implements SubMenus {
      */
     @PostMapping("/save")
     public String save(@Valid RequestBoard form, Errors errors, Model model) {
-        String mode = form.getMode(); // 이게 없을때는 기본값
+        String mode = form.getMode();
         mode = StringUtils.hasText(mode) ? mode : "add";
         commonProcess(mode, model);
 
         boardValidator.validate(form, errors);
 
         if (errors.hasErrors()) {
-            return "admin/board/" + mode; // 여기 모드에 따라서 등록이 될지 , 수정이 될지 결정 // 쇼핑몰과 비슷
+            return "admin/board/" + mode;
         }
-
-        // 여기부분에는 서비스가 추가될 예정
 
         configUpdateService.process(form);
 
@@ -128,7 +125,7 @@ public class BoardController implements SubMenus {
     }
 
     /**
-     * 게시글 관리 // 사용자가 작성한.
+     * 게시글 관리
      *
      * @param model
      * @return

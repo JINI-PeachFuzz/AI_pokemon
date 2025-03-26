@@ -20,7 +20,7 @@ import static org.springframework.data.domain.Sort.Order.asc;
 
 @Lazy
 @Service
-@Profile("dl") // dl이라는게 있으면 선별적으로 빈을 만들어서 하겠다.
+@Profile("dl")
 @RequiredArgsConstructor
 public class TrainService {
 
@@ -39,7 +39,6 @@ public class TrainService {
     public void process() {
         try {
             ProcessBuilder builder = new ProcessBuilder(runPath, scriptPath + "train.py", dataUrl + "?mode=ALL", dataUrl);
-            // 전체데이터+학습데이터
             Process process = builder.start();
             int exitCode = process.waitFor();
             System.out.println(exitCode);
@@ -47,7 +46,6 @@ public class TrainService {
         } catch (Exception e) {}
     }
 
-    // 훈련기록 기억
     public void log(TrainItem item) {
         repository.saveAndFlush(item);
     }
@@ -61,7 +59,6 @@ public class TrainService {
         } else {
             QTrainItem trainItem = QTrainItem.trainItem;
             return (List<TrainItem>)repository.findAll(trainItem.createdAt.after(LocalDateTime.of(LocalDate.now().minusDays(1L), LocalTime.of(0, 0, 0))), Sort.by(asc("createdAt")));
-            // 0시0분0초 부터 / 하루치 데이터 지금날짜의 전날새벽 1시부터 돌린다고 해서 minusDays(1L)을 해야1시부터가 적용됨
         }
     }
 }

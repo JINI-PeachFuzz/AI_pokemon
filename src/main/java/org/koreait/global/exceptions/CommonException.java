@@ -10,7 +10,7 @@ import java.util.Objects;
 
 /**
  * 모든 사용자 정의 예외 상위 클래스
- * // 기본 틀!
+ *
  */
 @Getter @Setter
 public class CommonException extends RuntimeException {
@@ -31,5 +31,5 @@ public class CommonException extends RuntimeException {
   public CommonException(Map<String, List<String>> errorMessages, HttpStatus status) {
     this.errorMessages = errorMessages;
     this.status = status;
-  } // 레스트에서 Map 생성자 메서드.. / 상속받은 형태로 사용
+  }
 }

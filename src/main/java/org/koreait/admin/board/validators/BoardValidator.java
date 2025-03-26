@@ -26,8 +26,6 @@ public class BoardValidator implements Validator {
             return;
         }
 
-        // 필수항목이 다 들어와야 다음꺼 진행가능하게
-
         RequestBoard form = (RequestBoard)target;
 
         // 게시판 등록일때만 게시판 아이디의 중복 여부 체크

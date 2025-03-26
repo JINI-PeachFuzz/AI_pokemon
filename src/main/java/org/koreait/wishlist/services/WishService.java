@@ -42,12 +42,10 @@ public class WishService {
         try {
             if (mode.equals("remove")) { // 찜 해제
                 WishId wishId = new WishId(seq, type, member);
-                // 로그인해야만 가능하니까 제한을 걸어야함
                 repository.deleteById(wishId);
 
             } else { // 찜 추가
-                Wish wish = new Wish(); // 이거는 직렬화를 안하는 이유는 / 레디스!
-                // 세션에 기록을 안하기 때문
+                Wish wish = new Wish();
                 wish.setSeq(seq);
                 wish.setType(type);
                 wish.setMember(member);
@@ -58,12 +56,11 @@ public class WishService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     public List<Long> getMyWish(WishType type) {
         if (!memberUtil.isLogin()) {
-            return List.of(); // null대신에 List넣어줬음/오류없이 사용하기 위해서
+            return List.of();
         }
 
         QWish wish = QWish.wish;
@@ -92,11 +89,9 @@ public class WishService {
         context.setVariable("seq", seq);
         context.setVariable("type", _type);
         context.setVariable("myWishes", myWishes);
-        context.setVariable("isMine", myWishes.contains(seq)); // 참이면 찜한거고 아니면 아닌거고
-        context.setVariable("isLogin", memberUtil.isLogin()); // 로그인페이지로 돌아가게
+        context.setVariable("isMine", myWishes.contains(seq));
+        context.setVariable("isLogin", memberUtil.isLogin());
 
         return templateEngine.process("common/_wish", context);
-
     }
 }
-

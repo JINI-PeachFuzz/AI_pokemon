@@ -16,15 +16,15 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
  *
  */
 @Configuration
-@EnableMethodSecurity // 특정 메서드만 통제할때도 사용가능
+@EnableMethodSecurity
 public class SecurityConfig {
 
     @Autowired
     private MemberInfoService memberInfoService;
 
-    @Bean // 이 빈이 중요함 / 로그인설정에 대한 설정들
+    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-// filterChain메서드가 설정인거임
+
         /* 인증 설정 S - 로그인, 로그아웃 */
         http.formLogin(c -> {
             c.loginPage("/member/login") // 로그인 양식을 처리할 주소
@@ -32,7 +32,7 @@ public class SecurityConfig {
                     .passwordParameter("password")
                     .failureHandler(new LoginFailureHandler())
                     .successHandler(new LoginSuccessHandler());
-        }); // 상세하게 하기 위해서 핸들러를 나눔 / 멤버-서비스
+        });
 
         http.logout(c -> {
             c.logoutRequestMatcher(new AntPathRequestMatcher("/member/logout"))
@@ -52,8 +52,8 @@ public class SecurityConfig {
          * hasRole("명칭")
          * hasAnyRole(...)
          */
-        http.authorizeHttpRequests(c -> { // 람다형태로 한건 영역별로 설정할 수 있게 하기 위해서임
-            c.requestMatchers("/mypage/**", "/message/**").authenticated() // authenticated 인증한 회원 / 쪽지기능에서도 로그인한 회원만 가능하게 추가했음
+        http.authorizeHttpRequests(c -> {
+            c.requestMatchers("/mypage/**", "/message/**").authenticated() // 인증한 회원
                     .requestMatchers("/member/login", "/member/join", "/member/agree").anonymous() // 미인증 회원
                     .requestMatchers("/admin/**").hasAnyAuthority("MANAGER", "ADMIN") // 관리자 페이지는 MANAGER, ADMIN 권한
                     .anyRequest().permitAll(); // 나머지 페이지는 모두 접근 가능
@@ -68,22 +68,21 @@ public class SecurityConfig {
         /* 인가 설정 E */
 
         /* 자동 로그인 설정 S */
-        http.rememberMe(c-> {
-            c.rememberMeParameter("autoLogin") // html에 작성한걸 시큐리티는 모르기때문에 rememberMeParameter을 넣어줬음
-                    .tokenValiditySeconds(60 * 60 * 24 * 30) // 자동 로그인을 유지할 시간, 기본값 14일 / 30일로 수정했음 60은 1분
-                    .userDetailsService(memberInfoService) // 조회
-                    .authenticationSuccessHandler(new LoginSuccessHandler()); // 성공시 콜백!
+        http.rememberMe(c -> {
+            c.rememberMeParameter("autoLogin")
+                    .tokenValiditySeconds(60 * 60 * 24 * 30) // 자동 로그인을 유지할 시간, 기본값 14일
+                    .userDetailsService(memberInfoService)
+                    .authenticationSuccessHandler(new LoginSuccessHandler());
         });
         /* 자동 로그인 설정 E */
 
         http.headers(c -> c.frameOptions(o -> o.sameOrigin()));
 
-        return http.build(); // 설정 무력화
+        return http.build();
     }
 
-    @Bean // 스프링의 관리를 받고있음 // 콩깍지가 스프링!
+    @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-    // 시큐리티제공, 비밀번호를 안전하게 암호화(해싱)하고 이후 사용자가 입력한 비밀번호와 암호화된 비밀번호를 비교할 수 있는 기능을 제공함
 }

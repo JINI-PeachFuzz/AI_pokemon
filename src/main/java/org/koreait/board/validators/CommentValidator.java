@@ -55,8 +55,6 @@ public class CommentValidator implements Validator, PasswordValidator {
         if (!memberUtil.isLogin()) {
             ValidationUtils.rejectIfEmptyOrWhitespace(errors, "guestPw", "NotBlank");
 
-
-            // 대소문자 구분없는 알파벳 1자 이상, 숫자 1자 이상 포함
             if (StringUtils.hasText(guestPw) && (!alphaCheck(guestPw, true) || !numberCheck(guestPw))) {
                 errors.rejectValue("guestPw", "Complexity");
             }

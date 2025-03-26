@@ -8,15 +8,12 @@ import org.koreait.member.constants.Authority;
 import java.io.Serializable;
 import java.util.List;
 
-// RequestBoard 참고
-// 게시판 설정
-
-    @Data
-    @Entity
-public class Board extends BaseMemberEntity implements Serializable { // 직렬화를 하기때문에 Serializable 필요
+@Data
+@Entity
+public class Board extends BaseMemberEntity implements Serializable {
     @Id
     @Column(length=30)
-    private String bid; // 게시판 설정쪽이라서 bid가 기본키임
+    private String bid;
 
     @Column(length=90, nullable = false)
     private String name; // 게시판명
@@ -38,7 +35,7 @@ public class Board extends BaseMemberEntity implements Serializable { // 직렬�
 
     private String locationAfterWriting; // 글 작성후 이동 경로 - list : 목록, view : 글보기
 
-    private String skin; // 게시판 스킨?
+    private String skin;
 
     @Enumerated(EnumType.STRING)
     @Column(length=20, nullable = false)
@@ -57,7 +54,7 @@ public class Board extends BaseMemberEntity implements Serializable { // 직렬�
     private Authority commentAuthority;
 
     @Transient
-    private List<String> categories; // 줄개행문자관련
+    private List<String> categories;
 
     @Transient
     private boolean listable;

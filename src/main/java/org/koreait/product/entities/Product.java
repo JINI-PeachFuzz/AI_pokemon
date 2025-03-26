@@ -10,18 +10,17 @@ import java.util.List;
 
 @Data
 @Entity
-public class Product extends BaseMemberEntity { // 책임전가로그확인으로 BaseMemberEntity 넣었음
+public class Product extends BaseMemberEntity {
     @Id @GeneratedValue
-    private Long seq; // 상품관리할 수 있는 별도 코드가 따로 있음
+    private Long seq;
 
     private boolean open; // 상품 노출 여부
 
-    @Column(length = 45, nullable = false)
-    private String gid; // 그룹 ID
+    @Column(length=45, nullable = false)
+    private String gid;
 
-    @Column(length = 150, nullable = false) // 한글의 경우 3바이트
+    @Column(length=150, nullable = false)
     private String name; // 상품명
-
 
     private String summary; // 상품 요약 설명
 
@@ -29,15 +28,14 @@ public class Product extends BaseMemberEntity { // 책임전가로그확인으�
     private String description; // 상품 상세 설명
 
     @Enumerated(EnumType.STRING)
-    @Column(length = 10)
+    @Column(length=10)
     private DiscountType discountType; // 할인 종류
 
-    private double discount; // 할인율, 정가가격을 넣을 수 있음
+    private double discount;
 
     private int maxDiscount; // 최대 할인 금액
 
-    private double pointRate; // 적립률 // 상품판매가 기준, 결제금액 기준 등등
-
+    private double pointRate; // 적립률
     private int maxPoint; // 최대 적립금
 
     @Transient
@@ -48,7 +46,4 @@ public class Product extends BaseMemberEntity { // 책임전가로그확인으�
 
     @Transient
     private List<FileInfo> editorImages; // 상세설명 이미지
-
-    // Transient를 넣은건 후에 2차가공을 한 뒤에 넣는 것들이라고 생각하면 됨.
-
 }

@@ -2,7 +2,6 @@ package org.koreait.member.services;
 
 import org.junit.jupiter.api.*;
 
-// 테스트 라이프 사이클 확인
 public class LifeCycleTest {
 
     @BeforeAll
@@ -28,20 +27,18 @@ public class LifeCycleTest {
     @Test
     void test1() {
         System.out.println("TEST1");
-
     }
 
     @Test
-    @Disabled // 이거는 테스트를 배제함
+    @Disabled
     void test2() {
         System.out.println("TEST2");
-
     }
 
     @Test
-    @Timeout(3L) // 3초
-    void test3() throws Exception{
+    @Timeout(3L)
+    void test3() throws Exception {
         System.out.println("TEST3");
-        Thread.sleep(5000); // 5초 대기
+        Thread.sleep(5000);
     }
 }

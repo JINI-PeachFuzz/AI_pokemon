@@ -19,7 +19,7 @@ public class BadRequestException extends CommonException {
         super(message, HttpStatus.BAD_REQUEST);
     }
 
-    public BadRequestException(Map<String, List<String>>messages) {
+    public BadRequestException(Map<String, List<String>> messages) {
         super(messages, HttpStatus.BAD_REQUEST);
     }
 }

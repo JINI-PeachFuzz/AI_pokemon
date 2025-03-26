@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 @Data
-@JsonIgnoreProperties(ignoreUnknown = true) // 카멜방식으로 작성하기 위해서 추가했음
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class AuthToken {
     @JsonAlias("access_token")
     private String accessToken;

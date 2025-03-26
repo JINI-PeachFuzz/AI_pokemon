@@ -7,7 +7,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-@JsonIgnoreProperties(ignoreUnknown = true) // 알려진 항목이 없으면 무시 / 필요한 것만 가져와서 사용
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ApiPokemon {
     private int id;
     private String name;

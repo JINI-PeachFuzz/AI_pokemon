@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{mobile/layouts/main}">
+<main layout:fragment="content">
+    <h1 th:text="#{My_Wish}"></h1>
+    <!--    <nav>-->
+    <!--        <a th:href="@{/mypage/wishlist/pokemon}" th:text="#{포켓몬}" class="tab" th:classappend="${mode == 'pokemon'} ? 'on'"></a>-->
+    <!--        <a th:href="@{/mypage/wishlist/board}" th:text="#{게시글}" class="tab" th:classappend="${mode == 'board'} ? 'on'"></a>-->
+    <!--    </nav>-->
+    <!--    <th:block th:if="${mode == 'pokemon'}">-->
+    <!--        <th:block th:replace="~{front/mypage/wishlist/_wishPokemons::wishPokemons}"></th:block>-->
+    <!--    </th:block>-->
+
+    <!--    &lt;!&ndash;    게시판-게시글 등&ndash;&gt;-->
+    <!--    <th:block th:if="${mode == 'board'}">-->
+
+    <!--    </th:block>-->
+</main>
+</html>

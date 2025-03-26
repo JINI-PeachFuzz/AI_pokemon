@@ -10,7 +10,6 @@ import org.springframework.test.context.ActiveProfiles;
 @ActiveProfiles({"default", "test"})
 public class CodeValueServiceTest {
 
-
     @Autowired
     private CodeValueService service;
 
@@ -23,7 +22,8 @@ public class CodeValueServiceTest {
 
         service.save("siteConfig", item);
 
+
         SiteConfig item2 = service.get("siteConfig", SiteConfig.class);
-        System.out.println(item2); // 테스트하는거기 때문에 로직을 추가했음
+        System.out.println(item2);
     }
 }

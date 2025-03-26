@@ -24,7 +24,7 @@ public class PredictService {
     private String dataUrl;
 
     @Autowired
-    private ObjectMapper om; // 빈설정하단 참고
+    private ObjectMapper om;
 
     public int[] predict(List<int[]> items) {
         try {
@@ -32,17 +32,8 @@ public class PredictService {
 
             ProcessBuilder builder = new ProcessBuilder(runPath, scriptPath + "predict.py", dataUrl + "?mode=ALL", data);
             Process process = builder.start();
-            //System.out.println(runPath);
-            //System.out.println(dataUrl);
-            //System.out.println(scriptPath);
-            //BufferedReader reader = process.inputReader();
-            //List<String> lines = reader.lines().toList();
-            //lines.forEach(System.out::println);
-            //int exitCode = process.waitFor();
-            //System.out.println("exitCode:" + exitCode);
             InputStream in = process.getInputStream();
             return om.readValue(in.readAllBytes(), int[].class);
-            //int[].class 는 뭐가 들어올지 몰라서
 
         } catch (Exception e) {
             e.printStackTrace();

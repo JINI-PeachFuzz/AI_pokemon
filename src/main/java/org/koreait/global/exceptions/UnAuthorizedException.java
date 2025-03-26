@@ -19,7 +19,7 @@ public class UnAuthorizedException extends CommonException {
     super(message, HttpStatus.UNAUTHORIZED);
   }
 
-  public UnAuthorizedException(Map<String, List<String>> messages){
+  public UnAuthorizedException(Map<String, List<String>> messages) {
     super(messages, HttpStatus.UNAUTHORIZED);
   }
 }

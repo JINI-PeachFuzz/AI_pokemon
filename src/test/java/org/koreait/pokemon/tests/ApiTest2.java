@@ -13,9 +13,7 @@ public class ApiTest2 {
     @Test
     void updateTest1() {
         for (int i = 1; i <= 6; i++) {
-            // service.update(3); // 페이지당 100ea씩 가져옴
             service.update(i);
-
         }
     }
 }

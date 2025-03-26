@@ -13,7 +13,7 @@ import org.springframework.util.StringUtils;
 import java.time.LocalDate;
 
 @Data
-public class RequestJoin extends RequestAgree{
+public class RequestJoin extends RequestAgree {
 
     @Email
     @NotBlank
@@ -25,7 +25,7 @@ public class RequestJoin extends RequestAgree{
     @Size(min=8)
     private String password; // 비밀번호
 
-    private String confirmPassword; // 비밀번호 확인 // 소셜로그인을 하기 때문에 낫블랭크를 제거했음
+    private String confirmPassword; // 비밀번호 확인
 
     @NotBlank
     private String nickName; // 닉네임
@@ -44,7 +44,7 @@ public class RequestJoin extends RequestAgree{
     private String address; // 주소
     private String addressSub; // 나머지 주소
 
-    private SocialChannel socialChannel; // 소셜로그인시에는 이걸 히든값으로 넣어서 만들어줄거임
+    private SocialChannel socialChannel;
     private String socialToken;
 
     // 소셜 로그인으로 가입하는 건지 체크

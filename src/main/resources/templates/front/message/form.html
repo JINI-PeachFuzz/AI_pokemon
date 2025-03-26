@@ -6,7 +6,6 @@
     <h1 th:text="#{쪽지_보내기}"></h1>
     <form name="frmSend" method="POST" th:action="@{/message}" autocomplete="off" th:object="${requestMessage}">
         <div class="error global" th:each="err : ${#fields.globalErrors()}" th:text="${err}"></div>
-<!--        <input type="hidden" name="email" th:field="*{email}">-->
         <input type="hidden" name="gid" th:field="*{gid}">
 
         <dl th:if="${@memberUtil.isAdmin()}">
@@ -51,7 +50,6 @@
             <dt>파일첨부</dt>
             <dd>
                 <button type="button" class="file-upload" th:text="#{파일_업로드}" th:data-gid="*{gid}" data-location="attach"></button>
-                <!--data-location="attach" 파일 첨부-->
                 <div class="uploaded-files" id="attach-files">
                     <span th:if="*{attachFiles != null}" th:each="item : *{attachFiles}" class="file-item" th:id="${'file-' + item.seq}">
                        <a th:href="@{/api/file/download/{seq}(seq=${item.seq})}" th:text="${item.fileName}"></a>

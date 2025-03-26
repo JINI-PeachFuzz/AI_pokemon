@@ -27,5 +27,5 @@ public class TrainItem extends BaseEntity {
     private int item8;
     private int item9;
     private int item10;
-    private int result; // item은 실수여도 되는데 result는 정수로 나오게 할거임
+    private int result;
 }

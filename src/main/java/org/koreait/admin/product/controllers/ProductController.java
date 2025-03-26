@@ -24,8 +24,8 @@ import java.util.UUID;
 @RequestMapping("/admin/product")
 public class ProductController implements SubMenus {
 
-    private final Utils utils; // 템플릿이 필요할 수도 있으니 남겨둠 / 관리자라서 필요는 없음
-    private final FileInfoService fileInfoService; // 이걸가지고 바로 조회할꺼 / gid뿐만아니라 location도 같이 조회할 예정
+    private final Utils utils;
+    private final FileInfoService fileInfoService;
 
     @Override
     @ModelAttribute("menuCode")
@@ -33,39 +33,36 @@ public class ProductController implements SubMenus {
         return "product";
     }
 
-    /***
+    /**
      * 상품 목록
      *
      * @param model
      * @return
      */
-    @GetMapping({"", "/list"}) // 상품목록
+    @GetMapping({"", "/list"})
     public String list(Model model) {
         commonProcess("list", model);
 
         return "admin/product/list";
     }
 
-
-    /***
+    /**
      * 상품 등록
      *
      * @param model
      * @return
-     *
-     * // Menus의 상품관리에 맞게 commonProcess("요기위치", model);를 변경해줌
      */
     @GetMapping("/add")
     public String add(@ModelAttribute RequestProduct form, Model model) {
-        commonProcess("add", model); // save를 해서 상품등록 수정을 같이
+        commonProcess("add", model);
 
-        form.setGid(UUID.randomUUID().toString()); // 중복되지않는 ID생성
-        form.setDiscountType(DiscountType.NONE); // 기본값설정
+        form.setGid(UUID.randomUUID().toString());
+        form.setDiscountType(DiscountType.NONE);
 
         return "admin/product/add";
     }
 
-    /***
+    /**
      * 상품 정보 수정
      *
      * @param seq
@@ -79,8 +76,8 @@ public class ProductController implements SubMenus {
         return "admin/product/edit";
     }
 
-    /***
-     *  상품 등록, 수정 처리
+    /**
+     * 상품 등록, 수정 처리
      *
      * @return
      */
@@ -89,9 +86,9 @@ public class ProductController implements SubMenus {
         String mode = form.getMode();
         mode = StringUtils.hasText(mode) ? mode : "add";
 
-        commonProcess(mode, model); // 모드가 어떤건지에 따라 달라져야하니까
+        commonProcess(mode, model);
 
-        if (errors.hasErrors()) { // 에러발생해도 form에 있는 데이터는 메시지와 동일하게 유지되어야함
+        if (errors.hasErrors()) {
             String gid = form.getGid();
             form.setMainImages(fileInfoService.getList(gid, "main", FileStatus.ALL));
             form.setListImages(fileInfoService.getList(gid, "list", FileStatus.ALL));
@@ -100,9 +97,9 @@ public class ProductController implements SubMenus {
             return "admin/product/" + mode;
         }
 
-        // 여기에는 상품 등록, 수정 처리 서비스를 넣으면 됨.
+        //  상품 등록, 수정 처리 서비스
 
-        return "redirect:/admin/product/list"; // 상품목록 수정이 다되면 목록으로 돌아가게
+        return "redirect:/admin/product/list";
     }
 
     /**
@@ -163,7 +160,7 @@ public class ProductController implements SubMenus {
      * @param model
      */
     private void commonProcess(String mode, Model model) {
-        mode = StringUtils.hasText(mode) ? mode : "list"; // 기본값, 상품목록이 나오게
+        mode = StringUtils.hasText(mode) ? mode : "list";
 
         List<String> addCommonScript = new ArrayList<>();
         List<String> addScript = new ArrayList<>();

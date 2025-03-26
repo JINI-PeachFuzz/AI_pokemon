@@ -9,13 +9,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-
-//@Lazy 멤버인포서비스에도 넣어줬음 / 근데 이거 넣으니까 오류발생했음 그래서 지웠음
 @Component
 public class MemberUtil {
-
-    //private Member member; // 있으면 이걸로 하고 없으면 가져오는 걸로 (하단참고) // 이건 싱글통형태의 객체임
-    // 내 사용자가 다른사용자로 바뀌는 문제 발생함 (싱글톤이기때문)
 
     @Autowired
     private HttpSession session;
@@ -24,10 +19,11 @@ public class MemberUtil {
         return getMember() != null;
     }
 
-    /*
-    * 관리자 여부
-    * 권한 - MANAGER, ADMIN
-    * */
+    /**
+     * 관리자 여부
+     *  권한 - MANAGER, ADMIN
+     * @return
+     */
     public boolean isAdmin() {
         return isLogin() &&
                 getMember().getAuthorities().stream()
@@ -44,7 +40,7 @@ public class MemberUtil {
 
         if (auth != null && auth.isAuthenticated() && auth.getPrincipal() instanceof MemberInfo memberInfo) {
             Member member = (Member)session.getAttribute("member");
-            if (member == null) { // null일땐 새로 // 멤버가 아닌경우도 있으니 그 내용을 추가함
+            if (member == null) {
                 member = memberInfo.getMember();
                 session.setAttribute("member", member);
 

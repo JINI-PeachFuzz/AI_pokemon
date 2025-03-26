@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.koreait.global.paging.ListData;
 import org.koreait.member.constants.Gender;
 import org.koreait.member.controllers.RequestJoin;
-import org.koreait.member.entities.Member;
 import org.koreait.member.repositories.MemberRepository;
 import org.koreait.member.services.MemberUpdateService;
 import org.koreait.message.controllers.MessageSearch;
@@ -26,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 @ActiveProfiles({"default", "test"})
-@Transactional // 엔티티 유지
+@Transactional
 public class MessageInfoServiceTest {
 
     @Autowired
@@ -41,8 +40,7 @@ public class MessageInfoServiceTest {
     @Autowired
     private MemberRepository memberRepository;
 
-
-    private String receiver; // 커맨드객체는 이메일로 받을 거임
+    private String receiver;
 
     @BeforeEach
     void init() {
@@ -60,12 +58,11 @@ public class MessageInfoServiceTest {
             form.setPassword("_aA123456");
             form.setConfirmPassword(form.getPassword());
             updateService.process(form);
-
         }
     }
 
     @Test
-    @WithUserDetails(value = "user01@test.org", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @WithUserDetails(value="user01@test.org", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     void listTest() {
         createMessages();
 
@@ -75,8 +72,7 @@ public class MessageInfoServiceTest {
         List<Message> items = data.getItems();
         items.forEach(System.out::println);
 
-        assertTrue(items.size() == 10); // 메시지를 10개 추가하니까 맞는지 검증
-
+        assertTrue(items.size() == 10);
     }
 
     void createMessages() {
@@ -86,7 +82,7 @@ public class MessageInfoServiceTest {
             message.setGid(UUID.randomUUID().toString());
             message.setSubject("제목" + i);
             message.setContent("내용" + i);
-            sendService.process(message); // 전송~
+            sendService.process(message);
         }
     }
 }

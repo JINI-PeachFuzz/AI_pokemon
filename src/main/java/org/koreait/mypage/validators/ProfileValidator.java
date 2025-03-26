@@ -20,7 +20,7 @@ public class ProfileValidator implements Validator, PasswordValidator {
     public boolean supports(Class<?> clazz) {
         return clazz.isAssignableFrom(RequestProfile.class);
     }
-// 값이 있을 때만!
+
     @Override
     public void validate(Object target, Errors errors) {
         RequestProfile form = (RequestProfile)target;
@@ -46,7 +46,6 @@ public class ProfileValidator implements Validator, PasswordValidator {
             return;
         }
 
-        // 필수는 아니고 있을때만 검증하는 거
         // 비밀번호 복잡성 S
         if (!alphaCheck(password, false) || !numberCheck(password) || !specialCharsCheck(password)) {
             errors.rejectValue("password", "Complexity");
@@ -58,5 +57,6 @@ public class ProfileValidator implements Validator, PasswordValidator {
             errors.rejectValue("confirmPassword", "Mismatch");
         }
         // 비밀번호, 비밀번호 확인 일치 여부 E
+
     }
 }

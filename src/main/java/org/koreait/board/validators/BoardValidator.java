@@ -32,27 +32,20 @@ public class BoardValidator implements Validator, PasswordValidator {
     @Override
     public boolean supports(Class<?> clazz) {
         return clazz.isAssignableFrom(RequestBoard.class);
-    } // 서포트 -> 검증하고자하는
+    }
 
     @Override
     public void validate(Object target, Errors errors) {
 
-        RequestBoard form = (RequestBoard) target; // 게스트비번에 대한 체크
+        RequestBoard form = (RequestBoard) target;
         // 비회원 비밀번호 검증
         if (!memberUtil.isLogin()) {
             ValidationUtils.rejectIfEmptyOrWhitespace(errors, "guestPw", "NotBlank");
 
-            // 대소문자 구분없이 알파벳 1자 이상, 숫자 1자 이상 포함
-            String guestPw = form.getGuestPw(); // 값이 있을 때는 복잡성에 대한것도 해줘야함
+            // 대소문자 구분없은 알파벳 1자 이상, 숫자 1자 이상 포함
+            String guestPw = form.getGuestPw();
             if (StringUtils.hasText(guestPw) && (!alphaCheck(guestPw, true) || !numberCheck(guestPw))) {
                 errors.rejectValue("guestPw", "Complexity");
-            }
-
-            String confirmPw = form.getConfirmPw();
-            ValidationUtils.rejectIfEmptyOrWhitespace(errors, "confirmPw", "NotBlank");
-
-            if (StringUtils.hasText(guestPw) && StringUtils.hasText(confirmPw) && !guestPw.equals(confirmPw)) {
-                errors.rejectValue("confirmPw", "Mismatch");
             }
         }
 

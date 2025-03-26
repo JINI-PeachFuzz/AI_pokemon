@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http:;//www.thymeleaf.org">
+<th:block th:fragment="member">
+
+    <h1>유저 정보</h1>
+
+    <dl>
+        <div class="aboutList" th:text="#{프로필_이미지}"></div>
+        <th:block th:if="${profile.profileImage != null}"
+                  th:utext="${@utils.showImage(profile.profileImage.seq, 100, 130, 'image')}"></th:block>
+    </dl>
+    <dl>
+        <dt th:text="#{닉네임}"></dt>
+        <dd class="aboutList" th:text="${profile.nickName}"></dd>
+    </dl>
+    <dl>
+        <dt th:text="#{성별}"></dt>
+        <dd class="aboutList" th:text="${#messages.msg(profile.gender.name)}"></dd>
+    </dl>
+    <dl>
+        <dt th:text="#{생년월일}"></dt>
+        <dd class="aboutList" th:text="${profile.birthDt}"></dd>
+    </dl>
+    <dl>
+        <dt th:text="#{자기소개}"></dt>
+        <dd class="aboutList" th:text="${profile.bio}"></dd>
+    </dl>
+
+</th:block>
+</html>

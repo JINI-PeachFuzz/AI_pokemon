@@ -1,6 +1,5 @@
 package org.koreait.file.services;
 
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.koreait.file.exceptions.FileNotFoundException;
@@ -8,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -23,7 +23,7 @@ public class FileInfoServiceTest {
     void notExistsFileInfoTest() {
         // 테스트 성공시 발생된 예외가 반환
         FileNotFoundException thrown = assertThrows(FileNotFoundException.class, () -> {
-           infoService.get(99999L);
+            infoService.get(99999L);
         });
 
         String message = thrown.getMessage();

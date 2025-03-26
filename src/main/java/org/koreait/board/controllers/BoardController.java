@@ -48,7 +48,7 @@ public class BoardController {
     private final Utils utils;
     private final MemberUtil memberUtil;
     private final BoardConfigInfoService configInfoService;
-    private final FileInfoService fileInfoService; // 실패했다고 해서 파일정보를 안보여주면 안되니까 이것도 추가했음
+    private final FileInfoService fileInfoService;
     private final BoardValidator boardValidator;
     private final BoardUpdateService boardUpdateService;
     private final BoardInfoService boardInfoService;
@@ -61,6 +61,7 @@ public class BoardController {
     private final CommentInfoService commentInfoService;
     private final CommentDeleteService commentDeleteService;
     private final HttpServletRequest request;
+
 
     /**
      * 사용자별 공통 데이터
@@ -150,7 +151,7 @@ public class BoardController {
         form.setGid(UUID.randomUUID().toString());
 
         if (memberUtil.isLogin()) {
-            form.setPoster(memberUtil.getMember().getName()); // 로그인상태일때는 로그인 사용자 이름으로 나오게!
+            form.setPoster(memberUtil.getMember().getName());
         }
 
         return utils.tpl("board/write");
@@ -180,11 +181,11 @@ public class BoardController {
      */
     @PostMapping("/save")
     public String save(@Valid RequestBoard form, Errors errors, @SessionAttribute("commonValue") CommonValue commonValue, Model model) {
-        String mode = form.getMode(); // 값이 없을때는 기본값 write.
+        String mode = form.getMode();
         mode = StringUtils.hasText(mode) ? mode : "write";
 
         if (mode.equals("edit")) commonProcess(form.getSeq(), mode, model);
-        else commonProcess(form.getBid(), mode, model); // 보드save 순환참조발생해서 분기했음
+        else commonProcess(form.getBid(), mode, model);
 
         boardValidator.validate(form, errors);
 
@@ -196,13 +197,11 @@ public class BoardController {
             return utils.tpl("board/" + mode);
         }
 
-        BoardData data = boardUpdateService.process(form); // 등록과 수정처리를 같이.
+        BoardData data = boardUpdateService.process(form);
 
         Board board = commonValue.getBoard();
-        // 게시글을 만들고 나면 보기로 이동하거나 목록으로 가거나 둘다 맞음 / 원하는대로
-
         // 글작성, 수정 성공시 글보기 또는 글목록으로 이동
-        String redirectUrl = String.format("/board/%s", board.getLocationAfterWriting().equals("view") ? "view/" + data.getSeq() : "list/" + board.getBid()); // "view/.."에서 ..은 작성후 이동할 경로 -> 게시글번호로 변경함
+        String redirectUrl = String.format("/board/%s", board.getLocationAfterWriting().equals("view") ? "view/" + data.getSeq() : "list/" + board.getBid());
         return "redirect:" + redirectUrl;
     }
 
@@ -344,7 +343,7 @@ public class BoardController {
         }
         /* 비회원 게시글 비밀번호 검증 E */
 
-        /* 비회원 댓글 비밀번호 검증 S */
+        /* 비회원 댓글 비밀번홀 검증 S */
         Long cSeq = (Long)session.getAttribute("cSeq");
         if (cSeq != null && cSeq > 0L) {
             if (!commentValidator.checkGuestPassword(password, cSeq)) {
@@ -360,6 +359,7 @@ public class BoardController {
         model.addAttribute("script", "parent.location.reload();");
         return "common/_execute_script";
     }
+
 
     // 공통 처리
     private void commonProcess(String bid, String mode, Model model) {
@@ -414,7 +414,7 @@ public class BoardController {
         model.addAttribute("mode", mode);
     }
 
-    // 게시글 보기, 게시글 수정 // seq를 가지고 가공할거임
+    // 게시글 보기, 게시글 수정
     private void commonProcess(Long seq, String mode, Model model) {
 
         BoardData item = null;
@@ -446,7 +446,7 @@ public class BoardController {
         model.addAttribute("boardData", item);
     }
 
-    @Data // 게터와 세터사용할려고 추가했음
+    @Data
     static class CommonValue implements Serializable {
         private Board board;
         private BoardData data;

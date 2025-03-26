@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraqnet.nz/thymeleaf/layout"
+      layout:decorate="~{front/layouts/main}">
+
+<main layout:fragment="content">
+
+    <img th:src="@{/front/images/join.png}" th:alt="#{회원가입_로고}" class="join-logo">
+
+    <div class="text">
+        <h1 th:text="#{회원가입이_완료되었습니다.}"></h1>
+        <h3 th:text="#{포켓몬코리아_홈페이지에_가입해주셔서_감사합니다.}"></h3>
+    </div>
+
+    <div class="links">
+        <a th:href="@{/member/login}">
+            <th:block th:text="#{로그인}"></th:block>
+        </a>
+        <a th:href="@{/}">
+            <th:block th:text="#{메인화면}"></th:block>
+        </a>
+    </div>
+</main>
+</html>

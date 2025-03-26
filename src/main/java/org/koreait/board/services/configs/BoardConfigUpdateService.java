@@ -22,14 +22,11 @@ public class BoardConfigUpdateService {
     private final BoardRepository boardRepository;
     private final Utils utils;
 
-    public void process(RequestBoard form) { // 게시판정보를 추가하거나 수정한다
+    public void process(RequestBoard form) {
 
         String bid = form.getBid();
 
         Board board = boardRepository.findById(bid).orElseGet(Board::new);
-        // 있으면 엔티티가져오고 없으면 추가한다 // 영속성
-
-        // RequestBoard 참고 / 기본값설정
 
         board.setBid(bid);
         board.setName(form.getName());

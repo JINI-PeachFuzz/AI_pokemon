@@ -1,6 +1,5 @@
 package org.koreait.member.controllers;
 
-import jakarta.validation.constraints.AssertTrue;
 import lombok.Data;
 
 import java.io.Serializable;

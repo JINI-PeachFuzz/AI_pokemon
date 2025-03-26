@@ -1,20 +1,19 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-    <th:block th:fragment="message" th:if="${session.showMessage != null}">
-        <div class="message-dialog" th:text="${session.showMessage}"></div>
+<th:block th:fragment="message" th:if="${session.showMessage != null}">
+    <div class="message-dialog" th:text="${session.showMessage}"></div>
 
-        [[${@utils.removeSessionMessage()}]]
+    [[${@utils.removeSessionMessage()}]]
 
-        <!--한번 보여주고 나면 제거하는 걸로 // 5초뒤에 서서히 3초뒤엔 완전히 제거-->
-        <script>
-            const el = document.querySelector(".message-dialog");
+    <script>
+        const el = document.querySelector(".message-dialog");
+        setTimeout(function() {
+            el.classList.add("fade");
+
             setTimeout(function() {
-                el.classList.add("fade");
-
-                setTimeout(function() {
                 el.parentElement.removeChild(el);
-                }, 3000);
-            }, 5000);
-        </script>
-    </th:block>
+            }, 3000);
+        }, 5000);
+    </script>
+</th:block>
 </html>
