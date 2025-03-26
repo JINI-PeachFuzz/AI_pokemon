@@ -26,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @ActiveProfiles({"default", "test"})
 @AutoConfigureMockMvc
-public class FileUploadServiceTest {
+class FileUploadServiceTest {
 
     @Autowired
     private MockMvc mockMvc;
