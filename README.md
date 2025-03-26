@@ -25,6 +25,7 @@ Anonymous 프로젝트 (MSA 기반 실전 적용) 진행 중
 
 # 구성
 메인화면
+
 ![img_4.png](src/main/resources/static/front/images/img_4.png)
 ![img_1.png](src/main/resources/static/front/images/img_1.png)
 ## 1. 로그인
