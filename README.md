@@ -59,7 +59,7 @@ Anonymous 프로젝트 (MSA 기반 실전 적용) 진행 중
 
 ## 1-1. 관리자 로그인
 
-![img_9.png](src/main/resources/static/front/images/img_9.png)
+![img_11.png](src/main/resources/static/front/images/img_11.png)
 
 로그인
 사이트관리
