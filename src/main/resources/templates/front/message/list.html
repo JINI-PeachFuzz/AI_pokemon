@@ -36,7 +36,6 @@
             <a th:href="@{/message/view/{seq}(seq=*{seq})}" class="subject">
                 <span class="badge notice" th:if="*{notice}" th:text="#{공지}"></span>
                 <span class="badge" th:unless="*{notice}" th:text="*{#messages.msg(status)}"></span>
-                <!--badge는 읽고 안읽고 / common프로퍼티에 추가해놨음-->
                 <th:block th:text="*{subject}"></th:block>
             </a>
             <div class="info">

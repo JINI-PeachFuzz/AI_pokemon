@@ -3,14 +3,13 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head th:object="${siteConfig}">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, user-scalable=yes,maximum-scale=2.0, minimum-scale=0.5, initial-scale=1.0"> <!--모바일은 뷰포터가 있어야 화면이 보임-->
+    <meta name="viewport" content="width=device-width, user-scalable=yes,maximum-scale=2.0, minimum-scale=0.5, initial-scale=1.0">
     <meta name="keywords" th:if="*{keywords != null}" th:content="*{keywords}">
     <meta name="description" th:if="*{description != null}" th:content="*{description}">
     <meta name="_csrf" th:content="${_csrf.token}">
-    <meta name="_csrf_header" th:content="${_csrf.headerName}">  <!--csrf가 토큰 검증 방식 관련 내용 / 기본 검증이라 다 들어감-->
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
     <meta name="rootUrl" th:content="@{/}">
     <meta th:if="${@memberUtil.isLogin()}" name="user" th:content="${profile.email}">
-    <!--<title th:if="${pageTitle != null}" th:text="${pageTitle}">-->
 
     <title>
         <th:block th:if="${pageTitle != null}"

@@ -24,7 +24,6 @@
                             <th:block th:unless="*{category != null && category != ''}">
                                 <th:block th:text="*{poster}"></th:block>
                                 <div th:if="*{member != null}" class="dn" th:text="*{member.email}"></div>
-                                <!--작성자를 dn으로 숨겼음-->
                             </th:block>
                         </span>
                     <span class="post-date" th:text="*{#temporals.format(createdAt, 'yyyy년 MM월 dd일')}"></span>

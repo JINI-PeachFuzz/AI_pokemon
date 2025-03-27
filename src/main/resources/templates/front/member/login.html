@@ -30,6 +30,8 @@
 
         <div class="error global" th:each="err : ${#fields.globalErrors()}" th:text="${err}"></div>
 
+
+
         <div class="links">
             <a th:href="@{/member/find_email}" th:text="#{이메일_찾기}"></a>
             <a th:href="@{/member/find_pass}" th:text="#{비밀번호_찾기}"></a>

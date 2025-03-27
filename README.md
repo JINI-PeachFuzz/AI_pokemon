@@ -8,7 +8,7 @@ Docker로 컨테이너화하고 AWS ECS에 배포하면서 서비스 분리 및 
 Anonymous 프로젝트 (MSA 기반 실전 적용) 진행 중
 기존 모놀리식 프로젝트의 설정을 Config Server를 통해 외부화하면서 다음과 같은 문제들이 발생했습니다.
 
-- 로컬 환경에서도 서비스 실행 오류
+- 로컬 환경에서도 서비스 실행 오류 -> 03.27 로컬연결해결완료
 - {redis.host}, {db.username} 등 환경 변수 미지정 오류
 - Config Server와 실제 서비스 간 연동 실패
 - Eureka 및 Gateway 서비스 연결 불안정
