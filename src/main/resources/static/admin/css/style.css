@@ -90,7 +90,7 @@ textarea {
     font-size: 1.15rem;
 }
 
-.table-rows .no-date {
+.table-rows .no-data {
     padding: 150px 0;
     text-align: center;
     font-size: 1.15rem;
@@ -128,7 +128,7 @@ textarea {
     width: 220px !important;
 }
 
-/* 너비 공통 S */
+/* 너비 공통 E */
 
 /* 버튼 공통 S */
 .btn {
@@ -350,7 +350,6 @@ h2 {
 .pagination {
     margin: 20px 0;
     text-align: center;
-
 }
 
 .pagination > a {
@@ -360,20 +359,16 @@ h2 {
     padding: 0 5px;
     text-align: center;
     line-height: 28px;
-    border: 1px solid  #000;
+    border: 1px solid #000;
     border-radius: 3px;
-
 }
 
 .pagination > a + a {
     margin-left: 2px;
-
 }
 
 .pagination > a.on {
     background: #000;
     color: #fff;
-
 }
-
 /* 페이징 공통 E */

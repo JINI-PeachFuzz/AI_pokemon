@@ -55,7 +55,7 @@
     cursor: pointer;
     color: #fff;
     text-align: center;
-    line-height: 61px;  /*border 1px이 있어서 위아래로 1씩 빼면 61로 했을 때 가운데 옴*/
+    line-height: 61px;
     transform: skew(-20deg);
 }
 
@@ -73,7 +73,7 @@
 .main-banner .more-button > span {
     color: #fff;
     transform: skew(20deg);
-    display: block; /*블록형태여야 반영되어서 마름모에서 원래대로 돌아옴*/
+    display: block;
     font-size: 1.62rem;
     font-weight: 700;
 }

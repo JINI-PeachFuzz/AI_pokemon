@@ -32,38 +32,38 @@ window.addEventListener("DOMContentLoaded", function() {
         });
 });
 
+
 /**
 * 파일 업로드 후 후속 처리
 *
 */
-
 function callbackFileUpload(files) {
-   if (!files || files.length === 0) {
-       return;
-   }
+    if (!files || files.length === 0) {
+        return;
+    }
 
-   const imageUrls = [];
-   const tpl = document.getElementById("tpl-file-item").innerHTML;
-   const tpl2 = document.getElementById("tpl-image-item").innerHTML;
+    const imageUrls = [];
+    const tpl = document.getElementById("tpl-file-item").innerHTML;
+    const tpl2 = document.getElementById("tpl-image-item").innerHTML;
 
-   const targetEditor = document.getElementById("editor-files");
-   const targetAttach = document.getElementById("attach-files");
+    const targetEditor = document.getElementById("editor-files");
+    const targetAttach = document.getElementById("attach-files");
 
-   const domParser = new DOMParser();
-   const { insertEditorImage } = commonLib;
+    const domParser = new DOMParser();
+    const { insertEditorImage } = commonLib;
 
-   for (const {seq, location, fileName, fileUrl, selected, thumbUrl} of files) {
+    for (const {seq, location, fileName, fileUrl, selected, thumbUrl} of files) {
 
-        const addClass = selected ? "on":"";
+        const addClass = selected ? " on":"";
 
         let html = location === 'editor' ? tpl2 : tpl;
-        html = html.replace(/\[seq\]/g, seq) // 치환코드 /\[\]/g
+        html = html.replace(/\[seq\]/g, seq)
                    .replace(/\[fileName\]/g, fileName)
-                   .replace(/\[fileUrl\]/g, fileUrl)
-                   .replace(/\[thumbUrl\]/g, `${thumbUrl}&width=100&height=50`)
-                   .replace(/\[addClass\]/g, addClass);
+                    .replace(/\[fileUrl\]/g, fileUrl)
+                    .replace(/\[thumbUrl\]/g, `${thumbUrl}&width=100&height=50`)
+                    .replace(/\[addClass\]/g, addClass);
 
-        const dom = domParser.parseFromString(html, "text/html"); // 돔파셔객체로 변환되어있을거임
+        const dom = domParser.parseFromString(html, "text/html");
         const el = dom.querySelector(location === 'editor' ? ".image-item" : ".file-item");
         const insertEditor = el.querySelector(".insert-editor");
         const selectImageEl = el.querySelector(".select-image");
@@ -79,26 +79,25 @@ function callbackFileUpload(files) {
             });
         });
 
+
         if (location === 'editor') {
-           imageUrls.push(fileUrl); // 첨부할 이미지의 주소
+           imageUrls.push(fileUrl);
 
-           insertEditor.addEventListener("click", () => insertEditorImage(fileUrl));
-          if (selectImageEl) { // 리스트 노출 메일 이미지 선택 처리
-            selectImageEl.addEventListener("click", () => commonLib.selectImage(seq));
-          }
+            insertEditor.addEventListener("click", () => insertEditorImage(fileUrl));
+            if (selectImageEl) { // 리스트 노출 메인 이미지 선택 처리
+                selectImageEl.addEventListener("click", () => commonLib.selectImage(seq));
+            }
 
-          targetEditor.append(el); // 데이터쪽에 추가하는 거
-
-
+            targetEditor.append(el);
         } else {
             // 파일 첨부에서는 에디터에 추가하는것이 아니므로 제거
             insertEditor.parentElement.removeChild(insertEditor);
 
-            targetAttach.append(el); // 첨부파일에 추가하는 거
+            targetAttach.append(el);
         }
-   } // endfor
+    } // endfor
 
-   if (imageUrls.length > 0) { // 에디터에 추가할 이미지
-       insertEditorImage(imageUrls);
-   }
+    if (imageUrls.length > 0) { // 에디터에 추가할 이미지
+        insertEditorImage(imageUrls);
+    }
 }

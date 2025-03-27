@@ -9,7 +9,7 @@ window.addEventListener("DOMContentLoaded", function() {
           autoplay: {
             delay: 1000,
           },
-          speed: 1000, /*0.5초*/
+          speed: 1000,
     });
     /* 메인 배너 E */
 });

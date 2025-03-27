@@ -1,10 +1,8 @@
-// 후속처리에 대한 부분을 정의할 거임
 window.addEventListener("DOMContentLoaded", function() {
     const { loadEditor } = commonLib;
 
     loadEditor("content", 350)
         .then(editor => window.editor = editor);
-
 
         // 이미지 본문 추가 이벤트 처리
         const insertEditors = document.querySelectorAll(".insert-editor")
@@ -28,33 +26,33 @@ window.addEventListener("DOMContentLoaded", function() {
         });
 });
 
+
 /**
 * 파일 업로드 후 후속 처리
 *
 */
-
 function callbackFileUpload(files) {
-   if (!files || files.length === 0) {
-       return;
-   }
+    if (!files || files.length === 0) {
+        return;
+    }
 
-   const imageUrls = [];
-   const tpl = document.getElementById("tpl-file-item").innerHTML;
+    const imageUrls = [];
+    const tpl = document.getElementById("tpl-file-item").innerHTML;
 
-   const targetEditor = document.getElementById("editor-files");
-   const targetAttach = document.getElementById("attach-files");
+    const targetEditor = document.getElementById("editor-files");
+    const targetAttach = document.getElementById("attach-files");
 
-   const domParser = new DOMParser();
-   const { insertEditorImage } = commonLib;
+    const domParser = new DOMParser();
+    const { insertEditorImage } = commonLib;
 
-   for (const {seq, location, fileName, fileUrl} of files) {
+    for (const {seq, location, fileName, fileUrl} of files) {
 
         let html = tpl;
-        html = html.replace(/\[seq\]/g, seq) // 치환코드 /\[\]/g
+        html = html.replace(/\[seq\]/g, seq)
                    .replace(/\[fileName\]/g, fileName)
-                   .replace(/\[fileUrl\]/g, fileUrl);
+                    .replace(/\[fileUrl\]/g, fileUrl);
 
-        const dom = domParser.parseFromString(html, "text/html"); // 돔파셔객체로 변환되어있을거임
+        const dom = domParser.parseFromString(html, "text/html");
         const el = dom.querySelector(".file-item");
         const insertEditor = el.querySelector(".insert-editor");
         const removeEl = el.querySelector(".remove");
@@ -62,6 +60,7 @@ function callbackFileUpload(files) {
             if (!confirm('정말 삭제하겠습니까?')) {
                 return;
             }
+
             const { fileManager } = commonLib;
             fileManager.delete(seq, () => {
                 el.parentElement.removeChild(el);
@@ -69,23 +68,20 @@ function callbackFileUpload(files) {
         });
 
         if (location === 'editor') {
-           imageUrls.push(fileUrl); // 첨부할 이미지의 주소
+           imageUrls.push(fileUrl);
 
-           insertEditor.addEventListener("click", () => insertEditorImage(fileUrl));
+            insertEditor.addEventListener("click", () => insertEditorImage(fileUrl));
 
-           targetEditor.append(el); // 데이터쪽에 추가하는 거
-
-
+            targetEditor.append(el);
         } else {
             // 파일 첨부에서는 에디터에 추가하는것이 아니므로 제거
             insertEditor.parentElement.removeChild(insertEditor);
 
-            targetAttach.append(el); // 첨부파일에 추가하는 거
+            targetAttach.append(el);
         }
+    } // endfor
 
-   } // endfor
-
-       if (imageUrls.length > 0) { // 에디터에 추가할 이미지
-           insertEditorImage(imageUrls);
-       }
-   }
+    if (imageUrls.length > 0) { // 에디터에 추가할 이미지
+        insertEditorImage(imageUrls);
+    }
+}

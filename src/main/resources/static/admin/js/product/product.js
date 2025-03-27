@@ -5,15 +5,13 @@ window.addEventListener("DOMContentLoaded", function() {
     const { insertEditorImage, fileManager } = commonLib;
 
     // 에디터 이미지 추가 처리
-    const insertEditors = document.getElementByIdClassName("insert-editor");
+    const insertEditors = document.getElementsByClassName("insert-editor");
     for (const el of insertEditors) {
         el.addEventListener("click", (e) => insertEditorImage(e.currentTarget.dataset.url))
-        // 이벤트에서 dataset가져오고 url을 가져옴 // 템플릿 html참고 / 화살표함수를 써서 디스는 윈도우가 됨.
     }
 
     // 파일 삭제 처리
     const removeEls = document.querySelectorAll(".file-item .remove, .image-item .remove");
-    // remove는 중복이 있을거 같아서 쿼리를 사용해서 범위를 한정할꺼
     for (const el of removeEls) {
         el.addEventListener("click", function() {
             if (!confirm('정말 삭제하겠습니까?')) {
@@ -27,7 +25,6 @@ window.addEventListener("DOMContentLoaded", function() {
             });
         });
     }
-
 });
 
 /**
@@ -49,7 +46,7 @@ function callbackFileUpload(files) {
 
     const domParser = new DOMParser();
 
-    for (const { seq, location, fileName, fileUrl, thumbUrl } of files) {
+    for (const {seq, location, fileName, fileUrl, thumbUrl } of files) {
         let html = location === 'editor' ? tplFile : tplImage;
         html = html.replace(/\[seq\]/g, seq)
                     .replace(/\[fileName\]/g, fileName)
@@ -68,16 +65,18 @@ function callbackFileUpload(files) {
         removeEl.addEventListener("click", () => {
             fileManager.delete(seq, () => {
                 if (!confirm('정말 처리하겠습니까?')) {
-                    return; // 중괄호 많이 쓰는것보다 이게 보기 편하고 리턴으로 끊어줬음
+                    return;
                 }
+
                 // 삭제 후속 처리
-                const el = document.getElementById(`file-${seq}`); // 선택 후 요소 제거
+                const el = document.getElementById(`file-${seq}`);
                 el.parentElement.removeChild(el);
             });
         });
 
+
         switch (location) {
-            case "main": // 메인 이미지
+            case "main":  // 메인 이미지
                 targetMain.append(el);
                 break;
             case "list": // 목록 이미지
